@@ -7,5 +7,5 @@ export interface IUser {
   token: string;
   role: string;
   googleId?: string;
-  avatar: string | null;
+  avatar: string | null;f
 }
