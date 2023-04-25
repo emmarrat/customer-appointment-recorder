@@ -1,4 +1,4 @@
-import mongoose, { Types } from 'mongoose';
+import mongoose, {Types} from 'mongoose';
 import User from './User';
 
 const Schema = mongoose.Schema;
@@ -14,6 +14,10 @@ const ExpertSchema = new Schema(
         message: 'There is no such user',
       },
     },
+    title: {
+      type: String,
+      required: true,
+    },
     info: {
       type: String,
       required: true,
@@ -22,8 +26,18 @@ const ExpertSchema = new Schema(
       type: String,
       required: true,
     },
+    services: [{
+      name: {
+        type: String,
+        required: true
+      },
+      price: {
+        type: Number,
+        required: true
+      },
+    }]
   },
-  { timestamps: true },
+  {timestamps: true},
 );
 
 const Expert = mongoose.model('Expert', ExpertSchema);
