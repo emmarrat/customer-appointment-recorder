@@ -5,12 +5,13 @@ import {useAppSelector} from "../../../app/hooks";
 import {selectUser} from "../../../features/users/usersSlice";
 import UserMenu from "./UserMenu";
 import AnonymousMenu from "./AnonymousMenu";
+import {COMPANY_TITLE} from "../../../constants";
 
 const Link = styled(NavLink)({
-  color: 'inherit',
+  color: '#fff',
   textDecoration: 'none',
   '&:hover': {
-    color: 'inherit'
+    color: '#afaeae'
   },
 });
 
@@ -18,11 +19,11 @@ const AppToolbar = () => {
   const user = useAppSelector(selectUser);
 
   return (
-    <AppBar position="sticky" sx={{mb: 2, backgroundColor: "#423794"}}>
+    <AppBar position="sticky" sx={{bgcolor: 'primary.main'}}>
       <Toolbar>
         <Grid container justifyContent="space-between" alignItems="center">
           <Typography variant="h6" component="div">
-            <Link to="/">Attractor Music</Link>
+            <Link to="/">{COMPANY_TITLE}</Link>
           </Typography>
           <Grid item>
             {user ? (<UserMenu user={user}/> ): (<AnonymousMenu/>)}

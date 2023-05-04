@@ -6,9 +6,16 @@ interface Props {
   name: string;
   label: string;
   type?: string;
+  errorCheck: (fieldName: string) => string | undefined;
 }
 
-const FileInput: React.FC<Props> = ({ onChange, name, label, type }) => {
+const FileInput: React.FC<Props> = ({
+                                      onChange,
+                                      name,
+                                      label,
+                                      type,
+                                      errorCheck,
+                                    }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [filename, setFilename] = useState('');
@@ -19,7 +26,6 @@ const FileInput: React.FC<Props> = ({ onChange, name, label, type }) => {
     } else {
       setFilename('');
     }
-
     onChange(e);
   };
 
@@ -31,14 +37,30 @@ const FileInput: React.FC<Props> = ({ onChange, name, label, type }) => {
 
   return (
     <>
-      <input style={{ display: 'none' }} type="file" accept={type} name={name} onChange={onFileChange} ref={inputRef} />
+      <input
+        style={{ display: 'none' }}
+        type="file"
+        accept={type}
+        name={name}
+        onChange={onFileChange}
+        ref={inputRef}
+      />
       <Grid container direction="row" spacing={2} alignItems="center">
         <Grid item xs>
-          <TextField disabled label={label} value={filename} onClick={activateInput} />
+          <TextField
+            error={Boolean(errorCheck(name))}
+            helperText={errorCheck(name)}
+            variant="standard"
+            disabled
+            label={label}
+            value={filename}
+            onClick={activateInput}
+            sx={{ width: '100%' }}
+          />
         </Grid>
         <Grid item>
           <Button type="button" variant="contained" onClick={activateInput}>
-            Browse
+            Выбрать
           </Button>
         </Grid>
       </Grid>

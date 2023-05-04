@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { User } from '../../../types';
-import {Avatar, Box, Button, Menu, MenuItem} from '@mui/material';
-import {Link as NavLink, useNavigate} from "react-router-dom";
+import React, {useState} from 'react';
+import {User} from '../../../types';
+import {Avatar, Button, Menu, MenuItem} from '@mui/material';
+import {useNavigate} from "react-router-dom";
 import {useAppDispatch} from "../../../app/hooks";
 import {logout} from "../../../features/users/usersThunks";
 import noImageAvailable from '../../../assets/images/noImageAvailable.jpg';
@@ -18,11 +18,11 @@ const UserMenu: React.FC<Props> = ({user}) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   let cardImage = noImageAvailable;
 
-  if (user.image !== null) {
+  if (user.avatar !== null) {
     if(user.googleId) {
-      cardImage = user.image;
+      cardImage = user.avatar;
     } else {
-      cardImage = apiURL + '/' + user.image;
+      cardImage = apiURL + '/' + user.avatar;
     }
   }
 
@@ -47,8 +47,8 @@ const UserMenu: React.FC<Props> = ({user}) => {
         onClick={handleClick}
         color="inherit"
       >
-        Hello, {user.displayName}
-        <Avatar src={cardImage} alt={user.username} sx={{ml: 2}}/>
+        Hello, {user.firstName}
+        <Avatar src={cardImage} alt={user.firstName} sx={{ml: 2}}/>
       </Button>
       <Menu
         anchorEl={anchorEl}
@@ -56,11 +56,7 @@ const UserMenu: React.FC<Props> = ({user}) => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem component={NavLink} to="/history">Tracks history</MenuItem>
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
-        <MenuItem component={NavLink} to="/new-artist">New Artist</MenuItem>
-        <MenuItem component={NavLink} to="/new-album">New Album</MenuItem>
-        <MenuItem component={NavLink} to="/new-track">New Track</MenuItem>
       </Menu>
     </>
   );
