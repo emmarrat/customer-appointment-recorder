@@ -54,4 +54,27 @@ expertsRouter.post(
   },
 );
 
+expertsRouter.get('/', async (req, res, next) => {
+  try {
+    const experts = await Expert.find();
+    return res.send(experts);
+  } catch (e) {
+    return next(e);
+  }
+});
+
+expertsRouter.get('/:id', async (req, res, next) => {
+  try {
+    const expert = await Expert.findById(req.params.id);
+    if (!expert) {
+      return res.status(404).send({ error: 'Мастер не найден!' });
+    }
+    return res.send(expert);
+  } catch (e) {
+    return next(e);
+  }
+});
+
+
+
 export default expertsRouter;

@@ -13,14 +13,6 @@ const client = new OAuth2Client(config.google.clientId);
 
 usersRouter.post('/', imageUpload.single('avatar'), async (req, res, next) => {
   try {
-    const phoneNumberPattern = /^\+996\d{9}$/;
-    if(req.body.phoneNumber) {
-      const isValidPhoneNumber = phoneNumberPattern.test(req.body.phoneNumber);
-      if (!isValidPhoneNumber) {
-        return res.status(400).send({ error: 'Неверный формат телефонного номера' });
-      }
-    }
-
     const user = new User({
       email: req.body.email,
       firstName: req.body.firstName,
