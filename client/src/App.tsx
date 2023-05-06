@@ -8,6 +8,7 @@ import {useAppSelector} from "./app/hooks";
 import {selectUser} from "./features/users/usersSlice";
 import ExpertAdmin from "./features/experts/components/ExpertAdmin";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
+import NewExpert from "./features/experts/NewExpert";
 
 const App = () => {
   const user = useAppSelector(selectUser);
@@ -27,6 +28,11 @@ const App = () => {
             <Route path="/admin/experts" element={
               <ProtectedRoute isAllowed={user && user.role === 'admin'}>
                 <ExpertAdmin/>
+              </ProtectedRoute>
+            }/>
+            <Route path="/admin/experts/new" element={
+              <ProtectedRoute isAllowed={user && user.role === 'admin'}>
+                <NewExpert/>
               </ProtectedRoute>
             }/>
             <Route path="/*" element={<Typography textAlign="center">Not found!</Typography>}/>

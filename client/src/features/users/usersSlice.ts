@@ -1,7 +1,7 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {GlobalError, User, ValidationError} from "../../types";
 import {RootState} from "../../app/store";
-import {fetchOneBasicUser, fetchUsers, googleLogin, login, register} from "./usersThunks";
+import {fetchOneBasicUser, fetchBasicUsers, googleLogin, login, register} from "./usersThunks";
 
 interface UsersState {
   user: User | null;
@@ -78,15 +78,15 @@ export const usersSlice = createSlice({
       state.loginError = error || null;
     });
 
-    builder.addCase(fetchUsers.pending, (state) => {
+    builder.addCase(fetchBasicUsers.pending, (state) => {
       state.fetchLoading = true;
       state.users = [];
     });
-    builder.addCase(fetchUsers.fulfilled, (state, { payload: users }) => {
+    builder.addCase(fetchBasicUsers.fulfilled, (state, { payload: users }) => {
       state.fetchLoading = false;
       state.users = users;
     });
-    builder.addCase(fetchUsers.rejected, (state) => {
+    builder.addCase(fetchBasicUsers.rejected, (state) => {
       state.fetchLoading = false;
     });
 

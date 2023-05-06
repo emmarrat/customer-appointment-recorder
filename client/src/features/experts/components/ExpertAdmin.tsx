@@ -37,7 +37,7 @@ const ExpertAdmin = () => {
     dispatch(fetchExperts({page, limit}));
   }, [dispatch, page, limit]);
 
-  
+
   const handleDelete = async (id: string) => {
     if (window.confirm('Подтвердите удаление мастера')) {
       console.log('you can think that it is deleted')
@@ -58,7 +58,7 @@ const ExpertAdmin = () => {
           <Grid item>
             <Button
               component={RouterLink}
-              to="/admin/experts/new-expert"
+              to="/admin/experts/new"
               color="primary"
               variant="contained"
             >

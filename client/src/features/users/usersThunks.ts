@@ -77,10 +77,10 @@ export const googleLogin = createAsyncThunk<
   }
 });
 
-export const fetchUsers = createAsyncThunk<User[]>(
-  'users/fetchAll', async () => {
+export const fetchBasicUsers = createAsyncThunk<User[]>(
+  'users/fetchAllBasic', async () => {
 
-  const response = await axiosApi.get<User[]>('/users');
+  const response = await axiosApi.get<User[]>('/users/basics');
   return response.data;
 });
 

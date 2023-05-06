@@ -6,6 +6,8 @@ import { imageUpload } from '../multer';
 import config from '../config';
 import { downloadFile } from '../helper';
 import { randomUUID } from 'crypto';
+import auth from "../middleware/auth";
+import permit from "../middleware/permit";
 
 
 const usersRouter = express.Router();
@@ -121,6 +123,16 @@ usersRouter.post('/google', async (req, res, next) => {
     user.generateToken();
     await user.save();
     return res.send({ message: 'Login with Google successful', user });
+  } catch (e) {
+    return next(e);
+  }
+});
+
+usersRouter.get('/basics', auth, permit('admin'), async (req, res, next) => {
+  try {
+    const user = await User.find({ role: 'user'});
+
+    return res.send(user);
   } catch (e) {
     return next(e);
   }

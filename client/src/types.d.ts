@@ -54,10 +54,11 @@ export interface GlobalError {
 
 export interface Services {
   name: string;
-  price: number;
+  price: string;
 }
 export interface ServicesFull extends Services {
   _id: string;
+  price: number;
 }
 export interface UserMini {
   _id: string;
