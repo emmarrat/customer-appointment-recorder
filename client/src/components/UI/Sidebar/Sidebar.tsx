@@ -1,21 +1,16 @@
 import React from 'react';
 import {Link as RouterLink} from "react-router-dom";
 import {Box, Link, List, ListItem} from "@mui/material";
+import {AdminFilters} from "../../../types";
 
-const Sidebar = () => {
 
-  const items = [
-    {
-      id: 1,
-      name: 'Мастера',
-      link: 'experts'
-    },
-    {
-      id: 2,
-      name: 'Клиенты',
-      link: 'users'
-    },
-  ];
+interface Props {
+  items: AdminFilters[]
+}
+
+const Sidebar: React.FC<Props> = ({items}) => {
+
+
 
   return (
     <Box sx={{bgcolor: 'primary.main', maxWidth: '320px', borderRadius: '20px', padding: '10px 40px'}}>

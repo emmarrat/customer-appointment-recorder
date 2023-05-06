@@ -51,3 +51,50 @@ export interface LoginMutation {
 export interface GlobalError {
   error: string;
 }
+
+export interface Services {
+  name: string;
+  price: number;
+}
+export interface ServicesFull extends Services {
+  _id: string;
+}
+export interface UserMini {
+  _id: string;
+  firstName: string;
+  lastName: string;
+}
+
+export interface ExpertMutation {
+  user: string;
+  title: string;
+  info: string;
+  photo: File | null;
+  services: Services[];
+}
+
+export interface ExpertFull {
+  _id: string;
+  user: UserMini;
+  title: string;
+  info: string;
+  photo: string;
+  services: ServicesFull[]
+}
+
+export interface IPagination<Type> {
+  [key: string]: Type[];
+  currentPage: number;
+  totalCount: number;
+}
+
+export interface ApiResponse<Type> {
+  message: 'string';
+  result: Type | IPagination<Type>;
+}
+
+export interface AdminFilters {
+  id: number;
+  name: string;
+  link: string;
+}

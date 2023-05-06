@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {User} from '../../../types';
+import {Link as RouterLink, useNavigate} from "react-router-dom";
 import {Avatar, Button, Menu, MenuItem} from '@mui/material';
-import {useNavigate} from "react-router-dom";
 import {useAppDispatch} from "../../../app/hooks";
 import {logout} from "../../../features/users/usersThunks";
 import noImageAvailable from '../../../assets/images/noImageAvailable.jpg';
@@ -57,6 +57,9 @@ const UserMenu: React.FC<Props> = ({user}) => {
         onClose={handleClose}
       >
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
+        {user.role === 'admin' && (
+          <MenuItem component={RouterLink} to="/admin/experts">Редактировать мастеров</MenuItem>
+        )}
       </Menu>
     </>
   );

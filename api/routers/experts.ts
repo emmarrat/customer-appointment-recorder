@@ -56,8 +56,31 @@ expertsRouter.post(
 
 expertsRouter.get('/', async (req, res, next) => {
   try {
-    const experts = await Expert.find();
-    return res.send(experts);
+
+    const userId = req.query.user as string;
+    const limit: number = parseInt(req.query.limit as string) || 10;
+    const page: number = parseInt(req.query.page as string) || 1;
+
+    const searchParam: { user?: string } = {};
+
+    if (userId) {
+      searchParam.user = userId;
+    }
+
+    const totalCount = await Expert.count(searchParam);
+    const skip = (page - 1) * limit;
+
+    const experts = await Expert.find()
+      .populate('user', 'firstName lastName')
+      .select('user photo title')
+      .skip(skip)
+      .limit(limit)
+      .exec();
+    return res.send({
+      message: 'Эксперты найдены',
+      result: { experts, currentPage: page, totalCount }
+    });
+
   } catch (e) {
     return next(e);
   }
@@ -71,6 +94,32 @@ expertsRouter.get('/:id', async (req, res, next) => {
     }
     return res.send(expert);
   } catch (e) {
+    return next(e);
+  }
+});
+
+expertsRouter.delete('/:id', auth, permit('admin'), async (req, res, next) => {
+  try {
+    const expertId = req.params.id;
+    const expert = await Expert.findById(expertId);
+
+    if (!expert) {
+      return res
+        .status(500)
+        .send({ error: 'Учетная запись мастера не найдена!' });
+    }
+
+    const removedExpert = await expert.deleteOne();
+    //Когда будет сущность запись. Добавить удаление связаных сущностей.
+
+    res.send({
+      message: 'Учетная запись мастера удалена',
+      removedExpert,
+    });
+  } catch (e) {
+    if (e instanceof mongoose.Error.ValidationError) {
+      return res.status(400).send(e);
+    }
     return next(e);
   }
 });
