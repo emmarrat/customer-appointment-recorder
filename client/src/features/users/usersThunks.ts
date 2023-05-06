@@ -78,7 +78,7 @@ export const googleLogin = createAsyncThunk<
 });
 
 export const fetchUsers = createAsyncThunk<User[]>(
-  'users/fetchAll', async (params) => {
+  'users/fetchAll', async () => {
 
   const response = await axiosApi.get<User[]>('/users');
   return response.data;

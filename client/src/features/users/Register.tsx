@@ -1,22 +1,12 @@
-
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import {
-  Avatar,
-  Box,
-  Button,
-  Container,
-  Grid,
-  TextField,
-  Typography,
-  Link, styled
-} from '@mui/material';
-import { GoogleLogin } from '@react-oauth/google';
+import {Avatar, Box, Button, Container, Grid, Link, TextField, Typography} from '@mui/material';
+import {GoogleLogin} from '@react-oauth/google';
 import React from 'react';
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import {selectRegisterError} from "./usersSlice";
 import {RegisterMutation} from "../../types";
 import {googleLogin, register} from "./usersThunks";
-import {Link as NavLink, Link as RouterLink, useNavigate} from "react-router-dom";
+import {Link as RouterLink, useNavigate} from "react-router-dom";
 import FileInput from "../../components/UI/FileInput/FileInput";
 
 const Register = () => {

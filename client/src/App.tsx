@@ -6,6 +6,7 @@ import Register from "./features/users/Register";
 import Login from "./features/users/Login";
 import {useAppSelector} from "./app/hooks";
 import {selectUser} from "./features/users/usersSlice";
+import Admin from "./features/admin/Admin";
 
 const App = () => {
   const user = useAppSelector(selectUser);
@@ -21,6 +22,8 @@ const App = () => {
             {/*<Route path="/" element={<Artists/>}/>*/}
             <Route path="/register" element={<Register/>}/>
             <Route path="/login" element={<Login/>}/>
+            <Route path="/admin/" element={<Admin/>}/>
+            <Route path="/admin/:id" element={<Admin/>}/>
             <Route path="/*" element={<Typography textAlign="center">Not found!</Typography>}/>
           </Routes>
         </Container>
