@@ -1,10 +1,10 @@
 import React, {ChangeEvent, useEffect, useState} from 'react';
-import {ExpertMutation, ValidationError} from "../../../types";
-import {useAppDispatch, useAppSelector} from "../../../app/hooks";
-import {selectUsers} from "../../users/usersSlice";
-import {fetchBasicUsers} from "../../users/usersThunks";
+import {ExpertMutation, ValidationError} from "../../../../types";
+import {useAppDispatch, useAppSelector} from "../../../../app/hooks";
+import {selectUsers} from "../../../users/usersSlice";
+import {fetchBasicUsers} from "../../../users/usersThunks";
 import {Button, Grid, MenuItem, TextField, Typography} from "@mui/material";
-import FileInput from "../../../components/UI/FileInput/FileInput";
+import FileInput from "../../../../components/UI/FileInput/FileInput";
 
 interface Props {
   onSubmit: (teacher: ExpertMutation) => void;
@@ -12,6 +12,7 @@ interface Props {
   isEdit?: boolean;
   loading: boolean;
   error: ValidationError | null;
+  expertName?: string;
 }
 
 const initialState: ExpertMutation = {
@@ -22,7 +23,7 @@ const initialState: ExpertMutation = {
   services: [{name: '', price: ''}],
 };
 
-const ExpertsForm: React.FC<Props> = ({onSubmit, existingExpert, loading, isEdit, error}) => {
+const ExpertsForm: React.FC<Props> = ({onSubmit, existingExpert, loading, isEdit, error, expertName}) => {
   const dispatch = useAppDispatch();
   const basicUsers = useAppSelector(selectUsers);
 
@@ -98,19 +99,19 @@ const ExpertsForm: React.FC<Props> = ({onSubmit, existingExpert, loading, isEdit
       <Grid container direction="column" spacing={2}>
         <Grid item xs>
           <Typography variant="h4" fontSize={{ xs: '18px', md: '22px' }}>
-            {isEdit ? 'Редактировать' : 'Добавить'} мастера
+            {isEdit ? 'Редактировать' : 'Добавить'} мастера {expertName}
           </Typography>
         </Grid>
-        <Grid item xs={12}>
+        {!isEdit && <Grid item xs={12}>
           <TextField
             label="Выберите пользователя"
             select
             name="user"
             value={state.user}
             onChange={inputChangeHandler}
-            required
             error={Boolean(getFieldError('user'))}
             helperText={getFieldError('user')}
+            required
           >
             <MenuItem value="" disabled>
               Пожалуйста, выберите пользователя
@@ -121,7 +122,7 @@ const ExpertsForm: React.FC<Props> = ({onSubmit, existingExpert, loading, isEdit
               </MenuItem>
             ))}
           </TextField>
-        </Grid>
+        </Grid>}
         <Grid item xs>
           <TextField
             variant="outlined"
@@ -171,7 +172,7 @@ const ExpertsForm: React.FC<Props> = ({onSubmit, existingExpert, loading, isEdit
                 onChange={(event)=>handleServicesChange(event, index)}
                 autoComplete="new-services"
                 error={Boolean(getFieldError(`services.${index}.name`))}
-                helperText={getFieldError(`services.${index}.price`)}
+                helperText={getFieldError(`services.${index}.name`)}
                 required
               />
             </Grid>

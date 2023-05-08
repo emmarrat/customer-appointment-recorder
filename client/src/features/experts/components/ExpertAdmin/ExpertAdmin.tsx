@@ -18,9 +18,9 @@ import {
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import {useAppDispatch, useAppSelector} from "../../../app/hooks";
-import {selectExperts, selectExpertsCount, selectExpertsPage} from "../expertsSlice";
-import {fetchExperts} from "../expertsThunks";
+import {useAppDispatch, useAppSelector} from "../../../../app/hooks";
+import {selectExperts, selectExpertsCount, selectExpertsPage} from "../../expertsSlice";
+import {fetchExperts} from "../../expertsThunks";
 
 
 const ExpertAdmin = () => {

@@ -88,7 +88,7 @@ expertsRouter.get('/', async (req, res, next) => {
 
 expertsRouter.get('/:id', async (req, res, next) => {
   try {
-    const expert = await Expert.findById(req.params.id);
+    const expert = await Expert.findById(req.params.id) .populate('user', 'firstName lastName');
     if (!expert) {
       return res.status(404).send({ error: 'Мастер не найден!' });
     }
@@ -123,6 +123,56 @@ expertsRouter.delete('/:id', auth, permit('admin'), async (req, res, next) => {
     return next(e);
   }
 });
+
+expertsRouter.patch(
+  '/:id',
+  auth,
+  permit('admin'),
+  imageUpload.single('photo'),
+  async (req, res, next) => {
+    try {
+      const expert = await Expert.findById(req.params.id);
+
+      if (!expert) {
+        return res.status(404).send({ error: 'Мастер не найден!' });
+      }
+
+      if (req.body.user) {
+        expert.user = req.body.user;
+      }
+
+      if (req.body.title) {
+        expert.title = req.body.title;
+      }
+
+      if (req.body.info) {
+        expert.info = req.body.info;
+      }
+
+      if (req.file) {
+        expert.photo = req.file.filename;
+      }
+
+      if (req.body.services) {
+        expert.services = JSON.parse(req.body.services);
+      }
+
+      await expert.save();
+
+      return res.send({
+        message: 'Учетная запись мастера изменена!',
+        expert,
+      });
+    } catch (e) {
+      if (e instanceof mongoose.Error.ValidationError) {
+        return res.status(400).send(e);
+      } else {
+        return next(e);
+      }
+    }
+  },
+);
+
 
 
 

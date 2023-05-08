@@ -6,9 +6,11 @@ import Register from "./features/users/Register";
 import Login from "./features/users/Login";
 import {useAppSelector} from "./app/hooks";
 import {selectUser} from "./features/users/usersSlice";
-import ExpertAdmin from "./features/experts/components/ExpertAdmin";
+import ExpertAdmin from "./features/experts/components/ExpertAdmin/ExpertAdmin";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
-import NewExpert from "./features/experts/NewExpert";
+import NewExpert from "./features/experts/containers/NewExpert/NewExpert";
+import EditExpert from "./features/experts/containers/EditExpert/EditExpert";
+import Experts from "./features/experts/containers/Experts/Experts";
 
 const App = () => {
   const user = useAppSelector(selectUser);
@@ -22,9 +24,9 @@ const App = () => {
       <main>
         <Container maxWidth="xl" sx={{mt: 5}}>
           <Routes>
-            {/*<Route path="/" element={<Artists/>}/>*/}
             <Route path="/register" element={<Register/>}/>
             <Route path="/login" element={<Login/>}/>
+            <Route path="/experts" element={<Experts/>}/>
             <Route path="/admin/experts" element={
               <ProtectedRoute isAllowed={user && user.role === 'admin'}>
                 <ExpertAdmin/>
@@ -33,6 +35,11 @@ const App = () => {
             <Route path="/admin/experts/new" element={
               <ProtectedRoute isAllowed={user && user.role === 'admin'}>
                 <NewExpert/>
+              </ProtectedRoute>
+            }/>
+            <Route path="/admin/experts/edit/:id" element={
+              <ProtectedRoute isAllowed={user && user.role === 'admin'}>
+                <EditExpert/>
               </ProtectedRoute>
             }/>
             <Route path="/*" element={<Typography textAlign="center">Not found!</Typography>}/>

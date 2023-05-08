@@ -1,5 +1,5 @@
 import React from 'react';
-import {AppBar, Grid, styled, Toolbar, Typography} from '@mui/material';
+import {AppBar, Button, Grid, styled, Toolbar, Typography} from '@mui/material';
 import {Link as NavLink} from 'react-router-dom';
 import {useAppSelector} from "../../../app/hooks";
 import {selectUser} from "../../../features/users/usersSlice";
@@ -25,7 +25,17 @@ const AppToolbar = () => {
           <Typography variant="h6" component="div">
             <Link to="/">{COMPANY_TITLE}</Link>
           </Typography>
-          <Grid item>
+          <Grid item container
+                alignItems="center"
+                justifyContent="flex-end"
+                xs={12}
+                md={9}>
+            <Grid item>
+              <Button component={NavLink} to="/experts" color="inherit">
+                Наши мастера
+              </Button>
+            </Grid>
+
             {user ? (<UserMenu user={user}/> ): (<AnonymousMenu/>)}
           </Grid>
         </Grid>

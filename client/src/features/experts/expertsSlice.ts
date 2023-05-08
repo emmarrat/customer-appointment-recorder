@@ -1,8 +1,7 @@
-import {ExpertFull, GlobalError, IPagination, User, ValidationError} from "../../types";
+import {ExpertFull, IPagination, ValidationError} from "../../types";
 import {createSlice} from "@reduxjs/toolkit";
 import {RootState} from "../../app/store";
-import {createExpert, fetchExpertById, fetchExperts} from "./expertsThunks";
-import {fetchOneBasicUser} from "../users/usersThunks";
+import {createExpert, fetchExpertById, fetchExperts, updateExpert} from "./expertsThunks";
 
 interface ExpertState {
   expert: ExpertFull | null;
@@ -75,6 +74,18 @@ export const expertsSlice = createSlice({
     );
     builder.addCase(fetchExpertById.rejected, (state) => {
       state.fetchOneExpertLoading = false;
+    });
+
+    builder.addCase(updateExpert.pending, (state) => {
+      state.expertUpdatingError = null;
+      state.expertUpdating = true;
+    });
+    builder.addCase(updateExpert.fulfilled, (state) => {
+      state.expertUpdating = false;
+    });
+    builder.addCase(updateExpert.rejected, (state, {payload: error}) => {
+      state.expertUpdatingError = error || null;
+      state.expertUpdating = false;
     });
 
 

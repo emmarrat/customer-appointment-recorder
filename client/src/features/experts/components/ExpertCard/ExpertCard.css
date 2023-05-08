@@ -1,0 +1,17 @@
+.expert-card{
+    min-width: 290px;
+    max-width: 350px;
+}
+.expert-media {
+    height: 140px;
+}
+.expert-content {
+    display: flex;
+    justify-content: center;
+}
+.expert-btn-wrapp {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
