@@ -99,3 +99,24 @@ export interface AdminFilters {
   name: string;
   link: string;
 }
+
+export interface ServiceHourMutation {
+  "expert": string,
+  "date": string,
+}
+
+export interface ServiceHours {
+  _id: string
+  expert: string
+  date: string
+  hours: Hour[]
+  createdAt: string
+  updatedAt: string
+}
+
+export interface Hour {
+  startTime: string
+  endTime: string
+  status: boolean
+  _id: string
+}

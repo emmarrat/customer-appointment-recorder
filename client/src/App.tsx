@@ -11,6 +11,7 @@ import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import NewExpert from "./features/experts/containers/NewExpert/NewExpert";
 import EditExpert from "./features/experts/containers/EditExpert/EditExpert";
 import Experts from "./features/experts/containers/Experts/Experts";
+import OneExpert from "./features/experts/containers/OneExpert/OneExpert";
 
 const App = () => {
   const user = useAppSelector(selectUser);
@@ -27,6 +28,7 @@ const App = () => {
             <Route path="/register" element={<Register/>}/>
             <Route path="/login" element={<Login/>}/>
             <Route path="/experts" element={<Experts/>}/>
+            <Route path="/experts/:id" element={<OneExpert/>}/>
             <Route path="/admin/experts" element={
               <ProtectedRoute isAllowed={user && user.role === 'admin'}>
                 <ExpertAdmin/>

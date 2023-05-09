@@ -33,17 +33,17 @@ serviceHoursRouter.post(
       }
 
       const newServicesHour = new ServicesHour({
-          expert: req.body.expert,
-          date: req.body.date,
-        });
+        expert: req.body.expert,
+        date: req.body.date,
+      });
 
       newServicesHour.hours = [
-        {startTime: '10:00', endTime: '11:00'},
-        {startTime: '11:15', endTime: '12:15'},
-        {startTime: '13:45', endTime: '14:45'},
-        {startTime: '15:00', endTime: '16:00'},
-        {startTime: '16:15', endTime: '17:15'},
-        {startTime: '17:30', endTime: '18:30'},
+        {startTime: '10:00', endTime: '11:00', status: false},
+        {startTime: '11:15', endTime: '12:15', status: false},
+        {startTime: '13:45', endTime: '14:45', status: false},
+        {startTime: '15:00', endTime: '16:00', status: false},
+        {startTime: '16:15', endTime: '17:15', status: false},
+        {startTime: '17:30', endTime: '18:30', status: false},
       ];
 
       const savedServicesHour = await newServicesHour.save();
@@ -62,9 +62,9 @@ serviceHoursRouter.post(
 
 serviceHoursRouter.get('/expert/:id', async (req, res, next) => {
   try {
-    const serviceHours = await ServicesHour.find({ expert: req.params.id }).exec();
+    const serviceHours = await ServicesHour.find({expert: req.params.id}).exec();
 
-    res.status(200).send({ message: 'Working schedules fetched successfully', serviceHours });
+    res.status(200).send(serviceHours);
   } catch (e) {
     return next(e);
   }
@@ -137,7 +137,6 @@ serviceHoursRouter.delete(
     }
   },
 );
-
 
 
 export default serviceHoursRouter;

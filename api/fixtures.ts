@@ -3,6 +3,7 @@ import config from "./config";
 import * as crypto from 'crypto';
 import User from "./models/User";
 import Expert from "./models/Expert";
+import ServiceHour from "./models/ServiceHour";
 
 const run = async () => {
   mongoose.set('strictQuery', false);
@@ -12,6 +13,7 @@ const run = async () => {
   try {
     await db.dropCollection('users');
     await db.dropCollection('experts');
+    await db.dropCollection('serviceshours');
   } catch (e) {
     console.log('Collections were not present, skipping drop...');
   }
@@ -79,7 +81,7 @@ const run = async () => {
       {
         user: expert2._id,
         title: 'Мастер по маникюру',
-        info: 'Профессионал мастер с творческим подходом, владеющий различными техниками маникюра, предлагающий индивидуальные решения, создающий уникальные дизайны на ногтях. Он также консультант по уходу за ногтями, соблюдающий стандарты санитарии и гигиены, обладающий отличными навыками общения с клиентами и создающий комфортную атмосферу в салоне.',
+        info: expert2.firstName + ' профессионал с творческим подходом, владеющий различными техниками маникюра, предлагающий индивидуальные решения, создающий уникальные дизайны на ногтях.',
         photo: 'fixtures/avatar2.jpg',
         services: [
           {name: 'Снятие лака', price: 500},
@@ -88,6 +90,45 @@ const run = async () => {
         ],
       },
     );
+
+  const [date1, date2, date3, date4] = await ServiceHour.create(
+    { expert: newExpert1._id, date: new Date('2023-06-01'), hours: [
+        { startTime: '10:00', endTime: '11:00', status: false },
+        { startTime: '11:15', endTime: '12:15', status: false },
+        { startTime: '13:45', endTime: '14:45', status: false },
+        { startTime: '15:00', endTime: '16:00', status: false },
+        { startTime: '16:15', endTime: '17:15', status: false },
+        { startTime: '17:30', endTime: '18:30', status: false },
+      ]
+    },
+    { expert: newExpert1._id, date: new Date('2023-06-02'), hours: [
+        { startTime: '10:00', endTime: '11:00', status: false },
+        { startTime: '11:15', endTime: '12:15', status: false },
+        { startTime: '13:45', endTime: '14:45', status: false },
+        { startTime: '15:00', endTime: '16:00', status: false },
+        { startTime: '16:15', endTime: '17:15', status: false },
+        { startTime: '17:30', endTime: '18:30', status: false },
+      ]
+    },
+    { expert: newExpert2._id, date: new Date('2023-06-01'), hours: [
+        { startTime: '10:00', endTime: '11:00', status: false },
+        { startTime: '11:15', endTime: '12:15', status: false },
+        { startTime: '13:45', endTime: '14:45', status: false },
+        { startTime: '15:00', endTime: '16:00', status: false },
+        { startTime: '16:15', endTime: '17:15', status: false },
+        { startTime: '17:30', endTime: '18:30', status: false },
+      ]
+    },
+    { expert: newExpert2._id, date: new Date('2023-06-02'), hours: [
+        { startTime: '10:00', endTime: '11:00', status: false },
+        { startTime: '11:15', endTime: '12:15', status: false },
+        { startTime: '13:45', endTime: '14:45', status: false },
+        { startTime: '15:00', endTime: '16:00', status: false },
+        { startTime: '16:15', endTime: '17:15', status: false },
+        { startTime: '17:30', endTime: '18:30', status: false },
+      ]
+    },
+  )
   await db.close();
 };
 void run();

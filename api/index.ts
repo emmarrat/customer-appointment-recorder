@@ -14,7 +14,7 @@ app.use(express.static('public'));
 app.use(express.json());
 app.use('/users', usersRouter);
 app.use('/experts', expertsRouter);
-app.use('/servicesHours', serviceHoursRouter);
+app.use('/service-hours', serviceHoursRouter);
 
 const run = async () => {
   mongoose.set('strictQuery', false);
