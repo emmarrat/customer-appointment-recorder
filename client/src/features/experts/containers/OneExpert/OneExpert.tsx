@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Avatar,
   Button,
@@ -21,6 +21,10 @@ import LoyaltyIcon from '@mui/icons-material/Loyalty';
 import LocalMallRoundedIcon from '@mui/icons-material/LocalMallRounded';
 import {apiURL} from "../../../../constants";
 import './OneExpert.css';
+import dayjs, {Dayjs} from "dayjs";
+import {DatePicker} from "@mui/x-date-pickers";
+import {ServiceHours} from "../../../../types";
+
 
 const OneExpert = () => {
   const {id} = useParams() as { id: string };
@@ -29,18 +33,58 @@ const OneExpert = () => {
   const workingDates = useAppSelector(selectDatetimes);
   const loading = useAppSelector(selectExpertOneFetching);
   const navigate = useNavigate();
-
+  const [state, setState] = useState<string[]>([]);
+  const [value, setValue] = React.useState<Dayjs | null>(dayjs(dayjs(new Date())));
+  const [selectedDate, setSelectedDate] = useState<ServiceHours | null>(null);
   useEffect(() => {
       dispatch(fetchExpertById(id));
       dispatch(fetchServiceHoursForExpert(id));
     },
     [dispatch, id]);
-  console.log('expert = ', expert);
+  // console.log('expert = ', expert);
   console.log('datetimes = ', workingDates);
+  // console.log('state = ', state);
+  console.log(value!.toISOString());
+  console.log('selected date = ', selectedDate )
+
+
+  const onDateChange = (newValue: Dayjs | null) => {
+    setValue(newValue);
+    if (newValue) {
+      const matchingObject = workingDates.find((obj) => {
+        const objDate = new Date(obj.date).toISOString().slice(0, 10);
+        const providedDate = new Date( newValue.toISOString()).toISOString().slice(0, 10);
+
+        return objDate === providedDate;
+      });
+      if (matchingObject) {
+        setSelectedDate(matchingObject);
+      } else {
+        setSelectedDate(null);
+      }
+    }
+  };
+
+  const isWeekend = (date: Dayjs) => {
+    const day = date.day();
+    return day === 0 || day === 6;
+  };
+
 
   const goBack = () => {
     navigate(-1);
   };
+
+  const addServiceState = (id: string) => {
+    setState(prevState => [...prevState, id]);
+  };
+
+  const checkIsSelected = (id: string) => {
+    if (expert) {
+      return state.includes(id);
+    }
+  };
+
   return (
     <Grid container justifyContent="center">
       {loading ? (
@@ -82,12 +126,18 @@ const OneExpert = () => {
                 <Divider sx={{my: 3}}/>
               </Grid>
               <Grid item xs={12} width="100%">
-                <Typography variant="h6" >Мои услуги:</Typography>
+                <Typography variant="h6">Мои услуги:</Typography>
                 <List>
                   {expert.services.map(service => (
                     <ListItem
+                      key={service._id}
                       secondaryAction={
-                        <Button className="service-btn" sx={{bgcolor: 'primary.light', color: "#fff"}}>
+                        <Button
+                          className="service-btn"
+                          sx={{bgcolor: 'primary.light', color: "#fff"}}
+                          onClick={() => addServiceState(service._id)}
+                          disabled={checkIsSelected(service._id)}
+                        >
                           Выбрать
                           <LocalMallRoundedIcon sx={{ml: 1, color: '#fff'}}/>
                         </Button>
@@ -106,6 +156,20 @@ const OneExpert = () => {
                   ))}
                 </List>
               </Grid>
+              <Grid item>
+                <Typography mb={1}>Когда вам будет удобно прийти?</Typography>
+                <DatePicker
+                  value={value}
+                  onChange={(newDate) => onDateChange(newDate)}
+                  shouldDisableDate={isWeekend}
+                  views={['year', 'month', 'day']}
+                />
+              </Grid>
+              <Grid item>
+                {selectedDate ? selectedDate.hours.map(hour => (
+                 !hour.status  && <Typography key={hour._id}>{hour.startTime} - {hour.endTime}</Typography>
+                )) : <Typography>На эту дату нет доступных окошек</Typography>}
+              </Grid>
               <Grid item width="100%">
                 <Divider sx={{my: 3}}/>
               </Grid>
@@ -117,8 +181,6 @@ const OneExpert = () => {
                   {expert.info}
                 </Typography>
               </Grid>
-
-
             </Grid>
           </Grid>
         )

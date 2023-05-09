@@ -75,7 +75,7 @@ const run = async () => {
         services: [
           {name: 'Обычная стрижка', price: 400},
           {name: 'Окрашивание волос', price: 800},
-          {name: 'Модельная стриэка', price: 600},
+          {name: 'Модельная стрижка', price: 600},
         ],
       },
       {
@@ -94,20 +94,20 @@ const run = async () => {
   const [date1, date2, date3, date4] = await ServiceHour.create(
     { expert: newExpert1._id, date: new Date('2023-06-01'), hours: [
         { startTime: '10:00', endTime: '11:00', status: false },
-        { startTime: '11:15', endTime: '12:15', status: false },
+        { startTime: '11:15', endTime: '12:15', status: true },
         { startTime: '13:45', endTime: '14:45', status: false },
         { startTime: '15:00', endTime: '16:00', status: false },
-        { startTime: '16:15', endTime: '17:15', status: false },
+        { startTime: '16:15', endTime: '17:15', status: true },
         { startTime: '17:30', endTime: '18:30', status: false },
       ]
     },
     { expert: newExpert1._id, date: new Date('2023-06-02'), hours: [
-        { startTime: '10:00', endTime: '11:00', status: false },
+        { startTime: '10:00', endTime: '11:00', status: true },
         { startTime: '11:15', endTime: '12:15', status: false },
         { startTime: '13:45', endTime: '14:45', status: false },
         { startTime: '15:00', endTime: '16:00', status: false },
         { startTime: '16:15', endTime: '17:15', status: false },
-        { startTime: '17:30', endTime: '18:30', status: false },
+        { startTime: '17:30', endTime: '18:30', status: true },
       ]
     },
     { expert: newExpert2._id, date: new Date('2023-06-01'), hours: [
@@ -121,9 +121,9 @@ const run = async () => {
     },
     { expert: newExpert2._id, date: new Date('2023-06-02'), hours: [
         { startTime: '10:00', endTime: '11:00', status: false },
-        { startTime: '11:15', endTime: '12:15', status: false },
-        { startTime: '13:45', endTime: '14:45', status: false },
-        { startTime: '15:00', endTime: '16:00', status: false },
+        { startTime: '11:15', endTime: '12:15', status: true },
+        { startTime: '13:45', endTime: '14:45', status: true },
+        { startTime: '15:00', endTime: '16:00', status: true },
         { startTime: '16:15', endTime: '17:15', status: false },
         { startTime: '17:30', endTime: '18:30', status: false },
       ]

@@ -1,4 +1,5 @@
 import { createTheme, Theme } from '@mui/material/styles';
+import { ruRU } from '@mui/x-date-pickers/locales';
 
 const theme: Theme = createTheme({
   palette: {
@@ -36,5 +37,14 @@ const theme: Theme = createTheme({
     },
   },
 });
+
+export const themeDate = createTheme(
+  {
+    palette: {
+      primary: { main: '#1976d2' },
+    },
+  },
+  ruRU, // use 'de' locale for UI texts (start, next month, ...)
+);
 
 export default theme;
