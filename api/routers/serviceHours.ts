@@ -70,6 +70,23 @@ serviceHoursRouter.get('/expert/:id', async (req, res, next) => {
   }
 });
 
+serviceHoursRouter.get('/by-user/:id', async (req, res, next) => {
+  try {
+    const expert = await Expert.findOne({user: req.params.id}).populate('user', 'firstName lastName');
+
+    if (!expert) {
+      return res.status(404).send({error: 'Мастер не найден!'});
+    }
+
+    const serviceHours = await ServicesHour.find({expert: expert._id}).exec();
+
+    return res.send(serviceHours);
+
+  } catch (e) {
+    return next(e);
+  }
+})
+
 serviceHoursRouter.patch(
   '/:id/hours',
   auth,

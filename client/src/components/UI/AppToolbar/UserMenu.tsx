@@ -60,6 +60,9 @@ const UserMenu: React.FC<Props> = ({user}) => {
         {user.role === 'admin' && (
           <MenuItem component={RouterLink} to="/admin/experts">Редактировать мастеров</MenuItem>
         )}
+        {user.role === 'expert' && (
+          <MenuItem component={RouterLink} to="/expert/service-hours">Рабочий график</MenuItem>
+        )}
       </Menu>
     </>
   );

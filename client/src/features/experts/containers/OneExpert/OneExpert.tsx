@@ -33,7 +33,7 @@ const OneExpert = () => {
   const workingDates = useAppSelector(selectDatetimes);
   const loading = useAppSelector(selectExpertOneFetching);
   const navigate = useNavigate();
-  const [state, setState] = useState<string[]>([]);
+  const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [value, setValue] = React.useState<Dayjs | null>(dayjs(dayjs(new Date())));
   const [selectedDate, setSelectedDate] = useState<ServiceHours | null>(null);
   useEffect(() => {
@@ -76,12 +76,12 @@ const OneExpert = () => {
   };
 
   const addServiceState = (id: string) => {
-    setState(prevState => [...prevState, id]);
+    setSelectedServices(prevState => [...prevState, id]);
   };
 
   const checkIsSelected = (id: string) => {
     if (expert) {
-      return state.includes(id);
+      return selectedServices.includes(id);
     }
   };
 

@@ -19,12 +19,12 @@ expertsRouter.post(
       if (existingExpert) {
         return res
           .status(500)
-          .send({ error: 'Такой мастер уже существует' });
+          .send({error: 'Такой мастер уже существует'});
       }
       const user = await User.findById(req.body.user);
 
       if (!user) {
-        return res.status(500).send({ error: 'Пользователь не найден!' });
+        return res.status(500).send({error: 'Пользователь не найден!'});
       }
 
       const parsedServices = JSON.parse(req.body.services);
@@ -78,7 +78,7 @@ expertsRouter.get('/', async (req, res, next) => {
       .exec();
     return res.send({
       message: 'Эксперты найдены',
-      result: { experts, currentPage: page, totalCount }
+      result: {experts, currentPage: page, totalCount}
     });
 
   } catch (e) {
@@ -88,9 +88,9 @@ expertsRouter.get('/', async (req, res, next) => {
 
 expertsRouter.get('/:id', async (req, res, next) => {
   try {
-    const expert = await Expert.findById(req.params.id) .populate('user', 'firstName lastName');
+    const expert = await Expert.findById(req.params.id).populate('user', 'firstName lastName');
     if (!expert) {
-      return res.status(404).send({ error: 'Мастер не найден!' });
+      return res.status(404).send({error: 'Мастер не найден!'});
     }
     return res.send(expert);
   } catch (e) {
@@ -106,7 +106,7 @@ expertsRouter.delete('/:id', auth, permit('admin'), async (req, res, next) => {
     if (!expert) {
       return res
         .status(500)
-        .send({ error: 'Учетная запись мастера не найдена!' });
+        .send({error: 'Учетная запись мастера не найдена!'});
     }
 
     const removedExpert = await expert.deleteOne();
@@ -134,7 +134,7 @@ expertsRouter.patch(
       const expert = await Expert.findById(req.params.id);
 
       if (!expert) {
-        return res.status(404).send({ error: 'Мастер не найден!' });
+        return res.status(404).send({error: 'Мастер не найден!'});
       }
 
       if (req.body.user) {
@@ -172,8 +172,6 @@ expertsRouter.patch(
     }
   },
 );
-
-
 
 
 export default expertsRouter;

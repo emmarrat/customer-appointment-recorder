@@ -9,3 +9,11 @@ export const fetchServiceHoursForExpert = createAsyncThunk<ServiceHours[], strin
       return response.data
   }
 );
+
+export const fetchServiceHoursByUser = createAsyncThunk<ServiceHours[], string>(
+  'experts/fetchServiceHoursByUser',
+  async (id) => {
+    const response = await axiosApi.get(`/service-hours/by-user/${id}`);
+    return response.data;
+  }
+);

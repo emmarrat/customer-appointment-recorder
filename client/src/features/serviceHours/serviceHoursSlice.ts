@@ -1,7 +1,7 @@
 import {GlobalError, ServiceHours} from "../../types";
 import {createSlice} from "@reduxjs/toolkit";
 import {RootState} from "../../app/store";
-import {fetchServiceHoursForExpert} from "./serviceHoursThunks";
+import {fetchServiceHoursByUser, fetchServiceHoursForExpert} from "./serviceHoursThunks";
 
 interface ServiceHoursState {
   datetimes: ServiceHours[];
@@ -39,6 +39,18 @@ export const serviceHoursSlice = createSlice({
       state.datetimes = datetimes;
     });
     builder.addCase(fetchServiceHoursForExpert.rejected, (state) => {
+      state.datetimeFetching = false;
+    });
+
+    builder.addCase(fetchServiceHoursByUser.pending, (state) => {
+      state.datetimes = []
+      state.datetimeFetching = true;
+    });
+    builder.addCase(fetchServiceHoursByUser.fulfilled, (state, {payload: datetimes}) => {
+      state.datetimeFetching = false;
+      state.datetimes = datetimes;
+    });
+    builder.addCase(fetchServiceHoursByUser.rejected, (state) => {
       state.datetimeFetching = false;
     });
   }

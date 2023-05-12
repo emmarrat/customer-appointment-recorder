@@ -12,6 +12,7 @@ import NewExpert from "./features/experts/containers/NewExpert/NewExpert";
 import EditExpert from "./features/experts/containers/EditExpert/EditExpert";
 import Experts from "./features/experts/containers/Experts/Experts";
 import OneExpert from "./features/experts/containers/OneExpert/OneExpert";
+import ServiceHourAdmin from "./features/serviceHours/components/ServiceHourAdmin/ServiceHourAdmin";
 
 const App = () => {
   const user = useAppSelector(selectUser);
@@ -45,6 +46,11 @@ const App = () => {
               </ProtectedRoute>
             }/>
             <Route path="/*" element={<Typography textAlign="center">Not found!</Typography>}/>
+            <Route path="/expert/service-hours" element={
+              <ProtectedRoute isAllowed={user && user.role === 'expert'}>
+                <ServiceHourAdmin/>
+              </ProtectedRoute>
+            }/>
           </Routes>
         </Container>
       </main>
