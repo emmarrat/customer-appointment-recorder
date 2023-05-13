@@ -11,7 +11,7 @@ const ExpertSchema = new Schema(
       required: true,
       validate: {
         validator: async (value: Types.ObjectId) => User.findById(value),
-        message: 'There is no such user',
+        message: 'Юзер не найден',
       },
     },
     title: {

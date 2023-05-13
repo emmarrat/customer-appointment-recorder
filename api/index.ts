@@ -5,6 +5,7 @@ import config from "./config";
 import usersRouter from "./routers/users";
 import expertsRouter from "./routers/experts";
 import serviceHoursRouter from "./routers/serviceHours";
+import appointments from "./routers/appointments";
 
 const app = express();
 const port = 8000;
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use('/users', usersRouter);
 app.use('/experts', expertsRouter);
 app.use('/service-hours', serviceHoursRouter);
+app.use('/appointments', appointments);
 
 const run = async () => {
   mongoose.set('strictQuery', false);

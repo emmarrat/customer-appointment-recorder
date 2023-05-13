@@ -41,12 +41,6 @@ const OneExpert = () => {
       dispatch(fetchServiceHoursForExpert(id));
     },
     [dispatch, id]);
-  // console.log('expert = ', expert);
-  console.log('datetimes = ', workingDates);
-  // console.log('state = ', state);
-  console.log(value!.toISOString());
-  console.log('selected date = ', selectedDate )
-
 
   const onDateChange = (newValue: Dayjs | null) => {
     setValue(newValue);
@@ -64,12 +58,6 @@ const OneExpert = () => {
       }
     }
   };
-
-  const isWeekend = (date: Dayjs) => {
-    const day = date.day();
-    return day === 0 || day === 6;
-  };
-
 
   const goBack = () => {
     navigate(-1);
@@ -160,7 +148,6 @@ const OneExpert = () => {
                 <DatePicker
                   value={value}
                   onChange={(newDate) => onDateChange(newDate)}
-                  shouldDisableDate={isWeekend}
                   views={['year', 'month', 'day']}
                 />
               </Grid>

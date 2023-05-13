@@ -3,7 +3,7 @@ import Expert from "./Expert";
 
 const Schema = mongoose.Schema;
 
-const ServicesHourSchema = new Schema(
+const ServiceHourSchema = new Schema(
   {
     expert: {
       type: Schema.Types.ObjectId,
@@ -11,7 +11,7 @@ const ServicesHourSchema = new Schema(
       required: true,
       validate: {
         validator: async (value: Types.ObjectId) => Expert.findById(value),
-        message: 'There is no such expert',
+        message: 'Эксперт не найден',
       },
     },
     date: {
@@ -36,5 +36,5 @@ const ServicesHourSchema = new Schema(
   },
   {timestamps: true},
 );
-const ServicesHour = mongoose.model('ServicesHour', ServicesHourSchema);
-export default ServicesHour;
+const ServiceHour = mongoose.model('ServiceHour', ServiceHourSchema);
+export default ServiceHour;

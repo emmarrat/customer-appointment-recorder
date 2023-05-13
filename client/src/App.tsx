@@ -45,12 +45,13 @@ const App = () => {
                 <EditExpert/>
               </ProtectedRoute>
             }/>
-            <Route path="/*" element={<Typography textAlign="center">Not found!</Typography>}/>
             <Route path="/expert/service-hours" element={
               <ProtectedRoute isAllowed={user && user.role === 'expert'}>
                 <ServiceHourAdmin/>
               </ProtectedRoute>
             }/>
+
+            <Route path="/*" element={<Typography textAlign="center" mt={5}>Упс! Страница не найдена!</Typography>}/>
 
           </Routes>
         </Container>

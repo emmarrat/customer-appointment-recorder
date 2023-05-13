@@ -3,7 +3,6 @@ import auth, {RequestWithUser} from "../middleware/auth";
 import permit from "../middleware/permit";
 import Expert from "../models/Expert";
 import mongoose from "mongoose";
-import ServicesHour from "../models/ServiceHour";
 import ServiceHour from "../models/ServiceHour";
 
 const serviceHoursRouter = express.Router();
@@ -32,7 +31,7 @@ serviceHoursRouter.post(
         return res.status(400).send({error: 'У данного мастера уже есть рабочий график на этот день!'});
       }
 
-      const newServicesHour = new ServicesHour({
+      const newServicesHour = new ServiceHour({
         expert: req.body.expert,
         date: req.body.date,
       });
@@ -62,7 +61,7 @@ serviceHoursRouter.post(
 
 serviceHoursRouter.get('/expert/:id', async (req, res, next) => {
   try {
-    const serviceHours = await ServicesHour.find({expert: req.params.id}).exec();
+    const serviceHours = await ServiceHour.find({expert: req.params.id}).exec();
 
     res.status(200).send(serviceHours);
   } catch (e) {
@@ -78,7 +77,7 @@ serviceHoursRouter.get('/by-user/:id', async (req, res, next) => {
       return res.status(404).send({error: 'Мастер не найден!'});
     }
 
-    const serviceHours = await ServicesHour.find({expert: expert._id}).exec();
+    const serviceHours = await ServiceHour.find({expert: expert._id}).exec();
 
     return res.send(serviceHours);
 
@@ -94,7 +93,7 @@ serviceHoursRouter.patch(
 
   async (req, res, next) => {
     try {
-      const serviceHour = await ServicesHour.findById(req.params.id);
+      const serviceHour = await ServiceHour.findById(req.params.id);
       if (!serviceHour) {
         return res.status(404).send({error: 'Service hour not found!'});
       }
@@ -130,7 +129,7 @@ serviceHoursRouter.delete(
   permit('expert', 'admin'),
   async (req, res, next) => {
     try {
-      const serviceHour = await ServicesHour.findById(req.params.id);
+      const serviceHour = await ServiceHour.findById(req.params.id);
       if (!serviceHour) {
         return res.status(404).send({error: 'Service hour not found!'});
       }
