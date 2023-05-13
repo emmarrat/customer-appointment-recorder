@@ -7,6 +7,7 @@ interface Props {
   handleClose: () => void;
   title?: string;
   children: React.ReactNode;
+  isFullWidth?: boolean;
 }
 
 const MyModal: React.FC<Props> = ({
@@ -14,16 +15,13 @@ const MyModal: React.FC<Props> = ({
                                     handleClose,
                                     title,
                                     children,
+                                    isFullWidth
                                   }) => {
   return (
     <Dialog
       open={open}
       onClose={handleClose}
-      sx={{
-        '& .MuiPaper-root': {
-          maxWidth: 'none',
-        },
-      }}
+      fullWidth={isFullWidth}
     >
       <DialogTitle>
         {title}
@@ -35,7 +33,9 @@ const MyModal: React.FC<Props> = ({
           <CloseIcon/>
         </IconButton>
       </DialogTitle>
-      <DialogContent>{children}</DialogContent>
+      <DialogContent sx={{height: isFullWidth ? '100vh' : 'auto'}}>
+        {children}
+      </DialogContent>
     </Dialog>
   );
 };

@@ -1,5 +1,5 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import {ApiResponse, ExpertFull, ExpertMutation, Services, ValidationError} from "../../types";
+import {ApiResponse, ExpertFull, ExpertMini, ExpertMutation, Services, ValidationError} from "../../types";
 import {RootState} from "../../app/store";
 import axiosApi from "../../axiosApi";
 import {isAxiosError} from "axios";
@@ -42,7 +42,7 @@ export const createExpert = createAsyncThunk<void, ExpertMutation, { rejectValue
 );
 
 export const fetchExperts = createAsyncThunk<
-  ApiResponse<ExpertFull>,
+  ApiResponse<ExpertMini>,
   SearchParam | undefined
 >('experts/fetchAll', async (params) => {
   const queryString =
@@ -53,7 +53,7 @@ export const fetchExperts = createAsyncThunk<
       .join('&');
 
   const url = `/experts/${queryString ? `?${queryString}` : ''}`;
-  const {data} = await axiosApi.get<ApiResponse<ExpertFull>>(url);
+  const {data} = await axiosApi.get<ApiResponse<ExpertMini>>(url);
   return data;
 });
 

@@ -56,10 +56,12 @@ export interface Services {
   name: string;
   price: string;
 }
+
 export interface ServicesFull extends Services {
   _id: string;
   price: number;
 }
+
 export interface UserMini {
   _id: string;
   firstName: string;
@@ -83,8 +85,16 @@ export interface ExpertFull {
   services: ServicesFull[]
 }
 
+export interface ExpertMini {
+  _id: string;
+  user: UserMini;
+  title: string;
+  photo: string;
+}
+
 export interface IPagination<Type> {
   [key: string]: Type[];
+
   currentPage: number;
   totalCount: number;
 }
@@ -114,9 +124,33 @@ export interface ServiceHours {
   updatedAt: string
 }
 
-export interface Hour {
+export interface HourMutation {
   startTime: string
   endTime: string
-  status: boolean
+}
+
+export interface Hour extends HourMutation{
   _id: string
+  status: boolean
+}
+
+export interface AppointmentMutation {
+  expert: string;
+  service: { name: string, price: number };
+  date: string;
+  startTime: string;
+  endTime: string;
+}
+
+export interface Appointment {
+  _id: string;
+  expert: {
+    firstName: string,
+    lastName: string,
+    title,
+  },
+  service: ServicesFull,
+  startTime: string;
+  endTime: string;
+  isApproved: boolean
 }

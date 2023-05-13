@@ -53,6 +53,10 @@ const AppointmentSchema = new Schema(
       type: String,
       required: true,
     },
+    isApproved: {
+      type: Boolean,
+      default: false,
+    }
   }
 );
 

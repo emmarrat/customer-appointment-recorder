@@ -1,11 +1,11 @@
-import {ExpertFull, IPagination, ValidationError} from "../../types";
+import {ExpertFull, ExpertMini, IPagination, ValidationError} from "../../types";
 import {createSlice} from "@reduxjs/toolkit";
 import {RootState} from "../../app/store";
 import {createExpert, fetchExpertById, fetchExperts, updateExpert} from "./expertsThunks";
 
 interface ExpertState {
   expert: ExpertFull | null;
-  experts: ExpertFull[];
+  experts: ExpertMini[];
   expertCreating: boolean;
   expertCreatingError: ValidationError | null;
   fetchLoading: boolean;
@@ -52,7 +52,7 @@ export const expertsSlice = createSlice({
     });
     builder.addCase(fetchExperts.fulfilled, (state, { payload }) => {
       state.fetchLoading = false;
-      const result = payload.result as IPagination<ExpertFull>;
+      const result = payload.result as IPagination<ExpertMini>;
       state.experts = result.experts;
       state.currentPage = result.currentPage;
       state.totalCount = result.totalCount;

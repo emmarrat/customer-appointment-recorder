@@ -23,7 +23,7 @@ const initialState: ServiceHoursState = {
   datetimeUpdating: false,
   datetimeUpdatingError: null,
   datetimeRemoving: false,
-}
+};
 
 export const serviceHoursSlice = createSlice({
   name: 'serviceHours',

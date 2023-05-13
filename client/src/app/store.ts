@@ -6,6 +6,7 @@ import storage from 'redux-persist/lib/storage';
 import { FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE } from 'redux-persist/es/constants';
 import {expertReducer} from "../features/experts/expertsSlice";
 import {serviceHoursReducer} from "../features/serviceHours/serviceHoursSlice";
+import {appointmentsReducer} from "../features/appointments/appointmentsSlice";
 
 const usersPersistConfig = {
   key: 'appointment-recorder:users',
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   users: persistReducer(usersPersistConfig,usersReducer),
   experts: expertReducer,
   serviceHours: serviceHoursReducer,
+  appointments: appointmentsReducer
 });
 
 export const store = configureStore({

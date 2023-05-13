@@ -4,7 +4,7 @@
 }
 
 .expert-media {
-    height: 140px;
+    height: 150px;
 }
 
 .expert-media:hover {
@@ -14,6 +14,8 @@
 
 .expert-content {
     display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
 }
 

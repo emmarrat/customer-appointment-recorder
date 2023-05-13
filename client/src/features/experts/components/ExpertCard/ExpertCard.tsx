@@ -1,12 +1,12 @@
 import React from 'react';
 import {Button, Card, CardActions, CardContent, CardMedia, Typography} from "@mui/material";
-import {ExpertFull} from "../../../../types";
+import {ExpertMini} from "../../../../types";
 import {apiURL} from "../../../../constants";
 import {Link as RouterLink} from "react-router-dom";
 import './ExpertCard.css';
 
 interface Props {
-  expert: ExpertFull;
+  expert: ExpertMini;
 }
 
 const ExpertCard: React.FC<Props> = ({expert}) => {
@@ -18,7 +18,10 @@ const ExpertCard: React.FC<Props> = ({expert}) => {
         title={`${expert.title} ${expert.user.firstName}`}
       />
       <CardContent className='expert-content'>
-        <Typography gutterBottom variant="h5" component="div">
+        <Typography gutterBottom variant="h6" component="div">
+          {expert.title}
+        </Typography>
+        <Typography  variant="body1" component="div">
           {expert.user.firstName} {expert.user.lastName}
         </Typography>
       </CardContent>
@@ -29,7 +32,7 @@ const ExpertCard: React.FC<Props> = ({expert}) => {
           variant="outlined"
           fullWidth
         >
-          Посмотреть профиль
+          Открыть профиль
         </Button>
       </CardActions>
     </Card>
