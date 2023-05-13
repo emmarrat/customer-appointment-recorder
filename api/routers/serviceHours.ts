@@ -17,19 +17,19 @@ serviceHoursRouter.post(
     try {
       const existingExpert = await Expert.findById(req.body.expert);
       if (!existingExpert) {
-        return res.status(500).send({error: 'Expert not found!'});
+        return res.status(400).send({error: 'Мастер не найден!'});
       }
 
       const user = (req as RequestWithUser).user;
 
       if (user._id.toString() !== existingExpert.user.toString()) {
-        return res.status(500).send({error: 'This user do not have enough access!'});
+        return res.status(400).send({error: 'У пользователя не достаточно прав!'});
       }
 
       const existingService = await ServiceHour.findOne({date: req.body.date});
 
       if (existingService) {
-        return res.status(500).send({error: 'This expert already has working schedule for this day!'});
+        return res.status(400).send({error: 'У данного мастера уже есть рабочий график на этот день!'});
       }
 
       const newServicesHour = new ServicesHour({

@@ -92,7 +92,6 @@ const OneExpert = () => {
       ) : (
         expert && (
           <Grid
-            // style={styles.teacherWrapper}
             padding={{xs: '10px 20px', md: '15px 50px'}}
             sx={{width: '100%'}}
           >
