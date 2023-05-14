@@ -3,10 +3,10 @@ import {
   Avatar,
   Box,
   Button,
+  Checkbox,
   CircularProgress,
   Divider,
   Grid,
-  IconButton,
   List,
   ListItem,
   ListItemAvatar,
@@ -27,8 +27,6 @@ import dayjs, {Dayjs} from "dayjs";
 import {DateCalendar} from "@mui/x-date-pickers";
 import {AppointmentMutation, Hour, HourMutation, ServiceHours, ServicesFull} from "../../../../types";
 import MyModal from "../../../../components/UI/MyModal/MyModal";
-import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import {createAppointment} from "../../../appointments/appointmentsThunk";
 
 const OneExpert = () => {
@@ -89,8 +87,9 @@ const OneExpert = () => {
     setSelectedTime({startTime: time.startTime, endTime: time.endTime});
   };
 
+
   const submitAppointment = async () => {
-    if(!expert || !selectedDate || !selectedServices || !selectedTime) return;
+    if (!expert || !selectedDate || !selectedServices || !selectedTime) return;
     const data: AppointmentMutation = {
       expert: expert._id,
       service: {name: selectedServices.name, price: selectedServices.price},
@@ -194,7 +193,7 @@ const OneExpert = () => {
         <Typography textAlign="center" variant="h6" my={1}>
           Выбранная процедура: {' '}
           <Typography variant="h6" component="span" color="primary">
-             "{selectedServices?.name}"
+            "{selectedServices?.name}"
           </Typography>
         </Typography>
 
@@ -210,35 +209,36 @@ const OneExpert = () => {
             />
           </Box>
           <Box>
-            {selectedDate ? selectedDate.hours.map(hour => (
-                !hour.status &&
-                (
-                  <Box
-                    key={hour._id}
-                    sx={{
-                      display: 'flex',
-                      justifyContent: 'center'
-                    }}>
-                    <Box sx={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      gap: 2
-                    }}>
-                      <Typography textAlign="center">{hour.startTime} - {hour.endTime}</Typography>
-                      <IconButton onClick={() => chooseTime(hour)} disabled={selectedTime !== null}>
-                        {selectedTime && selectedTime.startTime === hour.startTime ? <CheckCircleIcon/> :
-                          <RadioButtonUncheckedIcon/>}
-                      </IconButton>
-                    </Box>
+            {selectedDate !== null ? selectedDate.hours.map(hour => (
+              !hour.status && (
+                <Box
+                  key={hour._id}
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center'
+                  }}
+                >
+                  <Box sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    gap: 2
+                  }}>
+                    <Typography textAlign="center">{hour.startTime} - {hour.endTime}</Typography>
+                    <Checkbox
+                      checked={selectedTime?.startTime === hour.startTime ?? false}
+                      onChange={() => chooseTime(hour)}
+                    />
                   </Box>
-                )
-              )) :
+                </Box>
+              )
+            )) : (
               <Typography textAlign="center">Нет свободных окошек </Typography>
-            }
+            )}
           </Box>
         </Box>
-        {(selectedDate && selectedServices && selectedTime) && <Button fullWidth onClick={submitAppointment}>Подтвердить запись</Button>}
+        {(selectedDate && selectedServices && selectedTime) &&
+            <Button fullWidth onClick={submitAppointment}>Подтвердить запись</Button>}
       </MyModal>
     </>
   );
