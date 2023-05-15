@@ -154,3 +154,8 @@ export interface Appointment {
   endTime: string;
   isApproved: boolean
 }
+
+export interface AppointmentResponse {
+  message: string;
+  appointment: Appointment;
+}

@@ -13,6 +13,7 @@ import EditExpert from "./features/experts/containers/EditExpert/EditExpert";
 import Experts from "./features/experts/containers/Experts/Experts";
 import OneExpert from "./features/experts/containers/OneExpert/OneExpert";
 import ServiceHourAdmin from "./features/serviceHours/components/ServiceHourAdmin/ServiceHourAdmin";
+import './styles.css';
 
 const App = () => {
   const user = useAppSelector(selectUser);

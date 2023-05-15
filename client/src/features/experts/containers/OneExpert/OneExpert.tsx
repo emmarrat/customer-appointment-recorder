@@ -22,12 +22,14 @@ import {selectDatetimes} from "../../../serviceHours/serviceHoursSlice";
 import LoyaltyIcon from '@mui/icons-material/Loyalty';
 import LocalMallRoundedIcon from '@mui/icons-material/LocalMallRounded';
 import {apiURL} from "../../../../constants";
-import './OneExpert.css';
 import dayjs, {Dayjs} from "dayjs";
 import {DateCalendar} from "@mui/x-date-pickers";
 import {AppointmentMutation, Hour, HourMutation, ServiceHours, ServicesFull} from "../../../../types";
 import MyModal from "../../../../components/UI/MyModal/MyModal";
 import {createAppointment} from "../../../appointments/appointmentsThunk";
+import AppointmentMessage from "../../../appointments/components/AppointmentMessage/AppointmentMessage";
+import {styles} from './OneExpertStyles';
+
 
 const OneExpert = () => {
   const {id} = useParams() as { id: string };
@@ -42,6 +44,7 @@ const OneExpert = () => {
   const [selectedDate, setSelectedDate] = useState<ServiceHours | null>(null);
   const [open, setOpen] = useState(false);
   const [selectedTime, setSelectedTime] = useState<HourMutation | null>(null);
+  const [openCongrats, setOpenCongrats] = useState(false);
 
   useEffect(() => {
       dispatch(fetchExpertById(id));
@@ -77,16 +80,12 @@ const OneExpert = () => {
 
   const closeModal = () => {
     setOpen(false);
-    setSelectedTime(null);
-    setSelectedDate(null);
-    setSelectedServices(null);
-    setValue(null);
+    closeCongratsMsg();
   };
 
   const chooseTime = (time: Hour) => {
     setSelectedTime({startTime: time.startTime, endTime: time.endTime});
   };
-
 
   const submitAppointment = async () => {
     if (!expert || !selectedDate || !selectedServices || !selectedTime) return;
@@ -100,11 +99,20 @@ const OneExpert = () => {
     await dispatch(createAppointment(data)).unwrap();
     await dispatch(fetchServiceHoursForExpert(id));
     closeModal();
+    setOpenCongrats(true);
+  };
+
+  const closeCongratsMsg = () => {
+    setOpenCongrats(false);
+    setSelectedTime(null);
+    setSelectedDate(null);
+    setSelectedServices(null);
+    setValue(null);
   };
 
   return (
     <>
-      <Grid container justifyContent="center">
+      <Grid sx={styles.container}>
         {loading ? (
           <CircularProgress/>
         ) : (
@@ -114,15 +122,8 @@ const OneExpert = () => {
               sx={{width: '100%'}}
             >
               <Button onClick={goBack}>Назад</Button>
-              <Grid
-                container
-                flexDirection="column"
-                justifyContent="center"
-                alignItems="center"
-                mb={4}
-                padding="0 50px"
-              >
-                <Grid container justifyContent="space-between" alignItems="center" mt={4}>
+              <Grid sx={styles.columnContainer} mb={4}>
+                <Grid sx={styles.container} mt={4}>
                   <Grid item>
                     <Typography variant="h6" mb={2}>
                       {expert.user.firstName} {expert.user.lastName}
@@ -140,7 +141,7 @@ const OneExpert = () => {
                   </Grid>
                 </Grid>
                 <Grid item width="100%">
-                  <Divider sx={{my: 3}}/>
+                  <Divider sx={styles.divider}/>
                 </Grid>
                 <Grid item xs={12} width="100%">
                   <Typography variant="h6">Выберите услугу:</Typography>
@@ -150,17 +151,17 @@ const OneExpert = () => {
                         key={service._id}
                         secondaryAction={
                           <Button
-                            className="service-btn"
-                            sx={{bgcolor: 'primary.light', color: "#fff"}}
+                            className="btn"
+                            sx={styles.serviceBtn}
                             onClick={() => addServiceState(service)}
                             disabled={selectedServices !== null}
                           >
                             Выбрать
-                            <LocalMallRoundedIcon sx={{ml: 1, color: '#fff'}}/>
+                            <LocalMallRoundedIcon sx={styles.serviceIcon}/>
                           </Button>
                         }
                       >
-                        <ListItemAvatar sx={{mr: 3}}>
+                        <ListItemAvatar>
                           <Avatar sx={{bgcolor: 'primary.light'}}>
                             <LoyaltyIcon/>
                           </Avatar>
@@ -174,7 +175,7 @@ const OneExpert = () => {
                   </List>
                 </Grid>
                 <Grid item width="100%">
-                  <Divider sx={{my: 3}}/>
+                  <Divider sx={styles.divider}/>
                 </Grid>
                 <Grid item xs={12}>
                   <Typography
@@ -189,20 +190,34 @@ const OneExpert = () => {
           )
         )}
       </Grid>
-      <MyModal open={open} handleClose={closeModal} isFullWidth={true}>
-        <Typography textAlign="center" variant="h6" my={1}>
+      <MyModal
+        open={open}
+        handleClose={closeModal}
+        isFullWidth
+      >
+        <Typography
+          textAlign="center"
+          variant="h6"
+          my={1}
+        >
           Выбранная процедура: {' '}
-          <Typography variant="h6" component="span" color="primary">
+          <Typography
+            variant="h6"
+            component="span"
+            color="primary"
+          >
             "{selectedServices?.name}"
           </Typography>
         </Typography>
-
-        <Typography textAlign="center" variant="h6" mb={1}>Когда вам будет удобно прийти?</Typography>
-        <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
-          <Box sx={{
-            display: 'flex',
-            justifyContent: 'center'
-          }}>
+        <Typography
+          textAlign="center"
+          variant="h6"
+          mb={1}
+        >
+          Когда вам будет удобно прийти?
+        </Typography>
+        <Box sx={styles.container}>
+          <Box sx={styles.miniWrapp}>
             <DateCalendar
               value={value}
               onChange={(newDate) => onDateChange(newDate)}
@@ -213,18 +228,12 @@ const OneExpert = () => {
               !hour.status && (
                 <Box
                   key={hour._id}
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'center'
-                  }}
+                  sx={styles.miniWrapp}
                 >
-                  <Box sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    gap: 2
-                  }}>
-                    <Typography textAlign="center">{hour.startTime} - {hour.endTime}</Typography>
+                  <Box sx={styles.miniWrapp}>
+                    <Typography textAlign="center">
+                      {hour.startTime} - {hour.endTime}
+                    </Typography>
                     <Checkbox
                       checked={selectedTime?.startTime === hour.startTime ?? false}
                       onChange={() => chooseTime(hour)}
@@ -238,8 +247,15 @@ const OneExpert = () => {
           </Box>
         </Box>
         {(selectedDate && selectedServices && selectedTime) &&
-            <Button fullWidth onClick={submitAppointment}>Подтвердить запись</Button>}
+            <Button fullWidth variant="outlined" onClick={submitAppointment}>Подтвердить запись</Button>}
       </MyModal>
+      {(selectedDate && selectedTime) &&
+          <MyModal open={openCongrats} handleClose={closeCongratsMsg}>
+              <AppointmentMessage
+                  date={selectedDate.date}
+                  startDate={selectedTime.startTime}
+                  stayHere={closeCongratsMsg}/>
+          </MyModal>}
     </>
   );
 };

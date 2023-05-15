@@ -8,6 +8,7 @@ interface Props {
   title?: string;
   children: React.ReactNode;
   isFullWidth?: boolean;
+  isFullScreen?: boolean;
 }
 
 const MyModal: React.FC<Props> = ({
@@ -15,13 +16,15 @@ const MyModal: React.FC<Props> = ({
                                     handleClose,
                                     title,
                                     children,
-                                    isFullWidth
+                                    isFullWidth,
+                                    isFullScreen
                                   }) => {
   return (
     <Dialog
       open={open}
       onClose={handleClose}
       fullWidth={isFullWidth}
+      fullScreen={isFullScreen}
     >
       <DialogTitle>
         {title}
@@ -33,7 +36,7 @@ const MyModal: React.FC<Props> = ({
           <CloseIcon/>
         </IconButton>
       </DialogTitle>
-      <DialogContent sx={{height: isFullWidth ? '100vh' : 'auto'}}>
+      <DialogContent>
         {children}
       </DialogContent>
     </Dialog>

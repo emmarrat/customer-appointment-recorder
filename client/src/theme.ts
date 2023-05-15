@@ -22,7 +22,7 @@ const theme: Theme = createTheme({
     },
   },
   typography: {
-    fontFamily: 'Open Sans, sans-serif',
+    fontFamily: 'Roboto, sans-serif',
     fontWeightLight: 300,
     fontWeightRegular: 400,
     fontWeightMedium: 600,
@@ -44,7 +44,7 @@ export const themeDate = createTheme(
       primary: { main: '#1976d2' },
     },
   },
-  ruRU, // use 'de' locale for UI texts (start, next month, ...)
+  ruRU,
 );
 
 export default theme;
