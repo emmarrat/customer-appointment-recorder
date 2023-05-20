@@ -40,7 +40,8 @@
     "lint": "eslint \"src/**/*.{ts, tsx}\"",
     "format:check": "prettier --check .",
     "format": "prettier --write .",
-    "typecheck": "tsc --noemit"
+    "typecheck": "tsc --noemit",
+    "prepare": "cd .. && npm i"
 
   },
   "eslintConfig": {
