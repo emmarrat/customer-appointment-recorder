@@ -1,13 +1,17 @@
-import React, {useEffect} from 'react';
-import {useAppDispatch, useAppSelector} from "../../../../app/hooks";
-import {useNavigate, useParams} from "react-router-dom";
-import {selectExpertUpdating, selectExpertUpdatingError, selectOneExpert} from "../../expertsSlice";
-import ExpertsForm from "../../components/ExpertForm/ExpertsForm";
-import {ExpertMutation} from "../../../../types";
-import {fetchExpertById, updateExpert} from "../../expertsThunks";
+import React, { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { useNavigate, useParams } from 'react-router-dom';
+import {
+  selectExpertUpdating,
+  selectExpertUpdatingError,
+  selectOneExpert,
+} from '../../expertsSlice';
+import ExpertsForm from '../../components/ExpertForm/ExpertsForm';
+import { ExpertMutation } from '../../../../types';
+import { fetchExpertById, updateExpert } from '../../expertsThunks';
 
 const EditExpert = () => {
-  const {id} = useParams() as { id: string };
+  const { id } = useParams() as { id: string };
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const error = useAppSelector(selectExpertUpdatingError);
@@ -19,9 +23,9 @@ const EditExpert = () => {
   }, [dispatch, id]);
 
   const submitUpdatedExpert = async (expert: ExpertMutation) => {
-    await dispatch(updateExpert({expertData: expert, id}));
+    await dispatch(updateExpert({ expertData: expert, id }));
     navigate('/admin/experts');
-  }
+  };
 
   const existingExpert = expert && {
     user: expert.user._id,
@@ -29,26 +33,26 @@ const EditExpert = () => {
     info: expert.info,
     photo: null,
     services: expert.services.map((service) => {
-      return {name: service.name, price: service.price.toString()}
+      return { name: service.name, price: service.price.toString() };
     }),
-  }
+  };
 
-  console.log('it works here', expert)
+  console.log('it works here', expert);
 
   return (
     <>
-      {existingExpert && expert &&
-          <ExpertsForm
-              loading={loading}
-              error={error}
-              onSubmit={submitUpdatedExpert}
-              existingExpert={existingExpert}
-              isEdit
-              expertName={expert.user.firstName + ' ' + expert.user.lastName}
-          />}
+      {existingExpert && expert && (
+        <ExpertsForm
+          loading={loading}
+          error={error}
+          onSubmit={submitUpdatedExpert}
+          existingExpert={existingExpert}
+          isEdit
+          expertName={expert.user.firstName + ' ' + expert.user.lastName}
+        />
+      )}
     </>
   );
-
 };
 
 export default EditExpert;

@@ -1,9 +1,9 @@
-import React, {useEffect} from 'react';
-import {Grid} from "@mui/material";
-import {useAppDispatch, useAppSelector} from "../../../../app/hooks";
-import {selectExperts} from "../../expertsSlice";
-import {fetchExperts} from "../../expertsThunks";
-import ExpertCard from "../../components/ExpertCard/ExpertCard";
+import React, { useEffect } from 'react';
+import { Grid } from '@mui/material';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { selectExperts } from '../../expertsSlice';
+import { fetchExperts } from '../../expertsThunks';
+import ExpertCard from '../../components/ExpertCard/ExpertCard';
 
 const Experts = () => {
   const dispatch = useAppDispatch();
@@ -28,7 +28,6 @@ const Experts = () => {
             key={expert._id}
           >
             <ExpertCard expert={expert} />
-
           </Grid>
         ))}
     </Grid>

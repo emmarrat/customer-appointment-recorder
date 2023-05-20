@@ -9,13 +9,7 @@ interface Props {
   errorCheck: (fieldName: string) => string | undefined;
 }
 
-const FileInput: React.FC<Props> = ({
-                                      onChange,
-                                      name,
-                                      label,
-                                      type,
-                                      errorCheck,
-                                    }) => {
+const FileInput: React.FC<Props> = ({ onChange, name, label, type, errorCheck }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [filename, setFilename] = useState('');

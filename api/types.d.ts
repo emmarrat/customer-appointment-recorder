@@ -1,5 +1,5 @@
 export interface IUser {
-  email:string;
+  email: string;
   firstName: string;
   lastName: string;
   phoneNumber: string;
@@ -7,5 +7,6 @@ export interface IUser {
   token: string;
   role: string;
   googleId?: string;
-  avatar: string | null;f
+  avatar: string | null;
+  f;
 }

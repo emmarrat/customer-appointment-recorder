@@ -1,17 +1,17 @@
-import React, {useState} from 'react';
-import {ServiceHourMutation} from "../../../../types";
-import {Alert, Avatar, Box, Container, Grid, TextField} from "@mui/material";
-import {useAppSelector} from "../../../../app/hooks";
-import {selectDatetimeCreatingError} from "../../serviceHoursSlice";
+import React, { useState } from 'react';
+import { ServiceHourMutation } from '../../../../types';
+import { Alert, Avatar, Box, Container, Grid, TextField } from '@mui/material';
+import { useAppSelector } from '../../../../app/hooks';
+import { selectDatetimeCreatingError } from '../../serviceHoursSlice';
 import EventNoteIcon from '@mui/icons-material/EventNote';
-import LoadingButton from "@mui/lab/LoadingButton";
+import LoadingButton from '@mui/lab/LoadingButton';
 
 interface Props {
   onSubmit: (data: ServiceHourMutation) => void;
-  expert: string
+  expert: string;
 }
 
-const ServicesHoursForm:React.FC<Props> = ({onSubmit, expert}) => {
+const ServicesHoursForm: React.FC<Props> = ({ onSubmit, expert }) => {
   const error = useAppSelector(selectDatetimeCreatingError);
   const [state, setState] = useState<ServiceHourMutation>({
     expert: expert,
@@ -19,15 +19,15 @@ const ServicesHoursForm:React.FC<Props> = ({onSubmit, expert}) => {
   });
 
   const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const {name, value} = event.target;
+    const { name, value } = event.target;
     setState((prevState) => {
-      return {...prevState, [name]: value};
+      return { ...prevState, [name]: value };
     });
   };
 
   const submitFormHandler = async (event: React.FormEvent) => {
     event.preventDefault();
-    await onSubmit(state)
+    await onSubmit(state);
     setState({
       expert: '',
       date: '',
@@ -44,27 +44,23 @@ const ServicesHoursForm:React.FC<Props> = ({onSubmit, expert}) => {
           alignItems: 'center',
         }}
       >
-        <Avatar sx={{m: 1, bgcolor: 'secondary.main'}}>
-          <EventNoteIcon/>
+        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <EventNoteIcon />
         </Avatar>
         {error && (
-          <Alert severity="error" sx={{mt: 3, width: '100%'}}>
+          <Alert severity="error" sx={{ mt: 3, width: '100%' }}>
             {error.error}
           </Alert>
         )}
-        <Box
-          component="form"
-          onSubmit={submitFormHandler}
-          sx={{mt: 3, width: '100%'}}
-        >
-          <Grid container sx={{width: '100%'}}>
+        <Box component="form" onSubmit={submitFormHandler} sx={{ mt: 3, width: '100%' }}>
+          <Grid container sx={{ width: '100%' }}>
             <Grid item xs={12}>
               <TextField
                 name="date"
                 type="date"
                 value={state.date}
                 onChange={inputChangeHandler}
-                sx={{width: '100%'}}
+                sx={{ width: '100%' }}
               />
             </Grid>
           </Grid>
@@ -72,7 +68,7 @@ const ServicesHoursForm:React.FC<Props> = ({onSubmit, expert}) => {
             loading={false}
             variant="contained"
             type="submit"
-            sx={{mt: 3, mb: 2}}
+            sx={{ mt: 3, mb: 2 }}
             fullWidth
           >
             <span>Создать рабочий день</span>

@@ -1,7 +1,7 @@
-import bcrypt from 'bcrypt';
-import {randomUUID} from 'crypto';
-import {HydratedDocument, model, Model, Schema} from 'mongoose';
-import {IUser} from '../types';
+import bcrypt from "bcrypt";
+import { randomUUID } from "crypto";
+import { HydratedDocument, model, Model, Schema } from "mongoose";
+import { IUser } from "../types";
 
 const SALT_WORK_FACTOR = 10;
 
@@ -14,9 +14,9 @@ interface IUserMethods {
 type UserModel = Model<IUser, Record<string, never>, IUserMethods>;
 
 enum Role {
-  User = 'user',
-  Expert = 'expert',
-  Admin = 'admin',
+  User = "user",
+  Expert = "expert",
+  Admin = "admin",
 }
 
 const UserSchema = new Schema<IUser, UserModel, IUserMethods>(
@@ -28,15 +28,15 @@ const UserSchema = new Schema<IUser, UserModel, IUserMethods>(
       validate: {
         validator: async function (
           this: HydratedDocument<IUser>,
-          email: string,
+          email: string
         ): Promise<boolean> {
-          if (!this.isModified('email')) return true;
+          if (!this.isModified("email")) return true;
           const user = await User.findOne({
             email,
           });
           return !user;
         },
-        message: 'Пользователь под таким email-ом уже зарегистрирован!',
+        message: "Пользователь под таким email-ом уже зарегистрирован!",
       },
     },
     firstName: {
@@ -61,13 +61,13 @@ const UserSchema = new Schema<IUser, UserModel, IUserMethods>(
         {
           validator: async function (
             this: HydratedDocument<IUser>,
-            phoneNumber: string,
+            phoneNumber: string
           ): Promise<boolean> {
             if (!phoneNumber) {
               return true;
             }
 
-            if (!this.isModified('phoneNumber')) {
+            if (!this.isModified("phoneNumber")) {
               return true;
             }
 
@@ -77,7 +77,7 @@ const UserSchema = new Schema<IUser, UserModel, IUserMethods>(
 
             return !user;
           },
-          message: 'Пользователь с таким номером телефона уже зарегистрирован!',
+          message: "Пользователь с таким номером телефона уже зарегистрирован!",
         },
         {
           validator: function (phoneNumber: string): boolean {
@@ -88,7 +88,7 @@ const UserSchema = new Schema<IUser, UserModel, IUserMethods>(
             const regex = /^\+996\d{9}$/;
             return regex.test(phoneNumber);
           },
-          message: 'Неверный формат номера телефона!',
+          message: "Неверный формат номера телефона!",
         },
       ],
     },
@@ -101,11 +101,11 @@ const UserSchema = new Schema<IUser, UserModel, IUserMethods>(
     avatar: String,
     googleId: String,
   },
-  {timestamps: true},
+  { timestamps: true }
 );
 
-UserSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) return next();
+UserSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
 
   const salt = await bcrypt.genSalt(SALT_WORK_FACTOR);
   this.password = await bcrypt.hash(this.password, salt);
@@ -113,7 +113,7 @@ UserSchema.pre('save', async function (next) {
   next();
 });
 
-UserSchema.set('toJSON', {
+UserSchema.set("toJSON", {
   transform: (doc, ret) => {
     delete ret.password;
     return ret;
@@ -128,5 +128,5 @@ UserSchema.methods.generateToken = function () {
   this.token = randomUUID();
 };
 
-const User = model<IUser, UserModel>('User', UserSchema);
+const User = model<IUser, UserModel>("User", UserSchema);
 export default User;

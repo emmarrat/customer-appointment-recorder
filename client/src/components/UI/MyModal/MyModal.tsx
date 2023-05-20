@@ -1,5 +1,5 @@
 import React from 'react';
-import {Dialog, DialogContent, DialogTitle, IconButton} from '@mui/material';
+import { Dialog, DialogContent, DialogTitle, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
 interface Props {
@@ -12,13 +12,13 @@ interface Props {
 }
 
 const MyModal: React.FC<Props> = ({
-                                    open,
-                                    handleClose,
-                                    title,
-                                    children,
-                                    isFullWidth,
-                                    isFullScreen
-                                  }) => {
+  open,
+  handleClose,
+  title,
+  children,
+  isFullWidth,
+  isFullScreen,
+}) => {
   return (
     <Dialog
       open={open}
@@ -31,14 +31,12 @@ const MyModal: React.FC<Props> = ({
         <IconButton
           aria-label="close"
           onClick={handleClose}
-          sx={{position: 'absolute', top: 10, right: 10}}
+          sx={{ position: 'absolute', top: 10, right: 10 }}
         >
-          <CloseIcon/>
+          <CloseIcon />
         </IconButton>
       </DialogTitle>
-      <DialogContent>
-        {children}
-      </DialogContent>
+      <DialogContent>{children}</DialogContent>
     </Dialog>
   );
 };

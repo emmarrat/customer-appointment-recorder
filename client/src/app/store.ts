@@ -1,24 +1,31 @@
-import {combineReducers, configureStore} from "@reduxjs/toolkit";
-import {usersReducer} from "../features/users/usersSlice";
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import { usersReducer } from '../features/users/usersSlice';
 
 import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import { FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE } from 'redux-persist/es/constants';
-import {expertReducer} from "../features/experts/expertsSlice";
-import {serviceHoursReducer} from "../features/serviceHours/serviceHoursSlice";
-import {appointmentsReducer} from "../features/appointments/appointmentsSlice";
+import {
+  FLUSH,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+  REHYDRATE,
+} from 'redux-persist/es/constants';
+import { expertReducer } from '../features/experts/expertsSlice';
+import { serviceHoursReducer } from '../features/serviceHours/serviceHoursSlice';
+import { appointmentsReducer } from '../features/appointments/appointmentsSlice';
 
 const usersPersistConfig = {
   key: 'appointment-recorder:users',
   storage,
-  whitelist: ['user']
-}
+  whitelist: ['user'],
+};
 
 const rootReducer = combineReducers({
-  users: persistReducer(usersPersistConfig,usersReducer),
+  users: persistReducer(usersPersistConfig, usersReducer),
   experts: expertReducer,
   serviceHours: serviceHoursReducer,
-  appointments: appointmentsReducer
+  appointments: appointmentsReducer,
 });
 
 export const store = configureStore({
@@ -32,8 +39,6 @@ export const store = configureStore({
 });
 
 export const persistor = persistStore(store);
-
-
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

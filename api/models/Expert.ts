@@ -1,5 +1,5 @@
-import mongoose, {Types} from 'mongoose';
-import User from './User';
+import mongoose, { Types } from "mongoose";
+import User from "./User";
 
 const Schema = mongoose.Schema;
 
@@ -7,11 +7,11 @@ const ExpertSchema = new Schema(
   {
     user: {
       type: Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
       required: true,
       validate: {
         validator: async (value: Types.ObjectId) => User.findById(value),
-        message: 'Юзер не найден',
+        message: "Юзер не найден",
       },
     },
     title: {
@@ -26,19 +26,21 @@ const ExpertSchema = new Schema(
       type: String,
       required: true,
     },
-    services: [{
-      name: {
-        type: String,
-        required: true
+    services: [
+      {
+        name: {
+          type: String,
+          required: true,
+        },
+        price: {
+          type: Number,
+          required: true,
+        },
       },
-      price: {
-        type: Number,
-        required: true
-      },
-    }]
+    ],
   },
-  {timestamps: true},
+  { timestamps: true }
 );
 
-const Expert = mongoose.model('Expert', ExpertSchema);
+const Expert = mongoose.model("Expert", ExpertSchema);
 export default Expert;

@@ -1,7 +1,12 @@
-import {ExpertFull, ExpertMini, IPagination, ValidationError} from "../../types";
-import {createSlice} from "@reduxjs/toolkit";
-import {RootState} from "../../app/store";
-import {createExpert, fetchExpertById, fetchExperts, updateExpert} from "./expertsThunks";
+import { ExpertFull, ExpertMini, IPagination, ValidationError } from '../../types';
+import { createSlice } from '@reduxjs/toolkit';
+import { RootState } from '../../app/store';
+import {
+  createExpert,
+  fetchExpertById,
+  fetchExperts,
+  updateExpert,
+} from './expertsThunks';
 
 interface ExpertState {
   expert: ExpertFull | null;
@@ -41,7 +46,7 @@ export const expertsSlice = createSlice({
     builder.addCase(createExpert.fulfilled, (state) => {
       state.expertCreating = false;
     });
-    builder.addCase(createExpert.rejected, (state, {payload: error}) => {
+    builder.addCase(createExpert.rejected, (state, { payload: error }) => {
       state.expertCreatingError = error || null;
       state.expertCreating = false;
     });
@@ -65,13 +70,10 @@ export const expertsSlice = createSlice({
       state.fetchOneExpertLoading = true;
       state.expert = null;
     });
-    builder.addCase(
-      fetchExpertById.fulfilled,
-      (state, { payload: expert }) => {
-        state.fetchOneExpertLoading = false;
-        state.expert = expert;
-      },
-    );
+    builder.addCase(fetchExpertById.fulfilled, (state, { payload: expert }) => {
+      state.fetchOneExpertLoading = false;
+      state.expert = expert;
+    });
     builder.addCase(fetchExpertById.rejected, (state) => {
       state.fetchOneExpertLoading = false;
     });
@@ -83,25 +85,24 @@ export const expertsSlice = createSlice({
     builder.addCase(updateExpert.fulfilled, (state) => {
       state.expertUpdating = false;
     });
-    builder.addCase(updateExpert.rejected, (state, {payload: error}) => {
+    builder.addCase(updateExpert.rejected, (state, { payload: error }) => {
       state.expertUpdatingError = error || null;
       state.expertUpdating = false;
     });
-
-
-  }
+  },
 });
 
 export const expertReducer = expertsSlice.reducer;
 export const selectExperts = (state: RootState) => state.experts.experts;
 export const selectOneExpert = (state: RootState) => state.experts.expert;
 export const selectExpertCreating = (state: RootState) => state.experts.expertCreating;
-export const selectExpertCreatingError = (state: RootState) => state.experts.expertCreatingError;
+export const selectExpertCreatingError = (state: RootState) =>
+  state.experts.expertCreatingError;
 export const selectExpertsFetching = (state: RootState) => state.experts.fetchLoading;
-export const selectExpertOneFetching = (state: RootState) => state.experts.fetchOneExpertLoading;
+export const selectExpertOneFetching = (state: RootState) =>
+  state.experts.fetchOneExpertLoading;
 export const selectExpertUpdating = (state: RootState) => state.experts.expertUpdating;
-export const selectExpertUpdatingError = (state: RootState) => state.experts.expertUpdatingError;
-export const selectExpertsCount = (state: RootState) =>
-  state.experts.totalCount;
-export const selectExpertsPage = (state: RootState) =>
-  state.experts.currentPage;
+export const selectExpertUpdatingError = (state: RootState) =>
+  state.experts.expertUpdatingError;
+export const selectExpertsCount = (state: RootState) => state.experts.totalCount;
+export const selectExpertsPage = (state: RootState) => state.experts.currentPage;

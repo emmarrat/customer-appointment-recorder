@@ -1,8 +1,15 @@
 import React from 'react';
-import {Button, Card, CardActions, CardContent, CardMedia, Typography} from "@mui/material";
-import {ExpertMini} from "../../../../types";
-import {apiURL} from "../../../../constants";
-import {Link as RouterLink} from "react-router-dom";
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Typography,
+} from '@mui/material';
+import { ExpertMini } from '../../../../types';
+import { apiURL } from '../../../../constants';
+import { Link as RouterLink } from 'react-router-dom';
 
 interface Props {
   expert: ExpertMini;
@@ -21,10 +28,10 @@ const styles = {
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-  }
-}
+  },
+};
 
-const ExpertCard: React.FC<Props> = ({expert}) => {
+const ExpertCard: React.FC<Props> = ({ expert }) => {
   return (
     <Card sx={styles.card}>
       <CardMedia
@@ -55,7 +62,3 @@ const ExpertCard: React.FC<Props> = ({expert}) => {
 };
 
 export default ExpertCard;
-
-
-
-

@@ -3,11 +3,10 @@ import { ruRU } from '@mui/x-date-pickers/locales';
 
 const theme: Theme = createTheme({
   palette: {
-
     primary: {
       main: '#a4688e',
       light: '#d77bb3',
-      dark: '#855374'
+      dark: '#855374',
     },
     secondary: {
       main: '#b5838d',
@@ -15,7 +14,7 @@ const theme: Theme = createTheme({
     },
     info: {
       main: '#fff',
-      dark: '#afaeae'
+      dark: '#afaeae',
     },
     text: {
       primary: '#3b3939',

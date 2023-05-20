@@ -1,10 +1,10 @@
-import React, {ChangeEvent, useEffect, useState} from 'react';
-import {ExpertMutation, ValidationError} from "../../../../types";
-import {useAppDispatch, useAppSelector} from "../../../../app/hooks";
-import {selectUsers} from "../../../users/usersSlice";
-import {fetchBasicUsers} from "../../../users/usersThunks";
-import {Button, Grid, MenuItem, TextField, Typography} from "@mui/material";
-import FileInput from "../../../../components/UI/FileInput/FileInput";
+import React, { ChangeEvent, useEffect, useState } from 'react';
+import { ExpertMutation, ValidationError } from '../../../../types';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { selectUsers } from '../../../users/usersSlice';
+import { fetchBasicUsers } from '../../../users/usersThunks';
+import { Button, Grid, MenuItem, TextField, Typography } from '@mui/material';
+import FileInput from '../../../../components/UI/FileInput/FileInput';
 
 interface Props {
   onSubmit: (teacher: ExpertMutation) => void;
@@ -20,16 +20,23 @@ const initialState: ExpertMutation = {
   title: '',
   info: '',
   photo: null,
-  services: [{name: '', price: ''}],
+  services: [{ name: '', price: '' }],
 };
 
-const ExpertsForm: React.FC<Props> = ({onSubmit, existingExpert, loading, isEdit, error, expertName}) => {
+const ExpertsForm: React.FC<Props> = ({
+  onSubmit,
+  existingExpert,
+  loading,
+  isEdit,
+  error,
+  expertName,
+}) => {
   const dispatch = useAppDispatch();
   const basicUsers = useAppSelector(selectUsers);
 
   const [state, setState] = useState<ExpertMutation>(existingExpert || initialState);
 
-  useEffect( () => {
+  useEffect(() => {
     dispatch(fetchBasicUsers());
   }, [dispatch]);
 
@@ -57,9 +64,12 @@ const ExpertsForm: React.FC<Props> = ({onSubmit, existingExpert, loading, isEdit
     }));
   };
 
-  const handleServicesChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => {
+  const handleServicesChange = (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    index: number,
+  ) => {
     const { name, value } = event.target;
-    setState(prevState => {
+    setState((prevState) => {
       const services = [...prevState.services];
       services[index] = { ...services[index], [name]: value };
       return { ...prevState, services: services };
@@ -67,22 +77,19 @@ const ExpertsForm: React.FC<Props> = ({onSubmit, existingExpert, loading, isEdit
   };
 
   const addService = () => {
-    setState(prevState => {
+    setState((prevState) => {
       return {
         ...prevState,
-        services: [
-          ...prevState.services,
-          { name: '', price: '' },
-        ],
+        services: [...prevState.services, { name: '', price: '' }],
       };
     });
   };
 
   const removeService = (index: number) => {
-    setState(prevState => {
+    setState((prevState) => {
       const services = [...prevState.services];
       services.splice(index, 1);
-      return { ...prevState, services};
+      return { ...prevState, services };
     });
   };
 
@@ -102,27 +109,29 @@ const ExpertsForm: React.FC<Props> = ({onSubmit, existingExpert, loading, isEdit
             {isEdit ? 'Редактировать' : 'Добавить'} мастера {expertName}
           </Typography>
         </Grid>
-        {!isEdit && <Grid item xs={12}>
-          <TextField
-            label="Выберите пользователя"
-            select
-            name="user"
-            value={state.user}
-            onChange={inputChangeHandler}
-            error={Boolean(getFieldError('user'))}
-            helperText={getFieldError('user')}
-            required
-          >
-            <MenuItem value="" disabled>
-              Пожалуйста, выберите пользователя
-            </MenuItem>
-            {basicUsers.map((user) => (
-              <MenuItem key={user._id} value={user._id}>
-                {user.firstName} {user.lastName}
+        {!isEdit && (
+          <Grid item xs={12}>
+            <TextField
+              label="Выберите пользователя"
+              select
+              name="user"
+              value={state.user}
+              onChange={inputChangeHandler}
+              error={Boolean(getFieldError('user'))}
+              helperText={getFieldError('user')}
+              required
+            >
+              <MenuItem value="" disabled>
+                Пожалуйста, выберите пользователя
               </MenuItem>
-            ))}
-          </TextField>
-        </Grid>}
+              {basicUsers.map((user) => (
+                <MenuItem key={user._id} value={user._id}>
+                  {user.firstName} {user.lastName}
+                </MenuItem>
+              ))}
+            </TextField>
+          </Grid>
+        )}
         <Grid item xs>
           <TextField
             variant="outlined"
@@ -160,16 +169,24 @@ const ExpertsForm: React.FC<Props> = ({onSubmit, existingExpert, loading, isEdit
             errorCheck={getFieldError}
           />
         </Grid>
-        <Typography variant="h6" textAlign="center" mt={2}>Услуги и цены</Typography>
+        <Typography variant="h6" textAlign="center" mt={2}>
+          Услуги и цены
+        </Typography>
         {state.services.map((service, index) => (
-          <Grid item container key={index} justifyContent="space-between" alignItems="center">
+          <Grid
+            item
+            container
+            key={index}
+            justifyContent="space-between"
+            alignItems="center"
+          >
             <Grid item xs={12} md={6}>
               <TextField
                 variant="outlined"
                 label="Название услуги"
                 name="name"
                 value={service.name}
-                onChange={(event)=>handleServicesChange(event, index)}
+                onChange={(event) => handleServicesChange(event, index)}
                 autoComplete="new-services"
                 error={Boolean(getFieldError(`services.${index}.name`))}
                 helperText={getFieldError(`services.${index}.name`)}
@@ -183,18 +200,18 @@ const ExpertsForm: React.FC<Props> = ({onSubmit, existingExpert, loading, isEdit
                 type="number"
                 name="price"
                 value={service.price}
-                onChange={event => handleServicesChange(event, index)}
+                onChange={(event) => handleServicesChange(event, index)}
                 autoComplete="new-services"
-                error={Boolean(getFieldError(`services.${index}.price`,))}
+                error={Boolean(getFieldError(`services.${index}.price`))}
                 helperText={getFieldError(`services.${index}.price`)}
                 required
               />
             </Grid>
-            <Grid item xs={12} md={1} >
+            <Grid item xs={12} md={1}>
               <Button
                 variant="contained"
                 color="error"
-                onClick={()=> removeService(index)}
+                onClick={() => removeService(index)}
               >
                 Удалить
               </Button>
@@ -202,11 +219,7 @@ const ExpertsForm: React.FC<Props> = ({onSubmit, existingExpert, loading, isEdit
           </Grid>
         ))}
         <Grid item>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={addService}
-          >
+          <Button variant="contained" color="primary" onClick={addService}>
             Добавить услугу
           </Button>
         </Grid>
@@ -217,7 +230,7 @@ const ExpertsForm: React.FC<Props> = ({onSubmit, existingExpert, loading, isEdit
             color="success"
             disabled={loading}
             fullWidth
-            sx={{padding: '10px 0', fontWeight: '700'}}
+            sx={{ padding: '10px 0', fontWeight: '700' }}
           >
             Подтвердить
           </Button>

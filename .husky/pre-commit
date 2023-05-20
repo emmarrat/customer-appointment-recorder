@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+ cd client || exit 1
+ npm run lint && npm run typecheck
+
+ cd ../api || exit 1
+  npm run lint && npm run typecheck
+

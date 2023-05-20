@@ -25,7 +25,6 @@ export interface RegisterMutation {
   phoneNumber: string;
 }
 
-
 export interface RegisterResponse {
   message: string;
   user: User;
@@ -82,7 +81,7 @@ export interface ExpertFull {
   title: string;
   info: string;
   photo: string;
-  services: ServicesFull[]
+  services: ServicesFull[];
 }
 
 export interface ExpertMini {
@@ -111,32 +110,32 @@ export interface AdminFilters {
 }
 
 export interface ServiceHourMutation {
-  "expert": string,
-  "date": string,
+  expert: string;
+  date: string;
 }
 
 export interface ServiceHours {
-  _id: string
-  expert: string
-  date: string
-  hours: Hour[]
-  createdAt: string
-  updatedAt: string
+  _id: string;
+  expert: string;
+  date: string;
+  hours: Hour[];
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface HourMutation {
-  startTime: string
-  endTime: string
+  startTime: string;
+  endTime: string;
 }
 
-export interface Hour extends HourMutation{
-  _id: string
-  status: boolean
+export interface Hour extends HourMutation {
+  _id: string;
+  status: boolean;
 }
 
 export interface AppointmentMutation {
   expert: string;
-  service: { name: string, price: number };
+  service: { name: string; price: number };
   date: string;
   startTime: string;
   endTime: string;
@@ -145,14 +144,14 @@ export interface AppointmentMutation {
 export interface Appointment {
   _id: string;
   expert: {
-    firstName: string,
-    lastName: string,
-    title,
-  },
-  service: ServicesFull,
+    firstName: string;
+    lastName: string;
+    title;
+  };
+  service: ServicesFull;
   startTime: string;
   endTime: string;
-  isApproved: boolean
+  isApproved: boolean;
 }
 
 export interface AppointmentResponse {

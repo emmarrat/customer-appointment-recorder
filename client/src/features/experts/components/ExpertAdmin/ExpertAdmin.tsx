@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react';
-import {Link as RouterLink, useNavigate} from "react-router-dom";
+import React, { useEffect } from 'react';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
 import {
   Button,
@@ -18,10 +18,9 @@ import {
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import {useAppDispatch, useAppSelector} from "../../../../app/hooks";
-import {selectExperts, selectExpertsCount, selectExpertsPage} from "../../expertsSlice";
-import {fetchExperts} from "../../expertsThunks";
-
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { selectExperts, selectExpertsCount, selectExpertsPage } from '../../expertsSlice';
+import { fetchExperts } from '../../expertsThunks';
 
 const ExpertAdmin = () => {
   const navigate = useNavigate();
@@ -34,13 +33,12 @@ const ExpertAdmin = () => {
   const [page, setPage] = React.useState(1);
 
   useEffect(() => {
-    dispatch(fetchExperts({page, limit}));
+    dispatch(fetchExperts({ page, limit }));
   }, [dispatch, page, limit]);
-
 
   const handleDelete = async (id: string) => {
     if (window.confirm('Подтвердите удаление мастера')) {
-      console.log('you can think that it is deleted')
+      console.log('you can think that it is deleted');
     }
   };
 
@@ -70,7 +68,7 @@ const ExpertAdmin = () => {
           <TableContainer component={Paper}>
             <Table stickyHeader>
               <TableHead>
-                <TableRow sx={{width: '100%'}}>
+                <TableRow sx={{ width: '100%' }}>
                   <TableCell>Мастера</TableCell>
                   <TableCell>Специальность</TableCell>
                   <TableCell align="right">Изменить</TableCell>
@@ -81,22 +79,18 @@ const ExpertAdmin = () => {
                 {experts.map((expert) => (
                   <TableRow key={expert._id} hover>
                     <TableCell
-                      sx={{cursor: 'pointer'}}
+                      sx={{ cursor: 'pointer' }}
                       onClick={() => openOneTeacher(expert._id)}
                     >
                       {expert.user.firstName} {expert.user.lastName}
                     </TableCell>
-                    <TableCell
-                      sx={{cursor: 'pointer'}}
-                    >
-                      {expert.title}
-                    </TableCell>
+                    <TableCell sx={{ cursor: 'pointer' }}>{expert.title}</TableCell>
                     <TableCell align="right">
                       <IconButton
                         component={RouterLink}
                         to={`/admin/experts/edit/${expert._id}`}
                       >
-                        <EditIcon/>
+                        <EditIcon />
                       </IconButton>
                     </TableCell>
                     <TableCell align="right">
@@ -104,7 +98,7 @@ const ExpertAdmin = () => {
                         // onClick={() => handleDelete(expert._id)}
                         disabled={false}
                       >
-                        <DeleteIcon/>
+                        <DeleteIcon />
                       </IconButton>
                     </TableCell>
                   </TableRow>
@@ -118,9 +112,7 @@ const ExpertAdmin = () => {
                     rowsPerPage={limit}
                     page={currentPage - 1}
                     onPageChange={(_, newPage) => setPage(newPage + 1)}
-                    onRowsPerPageChange={(e) =>
-                      setLimit(parseInt(e.target.value))
-                    }
+                    onRowsPerPageChange={(e) => setLimit(parseInt(e.target.value))}
                   />
                 </TableRow>
               </TableFooter>
