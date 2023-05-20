@@ -5,6 +5,7 @@ import User from "./models/User";
 import Expert from "./models/Expert";
 import ServiceHour from "./models/ServiceHour";
 import Appointment from "./models/Appointment";
+import Category from "./models/Category";
 
 const run = async () => {
   mongoose.set("strictQuery", false);
@@ -13,6 +14,7 @@ const run = async () => {
 
   try {
     await db.dropCollection("users");
+    await db.dropCollection("categories");
     await db.dropCollection("experts");
     await db.dropCollection("serviceshours");
     await db.dropCollection("appointments");
@@ -66,6 +68,12 @@ const run = async () => {
       phoneNumber: "+996503503503",
       role: "expert",
     }
+  );
+
+  const [hair, manicure, pedicure] = await Category.create(
+    { title: "Волосы" },
+    { title: "Маникюр" },
+    { title: "Педикюр" }
   );
 
   const [newExpert1, newExpert2] = await Expert.create(

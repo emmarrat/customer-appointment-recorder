@@ -5,7 +5,8 @@ import config from "./config";
 import usersRouter from "./routers/users";
 import expertsRouter from "./routers/experts";
 import serviceHoursRouter from "./routers/serviceHours";
-import appointments from "./routers/appointments";
+import appointmentsRouter from "./routers/appointments";
+import categoriesRouter from "./routers/categories";
 
 const app = express();
 const port = 8000;
@@ -16,11 +17,13 @@ app.use(express.json());
 app.use("/users", usersRouter);
 app.use("/experts", expertsRouter);
 app.use("/service-hours", serviceHoursRouter);
-app.use("/appointments", appointments);
+app.use("/appointments", appointmentsRouter);
+app.use("/categories", categoriesRouter);
 
 const run = async () => {
   mongoose.set("strictQuery", false);
   await mongoose.connect(config.db);
+
   app.listen(port, () => {
     console.log("we are live on " + port);
   });

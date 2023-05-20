@@ -1,5 +1,6 @@
 import mongoose, { Types } from "mongoose";
 import User from "./User";
+import Category from "./Category";
 
 const Schema = mongoose.Schema;
 
@@ -12,6 +13,14 @@ const ExpertSchema = new Schema(
       validate: {
         validator: async (value: Types.ObjectId) => User.findById(value),
         message: "Юзер не найден",
+      },
+    },
+    category: {
+      ref: "Category",
+      required: true,
+      validate: {
+        validator: async (value: Types.ObjectId) => Category.findById(value),
+        message: "Категория не найдена",
       },
     },
     title: {

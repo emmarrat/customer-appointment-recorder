@@ -29,6 +29,7 @@ expertsRouter.post(
 
       const expert = await Expert.create({
         user: req.body.user,
+        category: req.body.category,
         title: req.body.title,
         info: req.body.info,
         photo: req.file ? req.file.filename : null,
@@ -69,6 +70,7 @@ expertsRouter.get("/", async (req, res, next) => {
 
     const experts = await Expert.find()
       .populate("user", "firstName lastName")
+      .populate("category", "title")
       .select("user photo title")
       .skip(skip)
       .limit(limit)
@@ -138,6 +140,10 @@ expertsRouter.patch(
 
       if (req.body.user) {
         expert.user = req.body.user;
+      }
+
+      if (req.body.category) {
+        expert.user = req.body.category;
       }
 
       if (req.body.title) {
