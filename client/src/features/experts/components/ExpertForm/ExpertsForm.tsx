@@ -5,6 +5,8 @@ import { selectUsers } from '../../../users/usersSlice';
 import { fetchBasicUsers } from '../../../users/usersThunks';
 import { Button, Grid, MenuItem, TextField, Typography } from '@mui/material';
 import FileInput from '../../../../components/UI/FileInput/FileInput';
+import { fetchCategories } from '../../../categories/categoriesThunks';
+import { selectCategories } from '../../../categories/categoriesSlice';
 
 interface Props {
   onSubmit: (teacher: ExpertMutation) => void;
@@ -17,6 +19,7 @@ interface Props {
 
 const initialState: ExpertMutation = {
   user: '',
+  category: '',
   title: '',
   info: '',
   photo: null,
@@ -33,11 +36,13 @@ const ExpertsForm: React.FC<Props> = ({
 }) => {
   const dispatch = useAppDispatch();
   const basicUsers = useAppSelector(selectUsers);
+  const categories = useAppSelector(selectCategories);
 
   const [state, setState] = useState<ExpertMutation>(existingExpert || initialState);
 
   useEffect(() => {
     dispatch(fetchBasicUsers());
+    dispatch(fetchCategories());
   }, [dispatch]);
 
   const submitFormHandler = async (e: React.FormEvent) => {
@@ -132,6 +137,27 @@ const ExpertsForm: React.FC<Props> = ({
             </TextField>
           </Grid>
         )}
+        <Grid item xs={12}>
+          <TextField
+            label="Выберите категорию"
+            select
+            name="category"
+            value={state.category}
+            onChange={inputChangeHandler}
+            error={Boolean(getFieldError('category'))}
+            helperText={getFieldError('category')}
+            required
+          >
+            <MenuItem value="" disabled>
+              Пожалуйста, выберите категорию
+            </MenuItem>
+            {categories.map((category) => (
+              <MenuItem key={category._id} value={category._id}>
+                {category.title}
+              </MenuItem>
+            ))}
+          </TextField>
+        </Grid>
         <Grid item xs>
           <TextField
             variant="outlined"

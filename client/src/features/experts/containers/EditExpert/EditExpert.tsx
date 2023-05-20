@@ -29,6 +29,7 @@ const EditExpert = () => {
 
   const existingExpert = expert && {
     user: expert.user._id,
+    category: expert.category._id,
     title: expert.title,
     info: expert.info,
     photo: null,

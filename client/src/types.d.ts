@@ -69,6 +69,7 @@ export interface UserMini {
 
 export interface ExpertMutation {
   user: string;
+  category: string;
   title: string;
   info: string;
   photo: File | null;
@@ -78,6 +79,7 @@ export interface ExpertMutation {
 export interface ExpertFull {
   _id: string;
   user: UserMini;
+  category: Category;
   title: string;
   info: string;
   photo: string;
@@ -93,7 +95,6 @@ export interface ExpertMini {
 
 export interface IPagination<Type> {
   [key: string]: Type[];
-
   currentPage: number;
   totalCount: number;
 }
@@ -146,7 +147,11 @@ export interface Appointment {
   expert: {
     firstName: string;
     lastName: string;
-    title;
+    title: string;
+  };
+  client: {
+    firstName: string;
+    lastName: string;
   };
   service: ServicesFull;
   startTime: string;
@@ -154,7 +159,7 @@ export interface Appointment {
   isApproved: boolean;
 }
 
-export interface AppointmentResponse {
-  message: string;
-  appointment: Appointment;
+export interface Category {
+  _id: string;
+  title: string;
 }

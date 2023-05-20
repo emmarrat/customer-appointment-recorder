@@ -14,6 +14,7 @@ import {
 import { expertReducer } from '../features/experts/expertsSlice';
 import { serviceHoursReducer } from '../features/serviceHours/serviceHoursSlice';
 import { appointmentsReducer } from '../features/appointments/appointmentsSlice';
+import { categoriesReducer } from '../features/categories/categoriesSlice';
 
 const usersPersistConfig = {
   key: 'appointment-recorder:users',
@@ -26,6 +27,7 @@ const rootReducer = combineReducers({
   experts: expertReducer,
   serviceHours: serviceHoursReducer,
   appointments: appointmentsReducer,
+  categories: categoriesReducer,
 });
 
 export const store = configureStore({

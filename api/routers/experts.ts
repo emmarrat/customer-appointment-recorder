@@ -86,10 +86,9 @@ expertsRouter.get("/", async (req, res, next) => {
 
 expertsRouter.get("/:id", async (req, res, next) => {
   try {
-    const expert = await Expert.findById(req.params.id).populate(
-      "user",
-      "firstName lastName"
-    );
+    const expert = await Expert.findById(req.params.id)
+      .populate("user", "firstName lastName")
+      .populate("category", "title");
     if (!expert) {
       return res.status(404).send({ error: "Мастер не найден!" });
     }
