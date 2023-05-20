@@ -35,6 +35,7 @@ const ExpertCard: React.FC<Props> = ({ expert }) => {
   return (
     <Card sx={styles.card}>
       <CardMedia
+        className="media"
         sx={styles.media}
         image={apiURL + '/' + expert.photo}
         title={`${expert.title} ${expert.user.firstName}`}

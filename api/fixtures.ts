@@ -71,9 +71,9 @@ const run = async () => {
   );
 
   const [hair, manicure, pedicure] = await Category.create(
-    { title: "Волосы" },
-    { title: "Маникюр" },
-    { title: "Педикюр" }
+    { title: "Волосы", image: "fixtures/hair.jpg" },
+    { title: "Маникюр", image: "fixtures/manicure.jpg" },
+    { title: "Педикюр", image: "fixtures/pedicure.jpg" }
   );
 
   const [newExpert1, newExpert2] = await Expert.create(

@@ -14,6 +14,7 @@ import Experts from './features/experts/containers/Experts/Experts';
 import OneExpert from './features/experts/containers/OneExpert/OneExpert';
 import ServiceHourAdmin from './features/serviceHours/components/ServiceHourAdmin/ServiceHourAdmin';
 import './styles.css';
+import Categories from './features/categories/containers/Categories/Categories';
 
 const App = () => {
   const user = useAppSelector(selectUser);
@@ -27,6 +28,7 @@ const App = () => {
       <main>
         <Container maxWidth="xl" sx={{ mt: 5 }}>
           <Routes>
+            <Route path="/" element={<Categories />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/experts" element={<Experts />} />
