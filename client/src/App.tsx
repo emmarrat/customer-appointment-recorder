@@ -32,6 +32,7 @@ const App = () => {
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/experts" element={<Experts />} />
+            <Route path="/experts/by-category/:id" element={<Experts />} />
             <Route path="/experts/:id" element={<OneExpert />} />
             <Route
               path="/admin/experts"

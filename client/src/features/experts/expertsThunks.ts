@@ -74,6 +74,14 @@ export const fetchExpertById = createAsyncThunk<ExpertFull, string>(
   },
 );
 
+export const fetchExpertsByCategory = createAsyncThunk<ExpertMini[], string>(
+  'experts/fetchExpertsByCategory',
+  async (id) => {
+    const response = await axiosApi.get(`/experts/by-category/${id}`);
+    return response.data;
+  },
+);
+
 export const updateExpert = createAsyncThunk<
   void,
   { id: string; expertData: ExpertMutation },

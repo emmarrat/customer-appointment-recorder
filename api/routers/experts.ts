@@ -98,6 +98,21 @@ expertsRouter.get("/:id", async (req, res, next) => {
   }
 });
 
+expertsRouter.get("/by-category/:id", async (req, res, next) => {
+  try {
+    const expert = await Expert.find({ category: req.params.id })
+      .populate("user", "firstName lastName")
+      .populate("category", "title")
+      .select("user photo title");
+    if (!expert) {
+      return res.status(404).send({ error: "Мастер не найден!" });
+    }
+    return res.send(expert);
+  } catch (e) {
+    return next(e);
+  }
+});
+
 expertsRouter.delete("/:id", auth, permit("admin"), async (req, res, next) => {
   try {
     const expertId = req.params.id;

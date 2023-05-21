@@ -5,6 +5,7 @@ import {
   createExpert,
   fetchExpertById,
   fetchExperts,
+  fetchExpertsByCategory,
   updateExpert,
 } from './expertsThunks';
 
@@ -75,6 +76,18 @@ export const expertsSlice = createSlice({
       state.expert = expert;
     });
     builder.addCase(fetchExpertById.rejected, (state) => {
+      state.fetchOneExpertLoading = false;
+    });
+
+    builder.addCase(fetchExpertsByCategory.pending, (state) => {
+      state.fetchOneExpertLoading = true;
+      state.expert = null;
+    });
+    builder.addCase(fetchExpertsByCategory.fulfilled, (state, { payload: experts }) => {
+      state.fetchOneExpertLoading = false;
+      state.experts = experts;
+    });
+    builder.addCase(fetchExpertsByCategory.rejected, (state) => {
       state.fetchOneExpertLoading = false;
     });
 

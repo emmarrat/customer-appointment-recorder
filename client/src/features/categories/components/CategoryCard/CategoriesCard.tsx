@@ -3,14 +3,20 @@ import { Card, CardActionArea, CardContent, CardMedia, Typography } from '@mui/m
 import { Category } from '../../../../types';
 import { apiURL } from '../../../../constants';
 import { styles } from './CategoriesCardStyles';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
   category: Category;
 }
 
 const CategoriesCard: React.FC<Props> = ({ category }) => {
+  const navigate = useNavigate();
+
+  const pushToExperts = (categoryId: string) => {
+    void navigate(`/experts/by-category/${categoryId}`);
+  };
   return (
-    <Card sx={styles.card}>
+    <Card sx={styles.card} onClick={() => pushToExperts(category._id)}>
       <CardActionArea sx={styles.actionArea}>
         <CardMedia
           component="img"
