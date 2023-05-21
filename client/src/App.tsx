@@ -15,6 +15,7 @@ import OneExpert from './features/experts/containers/OneExpert/OneExpert';
 import ServiceHourAdmin from './features/serviceHours/components/ServiceHourAdmin/ServiceHourAdmin';
 import './styles.css';
 import Categories from './features/categories/containers/Categories/Categories';
+import AppointmentPanel from './features/appointments/containers/AppointmentPanel/AppointmentPanel';
 
 const App = () => {
   const user = useAppSelector(selectUser);
@@ -34,6 +35,29 @@ const App = () => {
             <Route path="/experts" element={<Experts />} />
             <Route path="/experts/by-category/:id" element={<Experts />} />
             <Route path="/experts/:id" element={<OneExpert />} />
+
+            <Route
+              path={
+                user && user.role === 'expert' ? '/expert/appointments' : '/appointments'
+              }
+              element={
+                <ProtectedRoute
+                  isAllowed={user && (user.role === 'expert' || user.role === 'user')}
+                >
+                  {user && <AppointmentPanel who={user.role} />}
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/admin/appointments"
+              element={
+                <ProtectedRoute isAllowed={user && user.role === 'admin'}>
+                  {user && <AppointmentPanel who={user.role} />}
+                </ProtectedRoute>
+              }
+            />
+
             <Route
               path="/admin/experts"
               element={

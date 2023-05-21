@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppBar, Button, Grid, styled, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Button, Grid, styled, Toolbar, Typography } from '@mui/material';
 import { Link as NavLink } from 'react-router-dom';
 import { useAppSelector } from '../../../app/hooks';
 import { selectUser } from '../../../features/users/usersSlice';
@@ -38,6 +38,15 @@ const AppToolbar = () => {
                 Наши мастера
               </Button>
             </Grid>
+            <Box
+              sx={{
+                display: { xs: 'none', sm: 'inline-flex' },
+                width: '2px',
+                height: '20px',
+                background: '#fff',
+                borderRadius: '10px',
+              }}
+            />
 
             {user ? <UserMenu user={user} /> : <AnonymousMenu />}
           </Grid>

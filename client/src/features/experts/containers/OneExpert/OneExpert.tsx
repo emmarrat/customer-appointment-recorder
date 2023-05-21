@@ -85,7 +85,6 @@ const OneExpert = () => {
 
   const closeModal = () => {
     setOpen(false);
-    closeCongratsMsg();
   };
 
   const chooseTime = (time: Hour) => {
@@ -107,7 +106,8 @@ const OneExpert = () => {
     setOpenCongrats(true);
   };
 
-  const closeCongratsMsg = () => {
+  const closeAll = () => {
+    closeModal();
     setOpenCongrats(false);
     setSelectedTime(null);
     setSelectedDate(null);
@@ -192,7 +192,7 @@ const OneExpert = () => {
           )
         )}
       </Grid>
-      <MyModal open={open} handleClose={closeModal} isFullWidth>
+      <MyModal open={open} handleClose={closeAll} isFullWidth>
         <Typography textAlign="center" variant="h6" my={1}>
           Выбранная процедура:{' '}
           <Typography variant="h6" component="span" color="primary">
@@ -236,11 +236,11 @@ const OneExpert = () => {
         )}
       </MyModal>
       {selectedDate && selectedTime && (
-        <MyModal open={openCongrats} handleClose={closeCongratsMsg}>
+        <MyModal open={openCongrats} handleClose={closeAll}>
           <AppointmentMessage
             date={selectedDate.date}
             startDate={selectedTime.startTime}
-            stayHere={closeCongratsMsg}
+            stayHere={closeAll}
           />
         </MyModal>
       )}

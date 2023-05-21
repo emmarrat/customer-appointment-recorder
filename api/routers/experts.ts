@@ -98,6 +98,20 @@ expertsRouter.get("/:id", async (req, res, next) => {
   }
 });
 
+expertsRouter.get("/by-user/:id", async (req, res, next) => {
+  try {
+    const expert = await Expert.findOne({ user: req.params.id })
+      .populate("user", "firstName lastName")
+      .populate("category", "title");
+    if (!expert) {
+      return res.status(404).send({ error: "Мастер не найден!" });
+    }
+    return res.send(expert);
+  } catch (e) {
+    return next(e);
+  }
+});
+
 expertsRouter.get("/by-category/:id", async (req, res, next) => {
   try {
     const experts = await Expert.find({ category: req.params.id })

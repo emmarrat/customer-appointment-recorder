@@ -4,6 +4,7 @@ import { RootState } from '../../app/store';
 import {
   createExpert,
   fetchExpertById,
+  fetchExpertByUser,
   fetchExperts,
   fetchExpertsByCategory,
   updateExpert,
@@ -80,14 +81,26 @@ export const expertsSlice = createSlice({
     });
 
     builder.addCase(fetchExpertsByCategory.pending, (state) => {
-      state.fetchOneExpertLoading = true;
-      state.expert = null;
+      state.fetchLoading = true;
+      state.experts = [];
     });
     builder.addCase(fetchExpertsByCategory.fulfilled, (state, { payload: experts }) => {
-      state.fetchOneExpertLoading = false;
+      state.fetchLoading = false;
       state.experts = experts;
     });
     builder.addCase(fetchExpertsByCategory.rejected, (state) => {
+      state.fetchLoading = false;
+    });
+
+    builder.addCase(fetchExpertByUser.pending, (state) => {
+      state.fetchOneExpertLoading = true;
+      state.expert = null;
+    });
+    builder.addCase(fetchExpertByUser.fulfilled, (state, { payload: expert }) => {
+      state.fetchOneExpertLoading = false;
+      state.expert = expert;
+    });
+    builder.addCase(fetchExpertByUser.rejected, (state) => {
       state.fetchOneExpertLoading = false;
     });
 

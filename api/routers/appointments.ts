@@ -49,4 +49,78 @@ appointmentsRouter.post("/", auth, async (req, res, next) => {
   }
 });
 
+appointmentsRouter.get("/", auth, async (req, res) => {
+  const { expert, client } = req.query;
+  const user = (req as RequestWithUser).user;
+
+  try {
+    let appointments;
+    if (expert && user.role === "expert") {
+      appointments = await Appointment.find({ expert })
+        .populate({
+          path: "client",
+          select: "firstName lastName email",
+        })
+        .populate({
+          path: "expert",
+          select: "_id title",
+          populate: {
+            path: "user",
+            select: "firstName lastName",
+          },
+        })
+        .populate({
+          path: "date",
+          select: "date",
+        });
+      return res.send({ message: "Записи данного эксперта", appointments });
+    }
+    if (client && user.role === "user") {
+      appointments = await Appointment.find({ client })
+        .populate({
+          path: "client",
+          select: "firstName lastName email",
+        })
+        .populate({
+          path: "expert",
+          select: "_id title",
+          populate: {
+            path: "user",
+            select: "firstName lastName",
+          },
+        })
+        .populate({
+          path: "date",
+          select: "date",
+        });
+      return res.send({ message: "Записи данного пользователя", appointments });
+    }
+    if (user.role === "admin") {
+      appointments = await Appointment.find()
+        .populate({
+          path: "client",
+          select: "firstName lastName email",
+        })
+        .populate({
+          path: "expert",
+          select: "_id title",
+          populate: {
+            path: "user",
+            select: "firstName lastName",
+          },
+        })
+        .populate({
+          path: "date",
+          select: "date",
+        });
+      return res.send({ message: "Все записи", appointments });
+    }
+    return res.status(400).send({ error: "Записи не найдены" });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "An error occurred while retrieving appointments." });
+  }
+});
+
 export default appointmentsRouter;

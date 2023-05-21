@@ -18,11 +18,7 @@ const UserMenu: React.FC<Props> = ({ user }) => {
   let cardImage = noImageAvailable;
 
   if (user.avatar !== null) {
-    if (user.googleId) {
-      cardImage = user.avatar;
-    } else {
-      cardImage = apiURL + '/' + user.avatar;
-    }
+    cardImage = apiURL + '/' + user.avatar;
   }
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -41,7 +37,7 @@ const UserMenu: React.FC<Props> = ({ user }) => {
   return (
     <>
       <Button onClick={handleClick} color="inherit">
-        Hello, {user.firstName}
+        меню
         <Avatar src={cardImage} alt={user.firstName} sx={{ ml: 2 }} />
       </Button>
       <Menu
@@ -49,6 +45,7 @@ const UserMenu: React.FC<Props> = ({ user }) => {
         keepMounted
         open={Boolean(anchorEl)}
         onClose={handleClose}
+        sx={{ width: '100%' }}
       >
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
         {user.role === 'admin' && (
@@ -59,6 +56,19 @@ const UserMenu: React.FC<Props> = ({ user }) => {
         {user.role === 'expert' && (
           <MenuItem component={RouterLink} to="/expert/service-hours">
             Рабочий график
+          </MenuItem>
+        )}
+        {(user.role === 'expert' || user.role === 'user') && (
+          <MenuItem
+            component={RouterLink}
+            to={user.role === 'expert' ? '/expert/appointments' : '/appointments'}
+          >
+            {user.role === 'expert' ? 'Записи клиентов' : 'Мои записи'}
+          </MenuItem>
+        )}
+        {user.role === 'admin' && (
+          <MenuItem component={RouterLink} to="/admin/appointments">
+            Контроль записей
           </MenuItem>
         )}
       </Menu>

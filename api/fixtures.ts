@@ -15,8 +15,8 @@ const run = async () => {
   try {
     await db.dropCollection("users");
     await db.dropCollection("categories");
+    await db.dropCollection("servicehours");
     await db.dropCollection("experts");
-    await db.dropCollection("serviceshours");
     await db.dropCollection("appointments");
   } catch (e) {
     console.log("Collections were not present, skipping drop...");

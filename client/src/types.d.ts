@@ -56,6 +56,11 @@ export interface Services {
   price: string;
 }
 
+export interface ServicesPriceNumber {
+  name: string;
+  price: number;
+}
+
 export interface ServicesFull extends Services {
   _id: string;
   price: number;
@@ -136,31 +141,50 @@ export interface Hour extends HourMutation {
 
 export interface AppointmentMutation {
   expert: string;
-  service: { name: string; price: number };
+  service: ServicesPriceNumber;
   date: string;
   startTime: string;
   endTime: string;
-}
-
-export interface Appointment {
-  _id: string;
-  expert: {
-    firstName: string;
-    lastName: string;
-    title: string;
-  };
-  client: {
-    firstName: string;
-    lastName: string;
-  };
-  service: ServicesFull;
-  startTime: string;
-  endTime: string;
-  isApproved: boolean;
 }
 
 export interface Category {
   _id: string;
   title: string;
   image: string;
+}
+
+export interface Appointment {
+  service: ServicesPriceNumber;
+  _id: string;
+  client: Client;
+  expert: ExpertMiniWithoutPic;
+  date: Date;
+  startTime: string;
+  endTime: string;
+  isApproved: boolean;
+  __v: number;
+}
+
+export interface Client {
+  _id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+}
+
+export interface ExpertMiniWithoutPic {
+  _id: string;
+  user: UserMiniWithId;
+  title: string;
+}
+
+export interface UserMiniWithId {
+  _id: string;
+  firstName: string;
+  lastName: string;
+}
+
+export interface Date {
+  _id: string;
+  date: string;
 }

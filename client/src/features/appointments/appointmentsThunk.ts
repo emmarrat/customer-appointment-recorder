@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { AppointmentMutation, ValidationError } from '../../types';
+import { Appointment, AppointmentMutation, ValidationError } from '../../types';
 import axiosApi from '../../axiosApi';
 import { isAxiosError } from 'axios';
 
@@ -17,4 +17,15 @@ export const createAppointment = createAsyncThunk<
     }
     throw e;
   }
+});
+
+export const fetchAppointments = createAsyncThunk<
+  Appointment[],
+  { params?: string; id?: string }
+>('appointments/fetchAppointments', async (params) => {
+  const response = await axiosApi.get(
+    `/appointments${params && '?' + params.params + '=' + params.id}`,
+  );
+  const responseData = response.data;
+  return responseData.appointments;
 });

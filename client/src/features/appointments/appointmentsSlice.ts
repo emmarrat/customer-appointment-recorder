@@ -1,6 +1,6 @@
 import { Appointment, ValidationError } from '../../types';
 import { createSlice } from '@reduxjs/toolkit';
-import { createAppointment } from './appointmentsThunk';
+import { createAppointment, fetchAppointments } from './appointmentsThunk';
 import { RootState } from '../../app/store';
 
 interface AppointmentsState {
@@ -34,6 +34,17 @@ export const appointmentsSlice = createSlice({
     builder.addCase(createAppointment.rejected, (state, { payload: error }) => {
       state.appointmentCreating = false;
       state.appointmentCreatingError = error || null;
+    });
+
+    builder.addCase(fetchAppointments.pending, (state) => {
+      state.appointmentFetching = true;
+    });
+    builder.addCase(fetchAppointments.fulfilled, (state, { payload: appointments }) => {
+      state.appointmentFetching = false;
+      state.appointments = appointments;
+    });
+    builder.addCase(fetchAppointments.rejected, (state) => {
+      state.appointmentFetching = false;
     });
   },
 });

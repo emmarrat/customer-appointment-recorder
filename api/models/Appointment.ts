@@ -2,10 +2,11 @@ import mongoose, { Types } from "mongoose";
 import Expert from "./Expert";
 import User from "./User";
 import ServiceHour from "./ServiceHour";
+import { IAppointment } from "../types";
 
 const Schema = mongoose.Schema;
 
-const AppointmentSchema = new Schema({
+const AppointmentSchema = new Schema<IAppointment>({
   client: {
     type: Schema.Types.ObjectId,
     ref: "User",
@@ -57,5 +58,8 @@ const AppointmentSchema = new Schema({
   },
 });
 
-const Appointment = mongoose.model("Appointment", AppointmentSchema);
+const Appointment = mongoose.model<IAppointment>(
+  "Appointment",
+  AppointmentSchema
+);
 export default Appointment;

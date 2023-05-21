@@ -8,3 +8,8 @@
 .btn:hover {
   background: #855374 !important;
 }
+
+a:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}

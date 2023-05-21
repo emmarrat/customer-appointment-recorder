@@ -41,8 +41,13 @@ const AppointmentMessage: React.FC<Props> = ({ date, startDate, stayHere }) => {
           Спасибо за доверие!
         </Typography>
         <Typography sx={styles.text} mb={1} fontWeight={700}>
-          Ваша запись находится в статусе обработки
+          Ваша запись находится в статусе обработки у администратора
         </Typography>
+        <Typography sx={styles.text} mb={1} fontWeight={700}>
+          Вы получите email с подтверждением записи, а также вы можете следить за статусом
+          в личном кабинете
+        </Typography>
+
         <Typography sx={styles.text}>
           Будем ждать вас {dayjs(date).locale('ru').format('DD MMMM YYYY')} г., к{' '}
           {startDate}, по адресу:
