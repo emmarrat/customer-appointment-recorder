@@ -107,7 +107,7 @@ const ExpertAdmin = () => {
               <TableFooter>
                 <TableRow>
                   <TablePagination
-                    rowsPerPageOptions={[10, 25, 50]}
+                    rowsPerPageOptions={[5, 15, 50]}
                     count={totalCount}
                     rowsPerPage={limit}
                     page={currentPage - 1}

@@ -1,4 +1,4 @@
-import { Appointment, ValidationError } from '../../types';
+import { Appointment, IPagination, ValidationError } from '../../types';
 import { createSlice } from '@reduxjs/toolkit';
 import { createAppointment, fetchAppointments } from './appointmentsThunk';
 import { RootState } from '../../app/store';
@@ -9,6 +9,8 @@ interface AppointmentsState {
   appointmentCreating: boolean;
   appointmentCreatingError: ValidationError | null;
   appointmentFetching: boolean;
+  currentPage: number;
+  totalCount: number;
 }
 
 const initialState: AppointmentsState = {
@@ -17,6 +19,8 @@ const initialState: AppointmentsState = {
   appointmentCreating: false,
   appointmentCreatingError: null,
   appointmentFetching: false,
+  currentPage: 1,
+  totalCount: 1,
 };
 
 export const appointmentsSlice = createSlice({
@@ -38,10 +42,14 @@ export const appointmentsSlice = createSlice({
 
     builder.addCase(fetchAppointments.pending, (state) => {
       state.appointmentFetching = true;
+      state.appointments = [];
     });
-    builder.addCase(fetchAppointments.fulfilled, (state, { payload: appointments }) => {
+    builder.addCase(fetchAppointments.fulfilled, (state, { payload }) => {
       state.appointmentFetching = false;
-      state.appointments = appointments;
+      const result = payload.result as IPagination<Appointment>;
+      state.appointments = result.appointments;
+      state.currentPage = result.currentPage;
+      state.totalCount = result.totalCount;
     });
     builder.addCase(fetchAppointments.rejected, (state) => {
       state.appointmentFetching = false;
@@ -60,3 +68,5 @@ export const selectAppointmentCreatingError = (state: RootState) =>
   state.appointments.appointmentCreatingError;
 export const selectAppointmentFetching = (state: RootState) =>
   state.appointments.appointmentFetching;
+export const selectAppointmentPage = (state: RootState) => state.appointments.currentPage;
+export const selectAppointmentCount = (state: RootState) => state.appointments.totalCount;

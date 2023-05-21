@@ -50,11 +50,18 @@ appointmentsRouter.post("/", auth, async (req, res, next) => {
 });
 
 appointmentsRouter.get("/", auth, async (req, res) => {
-  const { expert, client } = req.query;
+  const { expert, client, page, limit } = req.query;
   const user = (req as RequestWithUser).user;
+
+  const currentPage: number = parseInt(page as string) || 1;
+  const itemsPerPage: number = parseInt(limit as string) || 10;
 
   try {
     let appointments;
+    let totalAppointments: number;
+
+    const skip: number = (currentPage - 1) * itemsPerPage;
+
     if (expert && user.role === "expert") {
       appointments = await Appointment.find({ expert })
         .populate({
@@ -72,9 +79,18 @@ appointmentsRouter.get("/", auth, async (req, res) => {
         .populate({
           path: "date",
           select: "date",
-        });
-      return res.send({ message: "Записи данного эксперта", appointments });
+        })
+        .skip(skip)
+        .limit(itemsPerPage);
+
+      totalAppointments = await Appointment.countDocuments({ expert });
+
+      return res.send({
+        message: "Записи данного эксперта",
+        result: { appointments, currentPage, totalCount: totalAppointments },
+      });
     }
+
     if (client && user.role === "user") {
       appointments = await Appointment.find({ client })
         .populate({
@@ -92,9 +108,18 @@ appointmentsRouter.get("/", auth, async (req, res) => {
         .populate({
           path: "date",
           select: "date",
-        });
-      return res.send({ message: "Записи данного пользователя", appointments });
+        })
+        .skip(skip)
+        .limit(itemsPerPage);
+
+      totalAppointments = await Appointment.countDocuments({ client });
+
+      return res.send({
+        message: "Записи данного пользователя",
+        result: { appointments, currentPage, totalCount: totalAppointments },
+      });
     }
+
     if (user.role === "admin") {
       appointments = await Appointment.find()
         .populate({
@@ -112,9 +137,19 @@ appointmentsRouter.get("/", auth, async (req, res) => {
         .populate({
           path: "date",
           select: "date",
-        });
-      return res.send({ message: "Все записи", appointments });
+        })
+        .skip(skip)
+        .limit(itemsPerPage);
+
+      // Count the total number of appointments
+      totalAppointments = await Appointment.countDocuments();
+
+      return res.send({
+        message: "Все записи",
+        result: { appointments, currentPage, totalCount: totalAppointments },
+      });
     }
+
     return res.status(400).send({ error: "Записи не найдены" });
   } catch (error) {
     res

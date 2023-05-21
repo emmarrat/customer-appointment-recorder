@@ -1,7 +1,13 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { Appointment, AppointmentMutation, ValidationError } from '../../types';
+import {
+  ApiResponse,
+  Appointment,
+  AppointmentMutation,
+  ValidationError,
+} from '../../types';
 import axiosApi from '../../axiosApi';
 import { isAxiosError } from 'axios';
+import { RootState } from '../../app/store';
 
 export const createAppointment = createAsyncThunk<
   void,
@@ -19,13 +25,41 @@ export const createAppointment = createAsyncThunk<
   }
 });
 
+interface FetchAppointmentsParams {
+  expert?: string;
+  client?: string;
+  page?: number;
+  limit?: number;
+}
+
 export const fetchAppointments = createAsyncThunk<
-  Appointment[],
-  { params?: string; id?: string }
->('appointments/fetchAppointments', async (params) => {
-  const response = await axiosApi.get(
-    `/appointments${params && '?' + params.params + '=' + params.id}`,
-  );
-  const responseData = response.data;
-  return responseData.appointments;
+  ApiResponse<Appointment>,
+  FetchAppointmentsParams,
+  { state: RootState }
+>('appointments/fetchAppointments', async (params, thunkAPI) => {
+  const { expert, client, page, limit } = params;
+  const { getState } = thunkAPI;
+  const userRole = getState().users.user?.role;
+
+  const queryParams: string[] = [];
+
+  if (expert && userRole === 'expert') {
+    queryParams.push(`expert=${expert}`);
+  } else if (client && userRole === 'user') {
+    queryParams.push(`client=${client}`);
+  }
+
+  if (page) {
+    queryParams.push(`page=${page}`);
+  }
+
+  if (limit) {
+    queryParams.push(`limit=${limit}`);
+  }
+
+  const queryString = queryParams.length > 0 ? `?${queryParams.join('&')}` : '';
+
+  const response = await axiosApi.get(`/appointments${queryString}`);
+
+  return response.data;
 });

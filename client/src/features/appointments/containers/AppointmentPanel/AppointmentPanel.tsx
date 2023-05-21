@@ -1,6 +1,10 @@
 import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { selectAppointments } from '../../appointmentsSlice';
+import {
+  selectAppointmentCount,
+  selectAppointmentPage,
+  selectAppointments,
+} from '../../appointmentsSlice';
 import { selectUser } from '../../../users/usersSlice';
 import { fetchAppointments } from '../../appointmentsThunk';
 import { fetchExpertByUser } from '../../../experts/expertsThunks';
@@ -16,6 +20,10 @@ const AppointmentPanel: React.FC<Props> = ({ who }) => {
   const appointments = useAppSelector(selectAppointments);
   const expert = useAppSelector(selectOneExpert);
   const user = useAppSelector(selectUser);
+  const currentPage = useAppSelector(selectAppointmentPage);
+  const totalCount = useAppSelector(selectAppointmentCount);
+  const [limit, setLimit] = React.useState(5);
+  const [page, setPage] = React.useState(1);
 
   useEffect(() => {
     if (user && user.role === 'expert') {
@@ -25,16 +33,26 @@ const AppointmentPanel: React.FC<Props> = ({ who }) => {
 
   useEffect(() => {
     if (user && user.role === 'user') {
-      dispatch(fetchAppointments({ params: 'client', id: user._id }));
+      dispatch(fetchAppointments({ client: user._id, page, limit }));
     }
     if (expert && user && user.role === 'expert') {
-      dispatch(fetchAppointments({ params: 'expert', id: expert._id }));
+      dispatch(fetchAppointments({ expert: expert._id, page, limit }));
     }
     if (user && user.role === 'admin') {
-      dispatch(fetchAppointments({}));
+      dispatch(fetchAppointments({ page, limit }));
     }
-  }, [dispatch, expert, user]);
-  return <AppointmentTable appointments={appointments} role={who} />;
+  }, [dispatch, expert, user, limit, page]);
+  return (
+    <AppointmentTable
+      appointments={appointments}
+      role={who}
+      limit={limit}
+      setLimit={setLimit}
+      totalCount={totalCount}
+      setPage={setPage}
+      currentPage={currentPage}
+    />
+  );
 };
 
 export default AppointmentPanel;

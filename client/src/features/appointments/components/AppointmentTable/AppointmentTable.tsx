@@ -6,7 +6,9 @@ import {
   TableBody,
   TableCell,
   TableContainer,
+  TableFooter,
   TableHead,
+  TablePagination,
   TableRow,
   Typography,
 } from '@mui/material';
@@ -16,9 +18,22 @@ import dayjs from 'dayjs';
 interface Props {
   appointments: Appointment[];
   role: string;
+  currentPage: number;
+  totalCount: number;
+  limit: number;
+  setLimit: (number: number) => void;
+  setPage: (number: number) => void;
 }
 
-const AppointmentTable: React.FC<Props> = ({ appointments, role }) => {
+const AppointmentTable: React.FC<Props> = ({
+  appointments,
+  role,
+  limit,
+  setLimit,
+  totalCount,
+  setPage,
+  currentPage,
+}) => {
   return (
     <>
       <Grid container spacing={2} direction="column">
@@ -87,6 +102,18 @@ const AppointmentTable: React.FC<Props> = ({ appointments, role }) => {
                   </TableRow>
                 ))}
               </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TablePagination
+                    rowsPerPageOptions={[5, 15, 50]}
+                    count={totalCount}
+                    rowsPerPage={limit}
+                    page={currentPage - 1}
+                    onPageChange={(_, newPage) => setPage(newPage + 1)}
+                    onRowsPerPageChange={(e) => setLimit(parseInt(e.target.value))}
+                  />
+                </TableRow>
+              </TableFooter>
             </Table>
           </TableContainer>
         </Grid>
