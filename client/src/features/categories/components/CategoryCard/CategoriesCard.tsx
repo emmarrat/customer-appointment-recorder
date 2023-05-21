@@ -4,6 +4,8 @@ import { Category } from '../../../../types';
 import { apiURL } from '../../../../constants';
 import { styles } from './CategoriesCardStyles';
 import { useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '../../../../app/hooks';
+import { getCategoryName } from '../../categoriesSlice';
 
 interface Props {
   category: Category;
@@ -11,12 +13,14 @@ interface Props {
 
 const CategoriesCard: React.FC<Props> = ({ category }) => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
-  const pushToExperts = (categoryId: string) => {
+  const pushToExperts = async (categoryId: string, categoryName: string) => {
+    await dispatch(getCategoryName(categoryName));
     void navigate(`/experts/by-category/${categoryId}`);
   };
   return (
-    <Card sx={styles.card} onClick={() => pushToExperts(category._id)}>
+    <Card sx={styles.card} onClick={() => pushToExperts(category._id, category.title)}>
       <CardActionArea sx={styles.actionArea}>
         <CardMedia
           component="img"

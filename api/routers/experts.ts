@@ -100,14 +100,14 @@ expertsRouter.get("/:id", async (req, res, next) => {
 
 expertsRouter.get("/by-category/:id", async (req, res, next) => {
   try {
-    const expert = await Expert.find({ category: req.params.id })
+    const experts = await Expert.find({ category: req.params.id })
       .populate("user", "firstName lastName")
       .populate("category", "title")
       .select("user photo title");
-    if (!expert) {
+    if (!experts) {
       return res.status(404).send({ error: "Мастер не найден!" });
     }
-    return res.send(expert);
+    return res.send(experts);
   } catch (e) {
     return next(e);
   }
