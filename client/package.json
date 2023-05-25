@@ -42,7 +42,6 @@
     "format": "prettier --write .",
     "typecheck": "tsc --noemit",
     "prepare": "cd .. && npm i"
-
   },
   "eslintConfig": {
     "extends": [

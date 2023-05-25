@@ -1,6 +1,10 @@
 import { Appointment, IPagination, ValidationError } from '../../types';
 import { createSlice } from '@reduxjs/toolkit';
-import { createAppointment, fetchAppointments } from './appointmentsThunk';
+import {
+  createAppointment,
+  fetchAppointments,
+  updateAppointment,
+} from './appointmentsThunk';
 import { RootState } from '../../app/store';
 
 interface AppointmentsState {
@@ -9,6 +13,7 @@ interface AppointmentsState {
   appointmentCreating: boolean;
   appointmentCreatingError: ValidationError | null;
   appointmentFetching: boolean;
+  appointmentUpdating: string | false;
   currentPage: number;
   totalCount: number;
 }
@@ -19,6 +24,7 @@ const initialState: AppointmentsState = {
   appointmentCreating: false,
   appointmentCreatingError: null,
   appointmentFetching: false,
+  appointmentUpdating: false,
   currentPage: 1,
   totalCount: 1,
 };
@@ -53,6 +59,16 @@ export const appointmentsSlice = createSlice({
     });
     builder.addCase(fetchAppointments.rejected, (state) => {
       state.appointmentFetching = false;
+    });
+
+    builder.addCase(updateAppointment.pending, (state, { meta: { arg } }) => {
+      state.appointmentUpdating = arg.id;
+    });
+    builder.addCase(updateAppointment.fulfilled, (state) => {
+      state.appointmentUpdating = false;
+    });
+    builder.addCase(updateAppointment.rejected, (state) => {
+      state.appointmentUpdating = false;
     });
   },
 });

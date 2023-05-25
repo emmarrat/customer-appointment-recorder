@@ -49,7 +49,7 @@ appointmentsRouter.post("/", auth, async (req, res, next) => {
   }
 });
 
-appointmentsRouter.get("/", auth, async (req, res) => {
+appointmentsRouter.get("/", auth, async (req, res, next) => {
   const { expert, client, page, limit } = req.query;
   const user = (req as RequestWithUser).user;
 
@@ -141,7 +141,6 @@ appointmentsRouter.get("/", auth, async (req, res) => {
         .skip(skip)
         .limit(itemsPerPage);
 
-      // Count the total number of appointments
       totalAppointments = await Appointment.countDocuments();
 
       return res.send({
@@ -151,10 +150,28 @@ appointmentsRouter.get("/", auth, async (req, res) => {
     }
 
     return res.status(400).send({ error: "Записи не найдены" });
-  } catch (error) {
-    res
-      .status(500)
-      .json({ error: "An error occurred while retrieving appointments." });
+  } catch (e) {
+    return next(e);
+  }
+});
+
+appointmentsRouter.patch("/:id", async (req, res, next) => {
+  const { id } = req.params;
+  const { isApproved } = req.body;
+
+  try {
+    const appointment = await Appointment.findById(id);
+
+    if (!appointment) {
+      return res.status(404).json({ error: "Appointment not found" });
+    }
+
+    appointment.isApproved = isApproved;
+    await appointment.save();
+
+    return res.send({ message: "Статус записи успешно изменен!", appointment });
+  } catch (e) {
+    return next(e);
   }
 });
 
