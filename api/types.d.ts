@@ -1,4 +1,4 @@
-import { Types } from "mongoose";
+import { Types } from 'mongoose';
 
 export interface IUser {
   email: string;
@@ -22,6 +22,40 @@ export interface IAppointment {
   expert: Types.ObjectId;
   service: IService;
   date: Types.ObjectId;
+  startTime: string;
+  endTime: string;
+  isApproved: boolean;
+}
+
+export interface ServicesPriceNumber {
+  name: string;
+  price: number;
+}
+
+export interface Client {
+  _id: Types.ObjectId;
+  email: string;
+  firstName: string;
+  lastName: string;
+}
+
+export interface ExpertMiniWithoutPic {
+  _id: Types.ObjectId;
+  user: UserMiniWithId;
+  title: string;
+}
+
+export interface Date {
+  _id: Types.ObjectId;
+  date: string;
+}
+
+export interface AppointmentFull {
+  service: ServicesPriceNumber;
+  _id: Types.ObjectId;
+  client: Client;
+  expert: ExpertMiniWithoutPic;
+  date: Date;
   startTime: string;
   endTime: string;
   isApproved: boolean;

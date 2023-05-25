@@ -1,6 +1,9 @@
 import React from 'react';
 import { Box, Button, Typography } from '@mui/material';
-import { COMPANY_ADDRESS_LINK, COMPANY_ADDRESS_NAME } from '../../../../constants';
+import {
+  COMPANY_ADDRESS_LINK,
+  COMPANY_ADDRESS_NAME,
+} from '../../../../constants';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { Link as RouterLink } from 'react-router-dom';
 import dayjs from 'dayjs';
@@ -44,13 +47,13 @@ const AppointmentMessage: React.FC<Props> = ({ date, startDate, stayHere }) => {
           Ваша запись находится в статусе обработки у администратора
         </Typography>
         <Typography sx={styles.text} mb={1} fontWeight={700}>
-          Вы получите email с подтверждением записи, а также вы можете следить за статусом
-          в личном кабинете
+          Вы получите email с подтверждением записи, а также вы можете следить
+          за статусом в личном кабинете
         </Typography>
 
         <Typography sx={styles.text}>
-          Будем ждать вас {dayjs(date).locale('ru').format('DD MMMM YYYY')} г., к{' '}
-          {startDate}, по адресу:
+          Будем ждать вас {dayjs(date).locale('ru').format('DD MMMM YYYY')} г.,
+          к {startDate}, по адресу:
         </Typography>
         <Typography
           sx={styles.link}

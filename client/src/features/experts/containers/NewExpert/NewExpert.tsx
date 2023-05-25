@@ -4,7 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import { createExpert } from '../../expertsThunks';
 import { ExpertMutation } from '../../../../types';
 import ExpertsForm from '../../components/ExpertForm/ExpertsForm';
-import { selectExpertCreating, selectExpertCreatingError } from '../../expertsSlice';
+import {
+  selectExpertCreating,
+  selectExpertCreatingError,
+} from '../../expertsSlice';
 
 const NewExpert = () => {
   const dispatch = useAppDispatch();
@@ -17,7 +20,9 @@ const NewExpert = () => {
     navigate('/admin/experts');
   };
 
-  return <ExpertsForm loading={loading} error={error} onSubmit={submitNewExpert} />;
+  return (
+    <ExpertsForm loading={loading} error={error} onSubmit={submitNewExpert} />
+  );
 };
 
 export default NewExpert;

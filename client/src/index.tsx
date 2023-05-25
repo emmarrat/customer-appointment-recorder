@@ -18,7 +18,9 @@ import 'dayjs/locale/ru';
 addInterceptors(store);
 dayjs.locale('ru');
 
-const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
+const root = ReactDOM.createRoot(
+  document.getElementById('root') as HTMLElement,
+);
 root.render(
   <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
     <Provider store={store}>

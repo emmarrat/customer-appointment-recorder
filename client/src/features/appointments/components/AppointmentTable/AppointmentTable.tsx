@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   Grid,
+  IconButton,
   Paper,
   Table,
   TableBody,
@@ -12,8 +13,10 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import { Appointment } from '../../../../types';
+import { Appointment, UpdateAppointmentParams } from '../../../../types';
 import dayjs from 'dayjs';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import DoNotDisturbIcon from '@mui/icons-material/DoNotDisturb';
 
 interface Props {
   appointments: Appointment[];
@@ -23,6 +26,7 @@ interface Props {
   limit: number;
   setLimit: (number: number) => void;
   setPage: (number: number) => void;
+  changeStatus: (item: UpdateAppointmentParams) => void;
 }
 
 const AppointmentTable: React.FC<Props> = ({
@@ -33,6 +37,7 @@ const AppointmentTable: React.FC<Props> = ({
   totalCount,
   setPage,
   currentPage,
+  changeStatus,
 }) => {
   return (
     <>
@@ -63,6 +68,7 @@ const AppointmentTable: React.FC<Props> = ({
                   <TableCell>Процедура</TableCell>
                   <TableCell>Стоимость</TableCell>
                   <TableCell>Статус</TableCell>
+                  <TableCell>Изменить</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -71,7 +77,8 @@ const AppointmentTable: React.FC<Props> = ({
                     {(role === 'expert' || role === 'admin') && (
                       <>
                         <TableCell>
-                          {appointment.client.firstName} {appointment.client.lastName}
+                          {appointment.client.firstName}{' '}
+                          {appointment.client.lastName}
                         </TableCell>
                         <TableCell>{appointment.client.email}</TableCell>
                       </>
@@ -88,16 +95,44 @@ const AppointmentTable: React.FC<Props> = ({
                     <TableCell>
                       {`${dayjs(appointment.date.date)
                         .locale('ru')
-                        .format('DD MMMM YYYY')} | ${appointment.startTime} - ${
+                        .format('DD.MM.YY')} | ${appointment.startTime} - ${
                         appointment.endTime
                       }`}
                     </TableCell>
                     <TableCell>{appointment.service.name}</TableCell>
                     <TableCell>{appointment.service.price} сом</TableCell>
+                    <TableCell
+                      sx={{ color: appointment.isApproved ? 'green' : 'red' }}
+                    >
+                      {appointment.isApproved ? 'Подтвержден' : 'Ожидает'}
+                    </TableCell>
                     <TableCell>
-                      {`${
-                        appointment.isApproved ? 'Подтвержден' : 'Ожидает подтвреждения'
-                      }`}
+                      {appointment.isApproved ? (
+                        <IconButton
+                          aria-label="DoNotDisturbIcon"
+                          sx={{ cursor: 'pointer' }}
+                          onClick={() =>
+                            changeStatus({
+                              id: appointment._id,
+                              isApproved: false,
+                            })
+                          }
+                        >
+                          <DoNotDisturbIcon color="error" />
+                        </IconButton>
+                      ) : (
+                        <IconButton
+                          onClick={() =>
+                            changeStatus({
+                              id: appointment._id,
+                              isApproved: true,
+                            })
+                          }
+                          sx={{ cursor: 'pointer' }}
+                        >
+                          <CheckCircleOutlineIcon color="success" />
+                        </IconButton>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -110,7 +145,9 @@ const AppointmentTable: React.FC<Props> = ({
                     rowsPerPage={limit}
                     page={currentPage - 1}
                     onPageChange={(_, newPage) => setPage(newPage + 1)}
-                    onRowsPerPageChange={(e) => setLimit(parseInt(e.target.value))}
+                    onRowsPerPageChange={(e) =>
+                      setLimit(parseInt(e.target.value))
+                    }
                   />
                 </TableRow>
               </TableFooter>
@@ -121,5 +158,4 @@ const AppointmentTable: React.FC<Props> = ({
     </>
   );
 };
-
 export default AppointmentTable;

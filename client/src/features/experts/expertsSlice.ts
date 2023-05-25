@@ -1,4 +1,9 @@
-import { ExpertFull, ExpertMini, IPagination, ValidationError } from '../../types';
+import {
+  ExpertFull,
+  ExpertMini,
+  IPagination,
+  ValidationError,
+} from '../../types';
 import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 import {
@@ -84,10 +89,13 @@ export const expertsSlice = createSlice({
       state.fetchLoading = true;
       state.experts = [];
     });
-    builder.addCase(fetchExpertsByCategory.fulfilled, (state, { payload: experts }) => {
-      state.fetchLoading = false;
-      state.experts = experts;
-    });
+    builder.addCase(
+      fetchExpertsByCategory.fulfilled,
+      (state, { payload: experts }) => {
+        state.fetchLoading = false;
+        state.experts = experts;
+      },
+    );
     builder.addCase(fetchExpertsByCategory.rejected, (state) => {
       state.fetchLoading = false;
     });
@@ -96,10 +104,13 @@ export const expertsSlice = createSlice({
       state.fetchOneExpertLoading = true;
       state.expert = null;
     });
-    builder.addCase(fetchExpertByUser.fulfilled, (state, { payload: expert }) => {
-      state.fetchOneExpertLoading = false;
-      state.expert = expert;
-    });
+    builder.addCase(
+      fetchExpertByUser.fulfilled,
+      (state, { payload: expert }) => {
+        state.fetchOneExpertLoading = false;
+        state.expert = expert;
+      },
+    );
     builder.addCase(fetchExpertByUser.rejected, (state) => {
       state.fetchOneExpertLoading = false;
     });
@@ -121,14 +132,19 @@ export const expertsSlice = createSlice({
 export const expertReducer = expertsSlice.reducer;
 export const selectExperts = (state: RootState) => state.experts.experts;
 export const selectOneExpert = (state: RootState) => state.experts.expert;
-export const selectExpertCreating = (state: RootState) => state.experts.expertCreating;
+export const selectExpertCreating = (state: RootState) =>
+  state.experts.expertCreating;
 export const selectExpertCreatingError = (state: RootState) =>
   state.experts.expertCreatingError;
-export const selectExpertsFetching = (state: RootState) => state.experts.fetchLoading;
+export const selectExpertsFetching = (state: RootState) =>
+  state.experts.fetchLoading;
 export const selectExpertOneFetching = (state: RootState) =>
   state.experts.fetchOneExpertLoading;
-export const selectExpertUpdating = (state: RootState) => state.experts.expertUpdating;
+export const selectExpertUpdating = (state: RootState) =>
+  state.experts.expertUpdating;
 export const selectExpertUpdatingError = (state: RootState) =>
   state.experts.expertUpdatingError;
-export const selectExpertsCount = (state: RootState) => state.experts.totalCount;
-export const selectExpertsPage = (state: RootState) => state.experts.currentPage;
+export const selectExpertsCount = (state: RootState) =>
+  state.experts.totalCount;
+export const selectExpertsPage = (state: RootState) =>
+  state.experts.currentPage;

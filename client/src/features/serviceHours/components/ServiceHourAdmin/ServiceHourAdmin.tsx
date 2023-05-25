@@ -1,7 +1,13 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { selectDatetimeFetching, selectDatetimes } from '../../serviceHoursSlice';
-import { createServiceHour, fetchServiceHoursByUser } from '../../serviceHoursThunks';
+import {
+  selectDatetimeFetching,
+  selectDatetimes,
+} from '../../serviceHoursSlice';
+import {
+  createServiceHour,
+  fetchServiceHoursByUser,
+} from '../../serviceHoursThunks';
 import { selectUser } from '../../../users/usersSlice';
 import { Button, CircularProgress, Grid, Typography } from '@mui/material';
 import dayjs from 'dayjs';
@@ -49,7 +55,12 @@ const ServiceHourAdmin = () => {
   return (
     <>
       <Button onClick={openModal}>Добавить рабочий день</Button>
-      <Grid container flexDirection="column" justifyContent="center" alignItems="center">
+      <Grid
+        container
+        flexDirection="column"
+        justifyContent="center"
+        alignItems="center"
+      >
         {loading && <CircularProgress />}
         {workingDates.map((date) => (
           <Grid
@@ -106,7 +117,9 @@ const ServiceHourAdmin = () => {
                     </Typography>
                   </Grid>
                   <Grid item>
-                    <Typography>{hour.status ? 'Занято' : 'Свободно'}</Typography>
+                    <Typography>
+                      {hour.status ? 'Занято' : 'Свободно'}
+                    </Typography>
                   </Grid>
                 </Grid>
               ))}

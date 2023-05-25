@@ -6,10 +6,11 @@ import {
   selectAppointments,
 } from '../../appointmentsSlice';
 import { selectUser } from '../../../users/usersSlice';
-import { fetchAppointments } from '../../appointmentsThunk';
+import { fetchAppointments, updateAppointment } from '../../appointmentsThunk';
 import { fetchExpertByUser } from '../../../experts/expertsThunks';
 import { selectOneExpert } from '../../../experts/expertsSlice';
 import AppointmentTable from '../../components/AppointmentTable/AppointmentTable';
+import { UpdateAppointmentParams } from '../../../../types';
 
 interface Props {
   who: string;
@@ -42,6 +43,19 @@ const AppointmentPanel: React.FC<Props> = ({ who }) => {
       dispatch(fetchAppointments({ page, limit }));
     }
   }, [dispatch, expert, user, limit, page]);
+
+  const changeStatus = async (data: UpdateAppointmentParams) => {
+    await dispatch(updateAppointment(data));
+    if (user && user.role === 'user') {
+      dispatch(fetchAppointments({ client: user._id, page, limit }));
+    }
+    if (expert && user && user.role === 'expert') {
+      dispatch(fetchAppointments({ expert: expert._id, page, limit }));
+    }
+    if (user && user.role === 'admin') {
+      dispatch(fetchAppointments({ page, limit }));
+    }
+  };
   return (
     <AppointmentTable
       appointments={appointments}
@@ -51,6 +65,7 @@ const AppointmentPanel: React.FC<Props> = ({ who }) => {
       totalCount={totalCount}
       setPage={setPage}
       currentPage={currentPage}
+      changeStatus={changeStatus}
     />
   );
 };

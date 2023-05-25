@@ -1,8 +1,8 @@
-import mongoose, { Types } from "mongoose";
-import Expert from "./Expert";
-import User from "./User";
-import ServiceHour from "./ServiceHour";
-import { IAppointment } from "../types";
+import mongoose, { Types } from 'mongoose';
+import Expert from './Expert';
+import User from './User';
+import ServiceHour from './ServiceHour';
+import { IAppointment } from '../types';
 
 const Schema = mongoose.Schema;
 
@@ -10,20 +10,20 @@ const AppointmentSchema = new Schema<IAppointment>(
   {
     client: {
       type: Schema.Types.ObjectId,
-      ref: "User",
+      ref: 'User',
       required: true,
       validate: {
         validator: async (value: Types.ObjectId) => User.findById(value),
-        message: "Юзер не найден",
+        message: 'Юзер не найден',
       },
     },
     expert: {
       type: Schema.Types.ObjectId,
-      ref: "Expert",
+      ref: 'Expert',
       required: true,
       validate: {
         validator: async (value: Types.ObjectId) => Expert.findById(value),
-        message: "Мастер не найден",
+        message: 'Мастер не найден',
       },
     },
     service: {
@@ -39,10 +39,10 @@ const AppointmentSchema = new Schema<IAppointment>(
     date: {
       type: Schema.Types.ObjectId,
       required: true,
-      ref: "ServiceHour",
+      ref: 'ServiceHour',
       validate: {
         validator: async (value: Types.ObjectId) => ServiceHour.findById(value),
-        message: "Дата не найдена",
+        message: 'Дата не найдена',
       },
     },
     startTime: {
@@ -58,11 +58,11 @@ const AppointmentSchema = new Schema<IAppointment>(
       default: false,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const Appointment = mongoose.model<IAppointment>(
-  "Appointment",
-  AppointmentSchema
+  'Appointment',
+  AppointmentSchema,
 );
 export default Appointment;

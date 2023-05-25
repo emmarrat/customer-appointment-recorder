@@ -1,22 +1,22 @@
-import express from "express";
-import auth, { RequestWithUser } from "../middleware/auth";
-import permit from "../middleware/permit";
-import Expert from "../models/Expert";
-import mongoose from "mongoose";
-import ServiceHour from "../models/ServiceHour";
+import express from 'express';
+import auth, { RequestWithUser } from '../middleware/auth';
+import permit from '../middleware/permit';
+import Expert from '../models/Expert';
+import mongoose from 'mongoose';
+import ServiceHour from '../models/ServiceHour';
 
 const serviceHoursRouter = express.Router();
 
 serviceHoursRouter.post(
-  "/",
+  '/',
   auth,
-  permit("expert"),
+  permit('expert'),
 
   async (req, res, next) => {
     try {
       const existingExpert = await Expert.findById(req.body.expert);
       if (!existingExpert) {
-        return res.status(400).send({ error: "Мастер не найден!" });
+        return res.status(400).send({ error: 'Мастер не найден!' });
       }
 
       const user = (req as RequestWithUser).user;
@@ -24,7 +24,7 @@ serviceHoursRouter.post(
       if (user._id.toString() !== existingExpert.user.toString()) {
         return res
           .status(400)
-          .send({ error: "У пользователя не достаточно прав!" });
+          .send({ error: 'У пользователя не достаточно прав!' });
       }
 
       const existingService = await ServiceHour.findOne({
@@ -33,7 +33,7 @@ serviceHoursRouter.post(
 
       if (existingService) {
         return res.status(400).send({
-          error: "У данного мастера уже есть рабочий график на этот день!",
+          error: 'У данного мастера уже есть рабочий график на этот день!',
         });
       }
 
@@ -43,18 +43,18 @@ serviceHoursRouter.post(
       });
 
       newServicesHour.hours = [
-        { startTime: "10:00", endTime: "11:00", status: false },
-        { startTime: "11:15", endTime: "12:15", status: false },
-        { startTime: "13:45", endTime: "14:45", status: false },
-        { startTime: "15:00", endTime: "16:00", status: false },
-        { startTime: "16:15", endTime: "17:15", status: false },
-        { startTime: "17:30", endTime: "18:30", status: false },
+        { startTime: '10:00', endTime: '11:00', status: false },
+        { startTime: '11:15', endTime: '12:15', status: false },
+        { startTime: '13:45', endTime: '14:45', status: false },
+        { startTime: '15:00', endTime: '16:00', status: false },
+        { startTime: '16:15', endTime: '17:15', status: false },
+        { startTime: '17:30', endTime: '18:30', status: false },
       ];
 
       const savedServicesHour = await newServicesHour.save();
 
       res.status(200).send({
-        message: "working schedule successfully created",
+        message: 'working schedule successfully created',
         serviceHours: savedServicesHour,
       });
     } catch (e) {
@@ -64,10 +64,10 @@ serviceHoursRouter.post(
         return next(e);
       }
     }
-  }
+  },
 );
 
-serviceHoursRouter.get("/expert/:id", async (req, res, next) => {
+serviceHoursRouter.get('/expert/:id', async (req, res, next) => {
   try {
     const serviceHours = await ServiceHour.find({
       expert: req.params.id,
@@ -79,15 +79,15 @@ serviceHoursRouter.get("/expert/:id", async (req, res, next) => {
   }
 });
 
-serviceHoursRouter.get("/by-user/:id", async (req, res, next) => {
+serviceHoursRouter.get('/by-user/:id', async (req, res, next) => {
   try {
     const expert = await Expert.findOne({ user: req.params.id }).populate(
-      "user",
-      "firstName lastName"
+      'user',
+      'firstName lastName',
     );
 
     if (!expert) {
-      return res.status(404).send({ error: "Мастер не найден!" });
+      return res.status(404).send({ error: 'Мастер не найден!' });
     }
 
     const serviceHours = await ServiceHour.find({ expert: expert._id }).exec();
@@ -99,34 +99,34 @@ serviceHoursRouter.get("/by-user/:id", async (req, res, next) => {
 });
 
 serviceHoursRouter.patch(
-  "/:id/hours",
+  '/:id/hours',
   auth,
-  permit("expert"),
+  permit('expert'),
 
   async (req, res, next) => {
     try {
       const serviceHour = await ServiceHour.findById(req.params.id);
       if (!serviceHour) {
-        return res.status(404).send({ error: "Service hour not found!" });
+        return res.status(404).send({ error: 'Service hour not found!' });
       }
 
       const existingExpert = await Expert.findById(serviceHour.expert);
       if (!existingExpert) {
-        return res.status(500).send({ error: "Expert not found!" });
+        return res.status(500).send({ error: 'Expert not found!' });
       }
 
       const user = (req as RequestWithUser).user;
       if (user._id.toString() !== existingExpert.user.toString()) {
         return res
           .status(500)
-          .send({ error: "This user do not have enough access!" });
+          .send({ error: 'This user do not have enough access!' });
       }
 
       serviceHour.hours = req.body.hours;
       const savedServiceHour = await serviceHour.save();
 
       res.status(200).send({
-        message: "working hours successfully updated",
+        message: 'working hours successfully updated',
         serviceHours: savedServiceHour,
       });
     } catch (e) {
@@ -136,43 +136,43 @@ serviceHoursRouter.patch(
         return next(e);
       }
     }
-  }
+  },
 );
 
 serviceHoursRouter.delete(
-  "/:id",
+  '/:id',
   auth,
-  permit("expert", "admin"),
+  permit('expert', 'admin'),
   async (req, res, next) => {
     try {
       const serviceHour = await ServiceHour.findById(req.params.id);
       if (!serviceHour) {
-        return res.status(404).send({ error: "Service hour not found!" });
+        return res.status(404).send({ error: 'Service hour not found!' });
       }
 
       const existingExpert = await Expert.findById(serviceHour.expert);
       if (!existingExpert) {
-        return res.status(500).send({ error: "Expert not found!" });
+        return res.status(500).send({ error: 'Expert not found!' });
       }
 
       const user = (req as RequestWithUser).user;
 
       if (
         user._id.toString() !== serviceHour.expert.toString() &&
-        user.role !== "admin"
+        user.role !== 'admin'
       ) {
-        return res.status(403).send({ error: "Access denied!" });
+        return res.status(403).send({ error: 'Access denied!' });
       }
 
       const removedServiceHour = await serviceHour.deleteOne();
       res.status(200).send({
-        message: "Working hours successfully removed",
+        message: 'Working hours successfully removed',
         serviceHours: removedServiceHour,
       });
     } catch (e) {
       return next(e);
     }
-  }
+  },
 );
 
 export default serviceHoursRouter;

@@ -61,7 +61,9 @@ const UserMenu: React.FC<Props> = ({ user }) => {
         {(user.role === 'expert' || user.role === 'user') && (
           <MenuItem
             component={RouterLink}
-            to={user.role === 'expert' ? '/expert/appointments' : '/appointments'}
+            to={
+              user.role === 'expert' ? '/expert/appointments' : '/appointments'
+            }
           >
             {user.role === 'expert' ? 'Записи клиентов' : 'Мои записи'}
           </MenuItem>

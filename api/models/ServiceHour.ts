@@ -1,5 +1,5 @@
-import mongoose, { Types } from "mongoose";
-import Expert from "./Expert";
+import mongoose, { Types } from 'mongoose';
+import Expert from './Expert';
 
 const Schema = mongoose.Schema;
 
@@ -7,11 +7,11 @@ const ServiceHourSchema = new Schema(
   {
     expert: {
       type: Schema.Types.ObjectId,
-      ref: "Expert",
+      ref: 'Expert',
       required: true,
       validate: {
         validator: async (value: Types.ObjectId) => Expert.findById(value),
-        message: "Эксперт не найден",
+        message: 'Эксперт не найден',
       },
     },
     date: {
@@ -36,7 +36,7 @@ const ServiceHourSchema = new Schema(
       },
     ],
   },
-  { timestamps: true }
+  { timestamps: true },
 );
-const ServiceHour = mongoose.model("ServiceHour", ServiceHourSchema);
+const ServiceHour = mongoose.model('ServiceHour', ServiceHourSchema);
 export default ServiceHour;

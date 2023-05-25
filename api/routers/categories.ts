@@ -1,9 +1,9 @@
-import express from "express";
-import Category from "../models/Category";
+import express from 'express';
+import Category from '../models/Category';
 
 const categoriesRouter = express.Router();
 
-categoriesRouter.get("/", async (req, res, next) => {
+categoriesRouter.get('/', async (req, res, next) => {
   try {
     const categories = await Category.find();
     res.status(200).send(categories);

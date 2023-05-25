@@ -19,7 +19,11 @@ import {
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { selectExperts, selectExpertsCount, selectExpertsPage } from '../../expertsSlice';
+import {
+  selectExperts,
+  selectExpertsCount,
+  selectExpertsPage,
+} from '../../expertsSlice';
 import { fetchExperts } from '../../expertsThunks';
 
 const ExpertAdmin = () => {
@@ -84,7 +88,9 @@ const ExpertAdmin = () => {
                     >
                       {expert.user.firstName} {expert.user.lastName}
                     </TableCell>
-                    <TableCell sx={{ cursor: 'pointer' }}>{expert.title}</TableCell>
+                    <TableCell sx={{ cursor: 'pointer' }}>
+                      {expert.title}
+                    </TableCell>
                     <TableCell align="right">
                       <IconButton
                         component={RouterLink}
@@ -112,7 +118,9 @@ const ExpertAdmin = () => {
                     rowsPerPage={limit}
                     page={currentPage - 1}
                     onPageChange={(_, newPage) => setPage(newPage + 1)}
-                    onRowsPerPageChange={(e) => setLimit(parseInt(e.target.value))}
+                    onRowsPerPageChange={(e) =>
+                      setLimit(parseInt(e.target.value))
+                    }
                   />
                 </TableRow>
               </TableFooter>

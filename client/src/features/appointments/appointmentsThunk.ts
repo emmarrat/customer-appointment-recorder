@@ -3,6 +3,7 @@ import {
   ApiResponse,
   Appointment,
   AppointmentMutation,
+  UpdateAppointmentParams,
   ValidationError,
 } from '../../types';
 import axiosApi from '../../axiosApi';
@@ -64,15 +65,9 @@ export const fetchAppointments = createAsyncThunk<
   return response.data;
 });
 
-interface UpdateAppointmentParams {
-  id: string;
-  isApproved: boolean;
-}
-
-export const updateAppointment = createAsyncThunk<void, UpdateAppointmentParams>(
-  'appointments/updateStatus',
-  async ({ id, isApproved }) => {
-    const response = await axiosApi.patch(`/appointments/${id}`, { isApproved });
-    return response.data;
-  },
-);
+export const updateAppointment = createAsyncThunk<
+  void,
+  UpdateAppointmentParams
+>('appointments/updateStatus', async ({ id, isApproved }) => {
+  await axiosApi.patch(`/appointments/${id}`, { isApproved });
+});

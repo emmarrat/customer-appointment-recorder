@@ -1,28 +1,28 @@
-import express from "express";
-import auth from "../middleware/auth";
-import permit from "../middleware/permit";
-import { imageUpload } from "../multer";
-import Expert from "../models/Expert";
-import User from "../models/User";
-import mongoose from "mongoose";
+import express from 'express';
+import auth from '../middleware/auth';
+import permit from '../middleware/permit';
+import { imageUpload } from '../multer';
+import Expert from '../models/Expert';
+import User from '../models/User';
+import mongoose from 'mongoose';
 
 const expertsRouter = express.Router();
 
 expertsRouter.post(
-  "/",
+  '/',
   auth,
-  permit("admin"),
-  imageUpload.single("photo"),
+  permit('admin'),
+  imageUpload.single('photo'),
   async (req, res, next) => {
     try {
       const existingExpert = await Expert.findOne({ user: req.body.user });
       if (existingExpert) {
-        return res.status(500).send({ error: "Такой мастер уже существует" });
+        return res.status(500).send({ error: 'Такой мастер уже существует' });
       }
       const user = await User.findById(req.body.user);
 
       if (!user) {
-        return res.status(500).send({ error: "Пользователь не найден!" });
+        return res.status(500).send({ error: 'Пользователь не найден!' });
       }
 
       const parsedServices = JSON.parse(req.body.services);
@@ -36,11 +36,11 @@ expertsRouter.post(
         services: parsedServices,
       });
 
-      user.role = "expert";
+      user.role = 'expert';
       await user.save();
 
       return res.send({
-        message: "Учетная запись мастера создана!",
+        message: 'Учетная запись мастера создана!',
         expert,
       });
     } catch (e) {
@@ -50,10 +50,10 @@ expertsRouter.post(
         return next(e);
       }
     }
-  }
+  },
 );
 
-expertsRouter.get("/", async (req, res, next) => {
+expertsRouter.get('/', async (req, res, next) => {
   try {
     const userId = req.query.user as string;
     const limit: number = parseInt(req.query.limit as string) || 10;
@@ -69,14 +69,14 @@ expertsRouter.get("/", async (req, res, next) => {
     const skip = (page - 1) * limit;
 
     const experts = await Expert.find()
-      .populate("user", "firstName lastName")
-      .populate("category", "title")
-      .select("user photo title")
+      .populate('user', 'firstName lastName')
+      .populate('category', 'title')
+      .select('user photo title')
       .skip(skip)
       .limit(limit)
       .exec();
     return res.send({
-      message: "Эксперты найдены",
+      message: 'Эксперты найдены',
       result: { experts, currentPage: page, totalCount },
     });
   } catch (e) {
@@ -84,13 +84,13 @@ expertsRouter.get("/", async (req, res, next) => {
   }
 });
 
-expertsRouter.get("/:id", async (req, res, next) => {
+expertsRouter.get('/:id', async (req, res, next) => {
   try {
     const expert = await Expert.findById(req.params.id)
-      .populate("user", "firstName lastName")
-      .populate("category", "title");
+      .populate('user', 'firstName lastName')
+      .populate('category', 'title');
     if (!expert) {
-      return res.status(404).send({ error: "Мастер не найден!" });
+      return res.status(404).send({ error: 'Мастер не найден!' });
     }
     return res.send(expert);
   } catch (e) {
@@ -98,13 +98,13 @@ expertsRouter.get("/:id", async (req, res, next) => {
   }
 });
 
-expertsRouter.get("/by-user/:id", async (req, res, next) => {
+expertsRouter.get('/by-user/:id', async (req, res, next) => {
   try {
     const expert = await Expert.findOne({ user: req.params.id })
-      .populate("user", "firstName lastName")
-      .populate("category", "title");
+      .populate('user', 'firstName lastName')
+      .populate('category', 'title');
     if (!expert) {
-      return res.status(404).send({ error: "Мастер не найден!" });
+      return res.status(404).send({ error: 'Мастер не найден!' });
     }
     return res.send(expert);
   } catch (e) {
@@ -112,14 +112,14 @@ expertsRouter.get("/by-user/:id", async (req, res, next) => {
   }
 });
 
-expertsRouter.get("/by-category/:id", async (req, res, next) => {
+expertsRouter.get('/by-category/:id', async (req, res, next) => {
   try {
     const experts = await Expert.find({ category: req.params.id })
-      .populate("user", "firstName lastName")
-      .populate("category", "title")
-      .select("user photo title");
+      .populate('user', 'firstName lastName')
+      .populate('category', 'title')
+      .select('user photo title');
     if (!experts) {
-      return res.status(404).send({ error: "Мастер не найден!" });
+      return res.status(404).send({ error: 'Мастер не найден!' });
     }
     return res.send(experts);
   } catch (e) {
@@ -127,7 +127,7 @@ expertsRouter.get("/by-category/:id", async (req, res, next) => {
   }
 });
 
-expertsRouter.delete("/:id", auth, permit("admin"), async (req, res, next) => {
+expertsRouter.delete('/:id', auth, permit('admin'), async (req, res, next) => {
   try {
     const expertId = req.params.id;
     const expert = await Expert.findById(expertId);
@@ -135,14 +135,14 @@ expertsRouter.delete("/:id", auth, permit("admin"), async (req, res, next) => {
     if (!expert) {
       return res
         .status(500)
-        .send({ error: "Учетная запись мастера не найдена!" });
+        .send({ error: 'Учетная запись мастера не найдена!' });
     }
 
     const removedExpert = await expert.deleteOne();
     //Когда будет сущность запись. Добавить удаление связаных сущностей.
 
     res.send({
-      message: "Учетная запись мастера удалена",
+      message: 'Учетная запись мастера удалена',
       removedExpert,
     });
   } catch (e) {
@@ -154,16 +154,16 @@ expertsRouter.delete("/:id", auth, permit("admin"), async (req, res, next) => {
 });
 
 expertsRouter.patch(
-  "/:id",
+  '/:id',
   auth,
-  permit("admin"),
-  imageUpload.single("photo"),
+  permit('admin'),
+  imageUpload.single('photo'),
   async (req, res, next) => {
     try {
       const expert = await Expert.findById(req.params.id);
 
       if (!expert) {
-        return res.status(404).send({ error: "Мастер не найден!" });
+        return res.status(404).send({ error: 'Мастер не найден!' });
       }
 
       if (req.body.user) {
@@ -193,7 +193,7 @@ expertsRouter.patch(
       await expert.save();
 
       return res.send({
-        message: "Учетная запись мастера изменена!",
+        message: 'Учетная запись мастера изменена!',
         expert,
       });
     } catch (e) {
@@ -203,7 +203,7 @@ expertsRouter.patch(
         return next(e);
       }
     }
-  }
+  },
 );
 
 export default expertsRouter;

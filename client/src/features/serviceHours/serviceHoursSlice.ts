@@ -81,8 +81,10 @@ export const serviceHoursSlice = createSlice({
 
 export const serviceHoursReducer = serviceHoursSlice.reducer;
 
-export const selectDatetimes = (state: RootState) => state.serviceHours.datetimes;
-export const selectOneDatetime = (state: RootState) => state.serviceHours.oneDateTime;
+export const selectDatetimes = (state: RootState) =>
+  state.serviceHours.datetimes;
+export const selectOneDatetime = (state: RootState) =>
+  state.serviceHours.oneDateTime;
 export const selectDatetimeFetching = (state: RootState) =>
   state.serviceHours.datetimeFetching;
 export const selectDatetimeCreating = (state: RootState) =>

@@ -1,5 +1,11 @@
 import React from 'react';
-import { Card, CardActionArea, CardContent, CardMedia, Typography } from '@mui/material';
+import {
+  Card,
+  CardActionArea,
+  CardContent,
+  CardMedia,
+  Typography,
+} from '@mui/material';
 import { Category } from '../../../../types';
 import { apiURL } from '../../../../constants';
 import { styles } from './CategoriesCardStyles';
@@ -20,7 +26,10 @@ const CategoriesCard: React.FC<Props> = ({ category }) => {
     void navigate(`/experts/by-category/${categoryId}`);
   };
   return (
-    <Card sx={styles.card} onClick={() => pushToExperts(category._id, category.title)}>
+    <Card
+      sx={styles.card}
+      onClick={() => pushToExperts(category._id, category.title)}
+    >
       <CardActionArea sx={styles.actionArea}>
         <CardMedia
           component="img"

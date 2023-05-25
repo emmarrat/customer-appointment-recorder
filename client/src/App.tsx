@@ -38,11 +38,15 @@ const App = () => {
 
             <Route
               path={
-                user && user.role === 'expert' ? '/expert/appointments' : '/appointments'
+                user && user.role === 'expert'
+                  ? '/expert/appointments'
+                  : '/appointments'
               }
               element={
                 <ProtectedRoute
-                  isAllowed={user && (user.role === 'expert' || user.role === 'user')}
+                  isAllowed={
+                    user && (user.role === 'expert' || user.role === 'user')
+                  }
                 >
                   {user && <AppointmentPanel who={user.role} />}
                 </ProtectedRoute>

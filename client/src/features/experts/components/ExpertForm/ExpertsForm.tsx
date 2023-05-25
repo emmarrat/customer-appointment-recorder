@@ -38,7 +38,9 @@ const ExpertsForm: React.FC<Props> = ({
   const basicUsers = useAppSelector(selectUsers);
   const categories = useAppSelector(selectCategories);
 
-  const [state, setState] = useState<ExpertMutation>(existingExpert || initialState);
+  const [state, setState] = useState<ExpertMutation>(
+    existingExpert || initialState,
+  );
 
   useEffect(() => {
     dispatch(fetchBasicUsers());

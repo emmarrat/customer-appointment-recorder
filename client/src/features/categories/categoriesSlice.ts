@@ -29,10 +29,13 @@ export const categoriesSlice = createSlice({
       state.fetching = true;
       state.items = [];
     });
-    builder.addCase(fetchCategories.fulfilled, (state, { payload: categories }) => {
-      state.fetching = false;
-      state.items = categories;
-    });
+    builder.addCase(
+      fetchCategories.fulfilled,
+      (state, { payload: categories }) => {
+        state.fetching = false;
+        state.items = categories;
+      },
+    );
     builder.addCase(fetchCategories.rejected, (state) => {
       state.fetching = false;
     });
@@ -44,5 +47,7 @@ export const categoriesReducer = categoriesSlice.reducer;
 export const { getCategoryName } = categoriesSlice.actions;
 
 export const selectCategories = (state: RootState) => state.categories.items;
-export const selectCategoriesFetching = (state: RootState) => state.categories.fetching;
-export const selectCategoryName = (state: RootState) => state.categories.categoryName;
+export const selectCategoriesFetching = (state: RootState) =>
+  state.categories.fetching;
+export const selectCategoryName = (state: RootState) =>
+  state.categories.categoryName;

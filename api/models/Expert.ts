@@ -1,6 +1,6 @@
-import mongoose, { Types } from "mongoose";
-import User from "./User";
-import Category from "./Category";
+import mongoose, { Types } from 'mongoose';
+import User from './User';
+import Category from './Category';
 
 const Schema = mongoose.Schema;
 
@@ -8,20 +8,20 @@ const ExpertSchema = new Schema(
   {
     user: {
       type: Schema.Types.ObjectId,
-      ref: "User",
+      ref: 'User',
       required: true,
       validate: {
         validator: async (value: Types.ObjectId) => User.findById(value),
-        message: "Юзер не найден",
+        message: 'Юзер не найден',
       },
     },
     category: {
       type: Schema.Types.ObjectId,
-      ref: "Category",
+      ref: 'Category',
       required: true,
       validate: {
         validator: async (value: Types.ObjectId) => Category.findById(value),
-        message: "Категория не найдена",
+        message: 'Категория не найдена',
       },
     },
     title: {
@@ -49,8 +49,8 @@ const ExpertSchema = new Schema(
       },
     ],
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-const Expert = mongoose.model("Expert", ExpertSchema);
+const Expert = mongoose.model('Expert', ExpertSchema);
 export default Expert;

@@ -52,7 +52,11 @@ const ServicesHoursForm: React.FC<Props> = ({ onSubmit, expert }) => {
             {error.error}
           </Alert>
         )}
-        <Box component="form" onSubmit={submitFormHandler} sx={{ mt: 3, width: '100%' }}>
+        <Box
+          component="form"
+          onSubmit={submitFormHandler}
+          sx={{ mt: 3, width: '100%' }}
+        >
           <Grid container sx={{ width: '100%' }}>
             <Grid item xs={12}>
               <TextField

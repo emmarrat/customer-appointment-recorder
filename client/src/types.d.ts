@@ -188,3 +188,8 @@ export interface Date {
   _id: string;
   date: string;
 }
+
+export interface UpdateAppointmentParams {
+  id: string;
+  isApproved: boolean;
+}

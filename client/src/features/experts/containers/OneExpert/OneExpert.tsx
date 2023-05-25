@@ -45,7 +45,9 @@ const OneExpert = () => {
   const loading = useAppSelector(selectExpertOneFetching);
   const user = useAppSelector(selectUser);
   const navigate = useNavigate();
-  const [selectedServices, setSelectedServices] = useState<ServicesFull | null>(null);
+  const [selectedServices, setSelectedServices] = useState<ServicesFull | null>(
+    null,
+  );
   const [value, setValue] = React.useState<Dayjs | null>(null);
   const [selectedDate, setSelectedDate] = useState<ServiceHours | null>(null);
   const [open, setOpen] = useState(false);
@@ -122,7 +124,10 @@ const OneExpert = () => {
           <CircularProgress />
         ) : (
           expert && (
-            <Grid padding={{ xs: '10px 20px', md: '15px 50px' }} sx={{ width: '100%' }}>
+            <Grid
+              padding={{ xs: '10px 20px', md: '15px 50px' }}
+              sx={{ width: '100%' }}
+            >
               <Button onClick={goBack}>Назад</Button>
               <Grid sx={styles.columnContainer} mb={4}>
                 <Grid sx={styles.container} mt={4}>
@@ -183,7 +188,10 @@ const OneExpert = () => {
                   <Divider sx={styles.divider} />
                 </Grid>
                 <Grid item xs={12}>
-                  <Typography variant="body1" fontSize={{ xs: '14px', md: '18px' }}>
+                  <Typography
+                    variant="body1"
+                    fontSize={{ xs: '14px', md: '18px' }}
+                  >
                     {expert.info}
                   </Typography>
                 </Grid>
@@ -204,7 +212,10 @@ const OneExpert = () => {
         </Typography>
         <Box sx={styles.container}>
           <Box sx={styles.miniWrapp}>
-            <DateCalendar value={value} onChange={(newDate) => onDateChange(newDate)} />
+            <DateCalendar
+              value={value}
+              onChange={(newDate) => onDateChange(newDate)}
+            />
           </Box>
           <Box>
             {selectedDate !== null ? (
@@ -217,7 +228,9 @@ const OneExpert = () => {
                           {hour.startTime} - {hour.endTime}
                         </Typography>
                         <Checkbox
-                          checked={selectedTime?.startTime === hour.startTime ?? false}
+                          checked={
+                            selectedTime?.startTime === hour.startTime ?? false
+                          }
                           onChange={() => chooseTime(hour)}
                         />
                       </Box>

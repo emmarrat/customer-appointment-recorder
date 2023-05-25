@@ -75,7 +75,8 @@ export const appointmentsSlice = createSlice({
 
 export const appointmentsReducer = appointmentsSlice.reducer;
 
-export const selectAppointments = (state: RootState) => state.appointments.appointments;
+export const selectAppointments = (state: RootState) =>
+  state.appointments.appointments;
 export const selectOneAppointment = (state: RootState) =>
   state.appointments.oneAppointment;
 export const selectAppointmentCreating = (state: RootState) =>
@@ -84,5 +85,7 @@ export const selectAppointmentCreatingError = (state: RootState) =>
   state.appointments.appointmentCreatingError;
 export const selectAppointmentFetching = (state: RootState) =>
   state.appointments.appointmentFetching;
-export const selectAppointmentPage = (state: RootState) => state.appointments.currentPage;
-export const selectAppointmentCount = (state: RootState) => state.appointments.totalCount;
+export const selectAppointmentPage = (state: RootState) =>
+  state.appointments.currentPage;
+export const selectAppointmentCount = (state: RootState) =>
+  state.appointments.totalCount;

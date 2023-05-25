@@ -1,12 +1,37 @@
-import express from "express";
-import ServiceHour from "../models/ServiceHour";
-import mongoose from "mongoose";
-import Appointment from "../models/Appointment";
-import auth, { RequestWithUser } from "../middleware/auth";
+import express from 'express';
+import ServiceHour from '../models/ServiceHour';
+import mongoose from 'mongoose';
+import Appointment from '../models/Appointment';
+import auth, { RequestWithUser } from '../middleware/auth';
+import nodemailer from 'nodemailer';
+import { AppointmentFull } from '../types';
+import constants from '../constants';
 
 const appointmentsRouter = express.Router();
 
-appointmentsRouter.post("/", auth, async (req, res, next) => {
+const sendEmail = async (email: string, subject: string, html: string) => {
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: true,
+    auth: {
+      user: process.env.VERIFY_EMAIL_USER,
+      pass: process.env.VERIFY_EMAIL_PASS,
+    },
+  });
+
+  const mailOptions = {
+    from: `"Strategia School" <do-not-reply@strategia.school>`,
+    to: email,
+    subject: subject,
+    html: html,
+  };
+
+  await transporter.sendMail(mailOptions);
+};
+
+appointmentsRouter.post('/', auth, async (req, res, next) => {
   try {
     const { expert, service, date, startTime, endTime } = req.body;
     const user = (req as RequestWithUser).user;
@@ -17,7 +42,7 @@ appointmentsRouter.post("/", auth, async (req, res, next) => {
     });
 
     if (!serviceHour) {
-      return res.status(400).send({ error: "Указанный день уже занят" });
+      return res.status(400).send({ error: 'Указанный день уже занят' });
     }
 
     const appointment = new Appointment({
@@ -32,12 +57,12 @@ appointmentsRouter.post("/", auth, async (req, res, next) => {
     await appointment.save();
 
     await ServiceHour.updateOne(
-      { _id: date, "hours.startTime": startTime },
-      { $set: { "hours.$.status": true } }
+      { _id: date, 'hours.startTime': startTime },
+      { $set: { 'hours.$.status': true } },
     );
 
     return res.send({
-      message: "Запись успешно создана!",
+      message: 'Запись успешно создана!',
       appointment,
     });
   } catch (e) {
@@ -49,7 +74,7 @@ appointmentsRouter.post("/", auth, async (req, res, next) => {
   }
 });
 
-appointmentsRouter.get("/", auth, async (req, res, next) => {
+appointmentsRouter.get('/', auth, async (req, res, next) => {
   const { expert, client, page, limit } = req.query;
   const user = (req as RequestWithUser).user;
 
@@ -62,23 +87,23 @@ appointmentsRouter.get("/", auth, async (req, res, next) => {
 
     const skip: number = (currentPage - 1) * itemsPerPage;
 
-    if (expert && user.role === "expert") {
+    if (expert && user.role === 'expert') {
       appointments = await Appointment.find({ expert })
         .populate({
-          path: "client",
-          select: "firstName lastName email",
+          path: 'client',
+          select: 'firstName lastName email',
         })
         .populate({
-          path: "expert",
-          select: "_id title",
+          path: 'expert',
+          select: '_id title',
           populate: {
-            path: "user",
-            select: "firstName lastName",
+            path: 'user',
+            select: 'firstName lastName',
           },
         })
         .populate({
-          path: "date",
-          select: "date",
+          path: 'date',
+          select: 'date',
         })
         .skip(skip)
         .limit(itemsPerPage);
@@ -86,28 +111,28 @@ appointmentsRouter.get("/", auth, async (req, res, next) => {
       totalAppointments = await Appointment.countDocuments({ expert });
 
       return res.send({
-        message: "Записи данного эксперта",
+        message: 'Записи данного эксперта',
         result: { appointments, currentPage, totalCount: totalAppointments },
       });
     }
 
-    if (client && user.role === "user") {
+    if (client && user.role === 'user') {
       appointments = await Appointment.find({ client })
         .populate({
-          path: "client",
-          select: "firstName lastName email",
+          path: 'client',
+          select: 'firstName lastName email',
         })
         .populate({
-          path: "expert",
-          select: "_id title",
+          path: 'expert',
+          select: '_id title',
           populate: {
-            path: "user",
-            select: "firstName lastName",
+            path: 'user',
+            select: 'firstName lastName',
           },
         })
         .populate({
-          path: "date",
-          select: "date",
+          path: 'date',
+          select: 'date',
         })
         .skip(skip)
         .limit(itemsPerPage);
@@ -115,28 +140,28 @@ appointmentsRouter.get("/", auth, async (req, res, next) => {
       totalAppointments = await Appointment.countDocuments({ client });
 
       return res.send({
-        message: "Записи данного пользователя",
+        message: 'Записи данного пользователя',
         result: { appointments, currentPage, totalCount: totalAppointments },
       });
     }
 
-    if (user.role === "admin") {
+    if (user.role === 'admin') {
       appointments = await Appointment.find()
         .populate({
-          path: "client",
-          select: "firstName lastName email",
+          path: 'client',
+          select: 'firstName lastName email',
         })
         .populate({
-          path: "expert",
-          select: "_id title",
+          path: 'expert',
+          select: '_id title',
           populate: {
-            path: "user",
-            select: "firstName lastName",
+            path: 'user',
+            select: 'firstName lastName',
           },
         })
         .populate({
-          path: "date",
-          select: "date",
+          path: 'date',
+          select: 'date',
         })
         .skip(skip)
         .limit(itemsPerPage);
@@ -144,32 +169,72 @@ appointmentsRouter.get("/", auth, async (req, res, next) => {
       totalAppointments = await Appointment.countDocuments();
 
       return res.send({
-        message: "Все записи",
+        message: 'Все записи',
         result: { appointments, currentPage, totalCount: totalAppointments },
       });
     }
 
-    return res.status(400).send({ error: "Записи не найдены" });
+    return res.status(400).send({ error: 'Записи не найдены' });
   } catch (e) {
     return next(e);
   }
 });
 
-appointmentsRouter.patch("/:id", async (req, res, next) => {
+appointmentsRouter.patch('/:id', async (req, res, next) => {
   const { id } = req.params;
   const { isApproved } = req.body;
 
   try {
-    const appointment = await Appointment.findById(id);
+    const appointment: AppointmentFull | null = await Appointment.findById(id)
+      .populate({
+        path: 'client',
+        select: 'firstName lastName email',
+      })
+      .populate({
+        path: 'expert',
+        select: '_id title',
+        populate: {
+          path: 'user',
+          select: 'firstName lastName',
+        },
+      })
+      .populate({
+        path: 'date',
+        select: 'date',
+      });
 
-    if (!appointment) {
-      return res.status(404).json({ error: "Appointment not found" });
+    const appointmentToSave = await Appointment.findById(id);
+
+    if (!appointment || !appointmentToSave) {
+      return res.status(404).json({ error: 'Appointment not found' });
     }
+    appointmentToSave.isApproved = isApproved;
+    await appointmentToSave.save();
 
-    appointment.isApproved = isApproved;
-    await appointment.save();
+    await sendEmail(
+      appointment.client.email,
+      isApproved ? 'Подтверджение записи' : 'Отмена записи',
+      isApproved
+        ? constants.APPOINTMENT_APPROVAL_EMAIL(
+            appointment.client.firstName,
+            appointment.date.date,
+            appointment.startTime,
+            appointment.service.name,
+            appointment.expert.user.firstName,
+          )
+        : constants.APPOINTMENT_REJECTION_EMAIL(
+            appointment.client.firstName,
+            appointment.date.date,
+            appointment.startTime,
+            appointment.service.name,
+            appointment.expert.user.firstName,
+          ),
+    );
 
-    return res.send({ message: "Статус записи успешно изменен!", appointment });
+    return res.send({
+      message: 'Статус записи успешно изменен!',
+      appointmentToSave,
+    });
   } catch (e) {
     return next(e);
   }
