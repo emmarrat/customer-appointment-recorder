@@ -193,3 +193,10 @@ export interface UpdateAppointmentParams {
   id: string;
   isApproved: boolean;
 }
+
+export interface ChatMessage {
+  _id: string;
+  username: string;
+  text: string;
+  createdAt: string;
+}

@@ -1,5 +1,6 @@
-import cors from 'cors';
 import express from 'express';
+import expressWs from 'express-ws';
+import cors from 'cors';
 import mongoose from 'mongoose';
 import config from './config';
 import usersRouter from './routers/users';
@@ -7,7 +8,6 @@ import expertsRouter from './routers/experts';
 import serviceHoursRouter from './routers/serviceHours';
 import appointmentsRouter from './routers/appointments';
 import categoriesRouter from './routers/categories';
-import expressWs from 'express-ws';
 import {
   ActiveConnections,
   IUserFull,
@@ -19,9 +19,8 @@ import User from './models/User';
 import Message from './models/Message';
 
 const app = express();
-const port = 8000;
 expressWs(app);
-const router = express.Router();
+const port = 8000;
 
 const activeConnections: ActiveConnections = {};
 let activeUser: IUserFull | null = null;
@@ -36,13 +35,16 @@ app.use('/service-hours', serviceHoursRouter);
 app.use('/appointments', appointmentsRouter);
 app.use('/categories', categoriesRouter);
 
+const router = express.Router();
+
 router.ws('/chat', async (ws) => {
   const id = crypto.randomUUID();
   activeConnections[id] = ws;
+  console.log('client connected');
 
   ws.on('message', async (message) => {
     const decodedMessage = JSON.parse(message.toString()) as IncomingMessage;
-
+    console.log('web socket', decodedMessage);
     switch (decodedMessage.type) {
       case 'LOGIN':
         const token = decodedMessage.payload;
@@ -127,6 +129,8 @@ router.ws('/chat', async (ws) => {
     });
   });
 });
+
+app.use(router);
 
 const run = async () => {
   mongoose.set('strictQuery', false);

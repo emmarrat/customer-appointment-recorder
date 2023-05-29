@@ -18,6 +18,7 @@ import Categories from './features/categories/containers/Categories/Categories';
 import AppointmentPanel from './features/appointments/containers/AppointmentPanel/AppointmentPanel';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Chat from './features/Chat/Chat';
 
 const App = () => {
   const user = useAppSelector(selectUser);
@@ -105,6 +106,7 @@ const App = () => {
                 </Typography>
               }
             />
+            <Route path="/chat" element={<Chat />} />
           </Routes>
         </Container>
         <ToastContainer

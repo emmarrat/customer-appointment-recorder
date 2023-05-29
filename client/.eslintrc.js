@@ -23,5 +23,7 @@ module.exports = {
     sourceType: 'module',
   },
   plugins: ['react', 'prettier', '@typescript-eslint'],
-  rules: {},
+  rules: {
+    'no-case-declarations': 'off',
+  },
 };

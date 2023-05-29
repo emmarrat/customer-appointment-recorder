@@ -6,6 +6,7 @@ import Expert from './models/Expert';
 import ServiceHour from './models/ServiceHour';
 import Appointment from './models/Appointment';
 import Category from './models/Category';
+import Message from './models/Message';
 
 const run = async () => {
   mongoose.set('strictQuery', false);
@@ -18,6 +19,7 @@ const run = async () => {
     await db.dropCollection('servicehours');
     await db.dropCollection('experts');
     await db.dropCollection('appointments');
+    await db.dropCollection('messages');
   } catch (e) {
     console.log('Collections were not present, skipping drop...');
   }
@@ -195,6 +197,29 @@ const run = async () => {
       startTime: '15:00',
       endTime: '16:00',
       isApproved: false,
+    },
+  );
+
+  await Message.create(
+    {
+      username: 'Jesse Pinkman',
+      text: 'What good is being an outlaw when you have responsibilities?',
+      createdAt: new Date(),
+    },
+    {
+      username: 'Jesse Pinkman',
+      text: 'You don’t need a criminal lawyer. You need a criminal lawyer',
+      createdAt: new Date(),
+    },
+    {
+      username: 'Walter White',
+      text: 'Say my name.',
+      createdAt: new Date(),
+    },
+    {
+      username: 'Walter White',
+      text: 'I did it for me. I liked it. I was good at it. And I was really — I was alive.',
+      createdAt: new Date(),
     },
   );
 
