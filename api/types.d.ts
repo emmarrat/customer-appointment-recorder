@@ -1,4 +1,5 @@
 import { Types } from 'mongoose';
+import { WebSocket } from 'ws';
 
 export interface IUser {
   email: string;
@@ -10,6 +11,10 @@ export interface IUser {
   role: string;
   googleId?: string;
   avatar: string | null;
+}
+
+export interface IUserFull extends IUser {
+  _id: Types.ObjectId;
 }
 
 export interface IService {
@@ -45,7 +50,7 @@ export interface ExpertMiniWithoutPic {
   title: string;
 }
 
-export interface Date {
+export interface IDate {
   _id: Types.ObjectId;
   date: string;
 }
@@ -55,8 +60,23 @@ export interface AppointmentFull {
   _id: Types.ObjectId;
   client: Client;
   expert: ExpertMiniWithoutPic;
-  date: Date;
+  date: IDate;
   startTime: string;
   endTime: string;
   isApproved: boolean;
+}
+
+export interface ActiveConnections {
+  [id: string]: WebSocket;
+}
+
+export interface IncomingMessage {
+  type: string;
+  payload: string;
+}
+
+export interface IMessage {
+  username: string;
+  text: string;
+  createdAt: Date;
 }
