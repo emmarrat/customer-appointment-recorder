@@ -17,8 +17,7 @@ interface Props {
 
 const styles = {
   card: {
-    minWidth: '290px',
-    maxWidth: '350px',
+    width: '320px',
   },
   media: {
     height: '150px',

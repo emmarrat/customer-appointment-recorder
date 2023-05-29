@@ -90,7 +90,9 @@ serviceHoursRouter.get('/by-user/:id', async (req, res, next) => {
       return res.status(404).send({ error: 'Мастер не найден!' });
     }
 
-    const serviceHours = await ServiceHour.find({ expert: expert._id }).exec();
+    const serviceHours = await ServiceHour.find({ expert: expert._id })
+      .sort({ date: 1 })
+      .exec();
 
     return res.send(serviceHours);
   } catch (e) {

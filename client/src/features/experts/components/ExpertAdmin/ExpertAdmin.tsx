@@ -86,7 +86,7 @@ const ExpertAdmin = () => {
                       sx={{ cursor: 'pointer' }}
                       onClick={() => openOneTeacher(expert._id)}
                     >
-                      {expert.user.firstName} {expert.user.lastName}
+                      {expert.user?.firstName} {expert.user?.lastName}
                     </TableCell>
                     <TableCell sx={{ cursor: 'pointer' }}>
                       {expert.title}

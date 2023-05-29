@@ -14,6 +14,7 @@ import {
   fetchExpertsByCategory,
   updateExpert,
 } from './expertsThunks';
+import { toast } from 'react-toastify';
 
 interface ExpertState {
   expert: ExpertFull | null;
@@ -52,10 +53,14 @@ export const expertsSlice = createSlice({
     });
     builder.addCase(createExpert.fulfilled, (state) => {
       state.expertCreating = false;
+      toast.info('Эксперт успешно создан!');
     });
     builder.addCase(createExpert.rejected, (state, { payload: error }) => {
       state.expertCreatingError = error || null;
       state.expertCreating = false;
+      if (error) {
+        toast.error(error.message);
+      }
     });
 
     builder.addCase(fetchExperts.pending, (state) => {
@@ -121,10 +126,14 @@ export const expertsSlice = createSlice({
     });
     builder.addCase(updateExpert.fulfilled, (state) => {
       state.expertUpdating = false;
+      toast.info('Эксперт обновлен!');
     });
     builder.addCase(updateExpert.rejected, (state, { payload: error }) => {
       state.expertUpdatingError = error || null;
       state.expertUpdating = false;
+      if (error) {
+        toast.error(error.message);
+      }
     });
   },
 });

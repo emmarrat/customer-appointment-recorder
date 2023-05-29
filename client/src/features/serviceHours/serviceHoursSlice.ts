@@ -6,6 +6,7 @@ import {
   fetchServiceHoursByUser,
   fetchServiceHoursForExpert,
 } from './serviceHoursThunks';
+import { toast } from 'react-toastify';
 
 interface ServiceHoursState {
   datetimes: ServiceHours[];
@@ -71,10 +72,14 @@ export const serviceHoursSlice = createSlice({
     builder.addCase(createServiceHour.fulfilled, (state) => {
       state.datetimeCreatingError = null;
       state.datetimeCreating = false;
+      toast.success('Рабочий график успешно создан!');
     });
     builder.addCase(createServiceHour.rejected, (state, { payload: error }) => {
       state.datetimeCreatingError = error || null;
       state.datetimeCreating = false;
+      if (error) {
+        toast.error(error.error);
+      }
     });
   },
 });

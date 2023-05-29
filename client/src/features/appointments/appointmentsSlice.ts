@@ -6,6 +6,7 @@ import {
   updateAppointment,
 } from './appointmentsThunk';
 import { RootState } from '../../app/store';
+import { toast } from 'react-toastify';
 
 interface AppointmentsState {
   appointments: Appointment[];
@@ -40,10 +41,14 @@ export const appointmentsSlice = createSlice({
     });
     builder.addCase(createAppointment.fulfilled, (state) => {
       state.appointmentCreating = false;
+      toast.info('Запись отправлена на рассмотрение');
     });
     builder.addCase(createAppointment.rejected, (state, { payload: error }) => {
       state.appointmentCreating = false;
       state.appointmentCreatingError = error || null;
+      if (error) {
+        toast.error(error.message);
+      }
     });
 
     builder.addCase(fetchAppointments.pending, (state) => {
@@ -66,9 +71,11 @@ export const appointmentsSlice = createSlice({
     });
     builder.addCase(updateAppointment.fulfilled, (state) => {
       state.appointmentUpdating = false;
+      toast.info('Статус записи обновлен!');
     });
     builder.addCase(updateAppointment.rejected, (state) => {
       state.appointmentUpdating = false;
+      toast.error('Произошла ошибка при обновлении статуса записи!');
     });
   },
 });

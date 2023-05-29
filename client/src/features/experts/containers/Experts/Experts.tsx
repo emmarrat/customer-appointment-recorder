@@ -34,16 +34,15 @@ const Experts = () => {
           ? `Мастера по категории: ${categoryName}`
           : 'Список всех мастеров'}
       </Typography>
-      <Grid container justifyContent="center" spacing={2}>
+      <Grid container flexWrap="wrap" alignItems="stretch" spacing={2}>
         {experts.length > 0 &&
           experts.map((expert) => (
             <Grid
               item
               container
               justifyContent="center"
-              flexWrap="wrap"
               xs={12}
-              md={6}
+              sm={6}
               lg={4}
               key={expert._id}
             >

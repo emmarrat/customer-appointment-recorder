@@ -16,6 +16,8 @@ import ServiceHourAdmin from './features/serviceHours/components/ServiceHourAdmi
 import './styles.css';
 import Categories from './features/categories/containers/Categories/Categories';
 import AppointmentPanel from './features/appointments/containers/AppointmentPanel/AppointmentPanel';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
   const user = useAppSelector(selectUser);
@@ -105,6 +107,14 @@ const App = () => {
             />
           </Routes>
         </Container>
+        <ToastContainer
+          position="bottom-right"
+          theme="light"
+          newestOnTop={false}
+          closeOnClick
+          hideProgressBar
+          autoClose={2000}
+        />
       </main>
     </>
   );

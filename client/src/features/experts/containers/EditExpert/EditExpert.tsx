@@ -23,7 +23,7 @@ const EditExpert = () => {
   }, [dispatch, id]);
 
   const submitUpdatedExpert = async (expert: ExpertMutation) => {
-    await dispatch(updateExpert({ expertData: expert, id }));
+    await dispatch(updateExpert({ expertData: expert, id })).unwrap();
     navigate('/admin/experts');
   };
 
@@ -37,8 +37,6 @@ const EditExpert = () => {
       return { name: service.name, price: service.price.toString() };
     }),
   };
-
-  console.log('it works here', expert);
 
   return (
     <>

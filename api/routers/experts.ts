@@ -153,7 +153,7 @@ expertsRouter.delete('/:id', auth, permit('admin'), async (req, res, next) => {
   }
 });
 
-expertsRouter.patch(
+expertsRouter.put(
   '/:id',
   auth,
   permit('admin'),
@@ -171,7 +171,7 @@ expertsRouter.patch(
       }
 
       if (req.body.category) {
-        expert.user = req.body.category;
+        expert.category = req.body.category;
       }
 
       if (req.body.title) {

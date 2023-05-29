@@ -43,15 +43,15 @@ const ExpertsForm: React.FC<Props> = ({
   );
 
   useEffect(() => {
-    dispatch(fetchBasicUsers());
+    if (!isEdit) {
+      dispatch(fetchBasicUsers());
+    }
     dispatch(fetchCategories());
-  }, [dispatch]);
+  }, [dispatch, isEdit]);
 
   const submitFormHandler = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(state);
     await onSubmit(state);
-    // setState(initialState);
   };
 
   const inputChangeHandler = (
@@ -133,7 +133,7 @@ const ExpertsForm: React.FC<Props> = ({
               </MenuItem>
               {basicUsers.map((user) => (
                 <MenuItem key={user._id} value={user._id}>
-                  {user.firstName} {user.lastName}
+                  {user?.firstName} {user?.lastName}
                 </MenuItem>
               ))}
             </TextField>

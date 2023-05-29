@@ -117,7 +117,7 @@ export const updateExpert = createAsyncThunk<
   });
 
   try {
-    await axiosApi.patch(`/experts/${id}`, formData);
+    await axiosApi.put(`/experts/${id}`, formData);
   } catch (e) {
     if (isAxiosError(e) && e.response && e.response.status === 400) {
       return rejectWithValue(e.response.data as ValidationError);

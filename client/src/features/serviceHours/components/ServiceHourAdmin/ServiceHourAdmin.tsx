@@ -20,16 +20,15 @@ const ServiceHourAdmin = () => {
   const user = useAppSelector(selectUser);
   const dispatch = useAppDispatch();
   const workingDates = useAppSelector(selectDatetimes);
-  const userId = useMemo(() => user?._id, [user]);
   const [open, setOpen] = useState(false);
   const [expert, setExpert] = useState('');
   const loading = useAppSelector(selectDatetimeFetching);
 
   useEffect(() => {
-    if (userId) {
-      dispatch(fetchServiceHoursByUser(userId));
+    if (user) {
+      dispatch(fetchServiceHoursByUser(user._id));
     }
-  }, [dispatch, userId]);
+  }, [dispatch, user]);
 
   useEffect(() => {
     const date = workingDates.find((date) => date._id);
@@ -47,8 +46,8 @@ const ServiceHourAdmin = () => {
   const onSubmitForm = async (data: ServiceHourMutation) => {
     await dispatch(createServiceHour(data)).unwrap();
     closeModal();
-    if (userId) {
-      dispatch(fetchServiceHoursByUser(userId));
+    if (user) {
+      dispatch(fetchServiceHoursByUser(user._id));
     }
   };
 
@@ -62,72 +61,77 @@ const ServiceHourAdmin = () => {
         alignItems="center"
       >
         {loading && <CircularProgress />}
-        {workingDates.map((date) => (
-          <Grid
-            item
-            container
-            justifyContent="space-between"
-            mb={3}
-            sx={{
-              borderRadius: '20px',
-              width: '65%',
-              boxShadow: '2px 12px 25px #d4d4d4, -12px -12px 25px #ffffff',
-            }}
-            key={date._id}
-          >
+        {workingDates.length > 0 &&
+          workingDates.map((date) => (
             <Grid
               item
               container
-              alignItems="center"
-              justifyContent="center"
-              xs={12}
-              md={4}
+              justifyContent="space-between"
+              mb={3}
               sx={{
-                borderRight: '1px solid #edf0ee',
+                borderRadius: '20px',
+                width: '65%',
+                boxShadow: '2px 12px 25px #d4d4d4, -12px -12px 25px #ffffff',
+                padding: '15px',
               }}
+              key={date._id}
             >
-              <Typography>
-                {dayjs(date.date).locale('ru').format('DD MMMM YYYY')} г.
-              </Typography>
-            </Grid>
-            <Grid
-              item
-              container
-              flexDirection="column"
-              justifyContent="center"
-              alignItems="center"
-              gap={1}
-              xs={12}
-              md={8}
-              sx={{
-                padding: '10px',
-              }}
-            >
-              {date.hours.map((hour) => (
-                <Grid
-                  item
-                  container
-                  width="50%"
-                  justifyContent="space-between"
-                  key={hour._id}
-                >
-                  <Grid item>
-                    <Typography>
-                      {hour.startTime} - {hour.endTime}
-                    </Typography>
+              <Grid
+                item
+                container
+                alignItems="center"
+                justifyContent="center"
+                xs={12}
+                md={4}
+                sx={{
+                  borderRight: '1px solid #edf0ee',
+                }}
+              >
+                <Typography>
+                  {dayjs(date?.date).locale('ru').format('DD MMMM YYYY')} г.
+                </Typography>
+              </Grid>
+              <Grid
+                item
+                container
+                flexDirection="column"
+                justifyContent="center"
+                alignItems="center"
+                gap={1}
+                xs={12}
+                md={8}
+                sx={{
+                  padding: '10px',
+                }}
+              >
+                {date?.hours?.map((hour) => (
+                  <Grid
+                    item
+                    container
+                    width="50%"
+                    justifyContent="space-between"
+                    key={hour._id}
+                  >
+                    <Grid item>
+                      <Typography>
+                        {hour?.startTime} - {hour?.endTime}
+                      </Typography>
+                    </Grid>
+                    <Grid item>
+                      <Typography
+                        color={hour.status ? 'primary.main' : 'text.secondary'}
+                        fontWeight="500"
+                      >
+                        {hour?.status ? 'Занято' : 'Свободно'}
+                      </Typography>
+                    </Grid>
                   </Grid>
-                  <Grid item>
-                    <Typography>
-                      {hour.status ? 'Занято' : 'Свободно'}
-                    </Typography>
-                  </Grid>
-                </Grid>
-              ))}
+                ))}
+              </Grid>
             </Grid>
-          </Grid>
-        ))}
+          ))}
       </Grid>
-      <MyModal open={open} handleClose={closeModal}>
+      <MyModal open={open} handleClose={closeModal} isFullWidth>
         <ServicesHoursForm onSubmit={onSubmitForm} expert={expert} />
       </MyModal>
     </>

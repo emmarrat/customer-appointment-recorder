@@ -8,6 +8,7 @@ import {
   login,
   register,
 } from './usersThunks';
+import { toast } from 'react-toastify';
 
 interface UsersState {
   user: User | null;
@@ -49,6 +50,7 @@ export const usersSlice = createSlice({
     builder.addCase(register.fulfilled, (state, { payload: user }) => {
       state.registerLoading = false;
       state.user = user;
+      toast.success(`${user.firstName}, регистрация прошла успешно!`);
     });
     builder.addCase(register.rejected, (state, { payload: error }) => {
       state.registerLoading = false;
@@ -62,10 +64,12 @@ export const usersSlice = createSlice({
     builder.addCase(login.fulfilled, (state, { payload: user }) => {
       state.loginLoading = false;
       state.user = user;
+      toast(`${user.firstName}, добро пожаловать!`, { icon: '👋' });
     });
     builder.addCase(login.rejected, (state, { payload: error }) => {
       state.loginLoading = false;
       state.loginError = error || null;
+      toast.error(`${error?.error}`);
     });
 
     builder.addCase(googleLogin.pending, (state) => {
@@ -76,11 +80,13 @@ export const usersSlice = createSlice({
       state.loginLoading = false;
       state.registerLoading = false;
       state.user = user;
+      toast(`${user.firstName}, добро пожаловать!`, { icon: '👋' });
     });
     builder.addCase(googleLogin.rejected, (state, { payload: error }) => {
       state.loginLoading = false;
       state.registerLoading = false;
       state.loginError = error || null;
+      toast.error(`${error?.error}`);
     });
 
     builder.addCase(fetchBasicUsers.pending, (state) => {
