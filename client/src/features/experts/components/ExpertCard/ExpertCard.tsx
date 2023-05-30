@@ -10,25 +10,11 @@ import {
 import { ExpertMini } from '../../../../types';
 import { apiURL } from '../../../../constants';
 import { Link as RouterLink } from 'react-router-dom';
+import { styles } from './ExperdCardStyles';
 
 interface Props {
   expert: ExpertMini;
 }
-
-const styles = {
-  card: {
-    width: '320px',
-  },
-  media: {
-    height: '150px',
-  },
-  wrapper: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-};
 
 const ExpertCard: React.FC<Props> = ({ expert }) => {
   return (
@@ -53,6 +39,7 @@ const ExpertCard: React.FC<Props> = ({ expert }) => {
           to={`/experts/${expert._id}`}
           variant="outlined"
           fullWidth
+          sx={styles.btn}
         >
           Открыть профиль
         </Button>

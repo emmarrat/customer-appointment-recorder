@@ -21,6 +21,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Chat from './features/chats/containers/Chat';
 import ChatPreview from './features/chats/containers/ChatPreview';
 import WelcomeBlock from './components/StaticComponents/WelcomeBlock';
+import ExpertsSlider from './features/experts/containers/ExpertsSlider/ExpertsSlider';
 
 const App = () => {
   const user = useAppSelector(selectUser);
@@ -37,12 +38,15 @@ const App = () => {
             <Route
               path="/"
               element={
-                <Grid container direction="column" gap={4}>
+                <Grid container direction="column" gap={10}>
                   <Grid item xs={12}>
                     <WelcomeBlock />
                   </Grid>
                   <Grid item xs={12}>
                     <Categories />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <ExpertsSlider />
                   </Grid>
                 </Grid>
               }

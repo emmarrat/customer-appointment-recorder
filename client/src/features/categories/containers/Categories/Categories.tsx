@@ -23,7 +23,7 @@ const Categories = () => {
       >
         Категории предоставляемых услуг:
       </Typography>
-      <Grid container justifyContent="center" flexWrap="wrap" spacing={2}>
+      <Grid container justifyContent="center" flexWrap="wrap" spacing={3}>
         {categories.map((category) => (
           <Grid item key={category._id}>
             <CategoriesCard category={category} />

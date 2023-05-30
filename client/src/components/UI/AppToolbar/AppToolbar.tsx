@@ -33,24 +33,28 @@ const AppToolbar = () => {
       sx={{ bgcolor: 'primary.main', padding: '15px 0' }}
     >
       <Toolbar>
-        <Grid container justifyContent="space-between" alignItems="center">
+        <Grid
+          container
+          justifyContent={{ xs: 'center', md: 'space-between' }}
+          alignItems="center"
+        >
           <Typography variant="h6" component="div">
             <Link to="/">{COMPANY_TITLE}</Link>
           </Typography>
           <Grid
             item
             container
+            justifyContent={{ xs: 'center', md: 'flex-end' }}
             alignItems="center"
-            justifyContent="flex-end"
             xs={12}
             md={9}
           >
-            <Grid item>
+            <Grid item container justifyContent="center" xs={12} md={'auto'}>
               <Button component={NavLink} to="/experts" color="inherit">
                 Наши мастера
               </Button>
             </Grid>
-            <Grid item>
+            <Grid item container justifyContent="center" xs={12} md={'auto'}>
               <Button component={NavLink} to="/pre-chat" color="inherit">
                 Форум
               </Button>

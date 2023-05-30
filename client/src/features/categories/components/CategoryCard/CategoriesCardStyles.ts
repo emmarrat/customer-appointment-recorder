@@ -1,7 +1,9 @@
 export const styles = {
   card: {
-    maxWidth: 345,
+    maxWidth: 420,
+    width: '100%',
     boxShadow: '12px 12px 24px #cfcfcf, -12px -12px 24px #ffffff',
+    borderRadius: '30px',
   },
   media: {
     maxHeight: 200,
