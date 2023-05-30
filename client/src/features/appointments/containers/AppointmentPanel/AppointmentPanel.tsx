@@ -4,11 +4,14 @@ import {
   selectAppointmentCount,
   selectAppointmentPage,
   selectAppointments,
-} from '../../appointmentsSlice';
-import { selectUser } from '../../../users/usersSlice';
-import { fetchAppointments, updateAppointment } from '../../appointmentsThunk';
-import { fetchExpertByUser } from '../../../experts/expertsThunks';
-import { selectOneExpert } from '../../../experts/expertsSlice';
+} from '../../../../dispatchers/appointemtns/appointmentsSlice';
+import { selectUser } from '../../../../dispatchers/users/usersSlice';
+import {
+  fetchAppointments,
+  updateAppointment,
+} from '../../../../dispatchers/appointemtns/appointmentsThunk';
+import { fetchExpertByUser } from '../../../../dispatchers/experts/expertsThunks';
+import { selectOneExpert } from '../../../../dispatchers/experts/expertsSlice';
 import AppointmentTable from '../../components/AppointmentTable/AppointmentTable';
 import { UpdateAppointmentParams } from '../../../../types';
 

@@ -1,11 +1,14 @@
 import React, { useEffect } from 'react';
 import { Grid, Typography } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { selectExperts } from '../../expertsSlice';
-import { fetchExperts, fetchExpertsByCategory } from '../../expertsThunks';
+import { selectExperts } from '../../../../dispatchers/experts/expertsSlice';
+import {
+  fetchExperts,
+  fetchExpertsByCategory,
+} from '../../../../dispatchers/experts/expertsThunks';
 import ExpertCard from '../../components/ExpertCard/ExpertCard';
 import { useParams } from 'react-router-dom';
-import { selectCategoryName } from '../../../categories/categoriesSlice';
+import { selectCategoryName } from '../../../../dispatchers/categories/categoriesSlice';
 
 const Experts = () => {
   const { id } = useParams() as { id: string };

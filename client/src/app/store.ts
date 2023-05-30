@@ -1,5 +1,5 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import { usersReducer } from '../features/users/usersSlice';
+import { usersReducer } from '../dispatchers/users/usersSlice';
 
 import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
@@ -11,10 +11,10 @@ import {
   REGISTER,
   REHYDRATE,
 } from 'redux-persist/es/constants';
-import { expertReducer } from '../features/experts/expertsSlice';
-import { serviceHoursReducer } from '../features/serviceHours/serviceHoursSlice';
-import { appointmentsReducer } from '../features/appointments/appointmentsSlice';
-import { categoriesReducer } from '../features/categories/categoriesSlice';
+import { expertReducer } from '../dispatchers/experts/expertsSlice';
+import { serviceHoursReducer } from '../dispatchers/serviceHours/serviceHoursSlice';
+import { appointmentsReducer } from '../dispatchers/appointemtns/appointmentsSlice';
+import { categoriesReducer } from '../dispatchers/categories/categoriesSlice';
 
 const usersPersistConfig = {
   key: 'appointment-recorder:users',

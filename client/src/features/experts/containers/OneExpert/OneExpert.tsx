@@ -15,10 +15,13 @@ import {
 } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { fetchExpertById } from '../../expertsThunks';
-import { fetchServiceHoursForExpert } from '../../../serviceHours/serviceHoursThunks';
-import { selectExpertOneFetching, selectOneExpert } from '../../expertsSlice';
-import { selectDatetimes } from '../../../serviceHours/serviceHoursSlice';
+import { fetchExpertById } from '../../../../dispatchers/experts/expertsThunks';
+import { fetchServiceHoursForExpert } from '../../../../dispatchers/serviceHours/serviceHoursThunks';
+import {
+  selectExpertOneFetching,
+  selectOneExpert,
+} from '../../../../dispatchers/experts/expertsSlice';
+import { selectDatetimes } from '../../../../dispatchers/serviceHours/serviceHoursSlice';
 import LoyaltyIcon from '@mui/icons-material/Loyalty';
 import LocalMallRoundedIcon from '@mui/icons-material/LocalMallRounded';
 import { apiURL } from '../../../../constants';
@@ -32,10 +35,10 @@ import {
   ServicesFull,
 } from '../../../../types';
 import MyModal from '../../../../components/UI/MyModal/MyModal';
-import { createAppointment } from '../../../appointments/appointmentsThunk';
+import { createAppointment } from '../../../../dispatchers/appointemtns/appointmentsThunk';
 import AppointmentMessage from '../../../appointments/components/AppointmentMessage/AppointmentMessage';
 import { styles } from './OneExpertStyles';
-import { selectUser } from '../../../users/usersSlice';
+import { selectUser } from '../../../../dispatchers/users/usersSlice';
 
 const OneExpert = () => {
   const { id } = useParams() as { id: string };

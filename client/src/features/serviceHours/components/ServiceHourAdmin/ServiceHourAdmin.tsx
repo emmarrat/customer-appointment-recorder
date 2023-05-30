@@ -3,12 +3,12 @@ import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import {
   selectDatetimeFetching,
   selectDatetimes,
-} from '../../serviceHoursSlice';
+} from '../../../../dispatchers/serviceHours/serviceHoursSlice';
 import {
   createServiceHour,
   fetchServiceHoursByUser,
-} from '../../serviceHoursThunks';
-import { selectUser } from '../../../users/usersSlice';
+} from '../../../../dispatchers/serviceHours/serviceHoursThunks';
+import { selectUser } from '../../../../dispatchers/users/usersSlice';
 import { Button, CircularProgress, Grid, Typography } from '@mui/material';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';

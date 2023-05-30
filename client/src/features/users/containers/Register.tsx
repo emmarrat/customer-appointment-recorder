@@ -11,12 +11,12 @@ import {
 } from '@mui/material';
 import { GoogleLogin } from '@react-oauth/google';
 import React from 'react';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { selectRegisterError } from './usersSlice';
-import { RegisterMutation } from '../../types';
-import { googleLogin, register } from './usersThunks';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import { selectRegisterError } from '../../../dispatchers/users/usersSlice';
+import { RegisterMutation } from '../../../types';
+import { googleLogin, register } from '../../../dispatchers/users/usersThunks';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import FileInput from '../../components/UI/FileInput/FileInput';
+import FileInput from '../../../components/UI/FileInput/FileInput';
 
 const Register = () => {
   const dispatch = useAppDispatch();

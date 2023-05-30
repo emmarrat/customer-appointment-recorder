@@ -28,6 +28,11 @@ const theme: Theme = createTheme({
     fontWeightBold: 700,
   },
   components: {
+    MuiGrid: {
+      defaultProps: {
+        borderRadius: '50px',
+      },
+    },
     MuiTextField: {
       defaultProps: {
         variant: 'outlined',

@@ -5,10 +5,13 @@ import {
   selectExpertUpdating,
   selectExpertUpdatingError,
   selectOneExpert,
-} from '../../expertsSlice';
+} from '../../../../dispatchers/experts/expertsSlice';
 import ExpertsForm from '../../components/ExpertForm/ExpertsForm';
 import { ExpertMutation } from '../../../../types';
-import { fetchExpertById, updateExpert } from '../../expertsThunks';
+import {
+  fetchExpertById,
+  updateExpert,
+} from '../../../../dispatchers/experts/expertsThunks';
 
 const EditExpert = () => {
   const { id } = useParams() as { id: string };

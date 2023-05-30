@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import { Link as NavLink } from 'react-router-dom';
 import { useAppSelector } from '../../../app/hooks';
-import { selectUser } from '../../../features/users/usersSlice';
+import { selectUser } from '../../../dispatchers/users/usersSlice';
 import UserMenu from './UserMenu';
 import AnonymousMenu from './AnonymousMenu';
 import { COMPANY_TITLE } from '../../../constants';

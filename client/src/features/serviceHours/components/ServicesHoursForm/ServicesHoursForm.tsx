@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ServiceHourMutation } from '../../../../types';
 import { Alert, Avatar, Box, Container, Grid, TextField } from '@mui/material';
 import { useAppSelector } from '../../../../app/hooks';
-import { selectDatetimeCreatingError } from '../../serviceHoursSlice';
+import { selectDatetimeCreatingError } from '../../../../dispatchers/serviceHours/serviceHoursSlice';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import LoadingButton from '@mui/lab/LoadingButton';
 

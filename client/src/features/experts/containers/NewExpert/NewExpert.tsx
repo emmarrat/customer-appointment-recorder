@@ -1,13 +1,13 @@
 import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { useNavigate } from 'react-router-dom';
-import { createExpert } from '../../expertsThunks';
+import { createExpert } from '../../../../dispatchers/experts/expertsThunks';
 import { ExpertMutation } from '../../../../types';
 import ExpertsForm from '../../components/ExpertForm/ExpertsForm';
 import {
   selectExpertCreating,
   selectExpertCreatingError,
-} from '../../expertsSlice';
+} from '../../../../dispatchers/experts/expertsSlice';
 
 const NewExpert = () => {
   const dispatch = useAppDispatch();

@@ -14,10 +14,13 @@ import { GoogleLogin } from '@react-oauth/google';
 import React from 'react';
 
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { selectLoginError, selectLoginLoading } from './usersSlice';
-import { LoginMutation } from '../../types';
-import { googleLogin, login } from './usersThunks';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import {
+  selectLoginError,
+  selectLoginLoading,
+} from '../../../dispatchers/users/usersSlice';
+import { LoginMutation } from '../../../types';
+import { googleLogin, login } from '../../../dispatchers/users/usersThunks';
 
 const Login = () => {
   const dispatch = useAppDispatch();

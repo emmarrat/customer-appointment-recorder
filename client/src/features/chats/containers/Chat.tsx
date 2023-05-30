@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ChatMessage, User } from '../../../types';
 import { useAppSelector } from '../../../app/hooks';
-import { selectUser } from '../../users/usersSlice';
+import { selectUser } from '../../../dispatchers/users/usersSlice';
 import { Navigate } from 'react-router-dom';
 import ReconnectingWebSocket from 'reconnecting-websocket';
 import {

@@ -1,12 +1,12 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { ExpertMutation, ValidationError } from '../../../../types';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { selectUsers } from '../../../users/usersSlice';
-import { fetchBasicUsers } from '../../../users/usersThunks';
+import { selectUsers } from '../../../../dispatchers/users/usersSlice';
+import { fetchBasicUsers } from '../../../../dispatchers/users/usersThunks';
 import { Button, Grid, MenuItem, TextField, Typography } from '@mui/material';
 import FileInput from '../../../../components/UI/FileInput/FileInput';
-import { fetchCategories } from '../../../categories/categoriesThunks';
-import { selectCategories } from '../../../categories/categoriesSlice';
+import { fetchCategories } from '../../../../dispatchers/categories/categoriesThunks';
+import { selectCategories } from '../../../../dispatchers/categories/categoriesSlice';
 
 interface Props {
   onSubmit: (teacher: ExpertMutation) => void;

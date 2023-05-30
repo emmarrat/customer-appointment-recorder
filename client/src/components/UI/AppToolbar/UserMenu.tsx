@@ -3,7 +3,7 @@ import { User } from '../../../types';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { Avatar, Button, Menu, MenuItem } from '@mui/material';
 import { useAppDispatch } from '../../../app/hooks';
-import { logout } from '../../../features/users/usersThunks';
+import { logout } from '../../../dispatchers/users/usersThunks';
 import noImageAvailable from '../../../assets/images/noImageAvailable.jpg';
 import { apiURL } from '../../../constants';
 

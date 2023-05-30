@@ -49,7 +49,6 @@ export const styles = {
     fontWeight: 700,
   },
   background: {
-    borderRadius: '30px',
     padding: '50px',
     background: `linear-gradient(22deg, rgba(133,83,116,1) 0%, rgba(215,123,179,1) 33%, rgba(255,255,255,0) 100%), url(${team})`,
     backgroundRepeat: 'no-repeat',

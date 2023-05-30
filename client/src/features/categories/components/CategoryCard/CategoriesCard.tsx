@@ -11,7 +11,7 @@ import { apiURL } from '../../../../constants';
 import { styles } from './CategoriesCardStyles';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../../../app/hooks';
-import { getCategoryName } from '../../categoriesSlice';
+import { getCategoryName } from '../../../../dispatchers/categories/categoriesSlice';
 
 interface Props {
   category: Category;

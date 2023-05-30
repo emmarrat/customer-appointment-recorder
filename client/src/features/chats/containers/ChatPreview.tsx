@@ -7,6 +7,7 @@ import { Link as RouterLink } from 'react-router-dom';
 const Text = styled(Typography)({
   color: '#fff',
 });
+
 const Link = styled(RouterLink)({
   color: '#fff',
   textDecoration: 'underline',

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { selectCategories } from '../../categoriesSlice';
-import { fetchCategories } from '../../categoriesThunks';
+import { selectCategories } from '../../../../dispatchers/categories/categoriesSlice';
+import { fetchCategories } from '../../../../dispatchers/categories/categoriesThunks';
 import { Grid, Typography } from '@mui/material';
 import CategoriesCard from '../../components/CategoryCard/CategoriesCard';
 

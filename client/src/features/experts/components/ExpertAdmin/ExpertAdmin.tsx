@@ -23,8 +23,8 @@ import {
   selectExperts,
   selectExpertsCount,
   selectExpertsPage,
-} from '../../expertsSlice';
-import { fetchExperts } from '../../expertsThunks';
+} from '../../../../dispatchers/experts/expertsSlice';
+import { fetchExperts } from '../../../../dispatchers/experts/expertsThunks';
 
 const ExpertAdmin = () => {
   const navigate = useNavigate();

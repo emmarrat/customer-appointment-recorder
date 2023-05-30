@@ -1,11 +1,11 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { Container, CssBaseline, Typography } from '@mui/material';
+import { Container, CssBaseline, Grid, Typography } from '@mui/material';
 import AppToolbar from './components/UI/AppToolbar/AppToolbar';
-import Register from './features/users/Register';
-import Login from './features/users/Login';
+import Register from './features/users/containers/Register';
+import Login from './features/users/containers/Login';
 import { useAppSelector } from './app/hooks';
-import { selectUser } from './features/users/usersSlice';
+import { selectUser } from './dispatchers/users/usersSlice';
 import ExpertAdmin from './features/experts/components/ExpertAdmin/ExpertAdmin';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import NewExpert from './features/experts/containers/NewExpert/NewExpert';
@@ -20,6 +20,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Chat from './features/chats/containers/Chat';
 import ChatPreview from './features/chats/containers/ChatPreview';
+import WelcomeBlock from './components/StaticComponents/WelcomeBlock';
 
 const App = () => {
   const user = useAppSelector(selectUser);
@@ -33,13 +34,24 @@ const App = () => {
       <main>
         <Container maxWidth="xl" sx={{ mt: 5 }}>
           <Routes>
-            <Route path="/" element={<Categories />} />
+            <Route
+              path="/"
+              element={
+                <Grid container direction="column" gap={4}>
+                  <Grid item xs={12}>
+                    <WelcomeBlock />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Categories />
+                  </Grid>
+                </Grid>
+              }
+            />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/experts" element={<Experts />} />
             <Route path="/experts/by-category/:id" element={<Experts />} />
             <Route path="/experts/:id" element={<OneExpert />} />
-
             <Route
               path={
                 user && user.role === 'expert'
@@ -56,7 +68,6 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
-
             <Route
               path="/admin/appointments"
               element={
