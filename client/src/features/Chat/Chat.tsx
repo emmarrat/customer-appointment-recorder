@@ -8,6 +8,7 @@ import {
   Box,
   Button,
   Grid,
+  IconButton,
   List,
   ListItem,
   ListItemText,
@@ -15,16 +16,19 @@ import {
   Typography,
 } from '@mui/material';
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
+import SendIcon from '@mui/icons-material/Send';
 import dayjs from 'dayjs';
+import { COMPANY_TITLE } from '../../constants';
+import { styles } from './ChatStyles';
 
 const Chat = () => {
   const user = useAppSelector(selectUser);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [messageText, setMessageText] = useState('');
   const [activeUsers, setActiveUsers] = useState<User[]>([]);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const ws = useRef<null | ReconnectingWebSocket>(null);
-  console.log(activeUsers);
   useEffect(() => {
     ws.current = new ReconnectingWebSocket('ws://localhost:8000/chat');
     console.log('ws = ', ws.current);
@@ -73,6 +77,10 @@ const Chat = () => {
     };
   }, [user]);
 
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
   const changeMessage = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessageText(e.target.value);
   };
@@ -80,11 +88,14 @@ const Chat = () => {
   const sendMessage = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!ws.current) return;
+    if (!ws.current || !user) return;
     ws.current.send(
       JSON.stringify({
         type: 'SEND_MESSAGE',
-        payload: messageText,
+        payload: {
+          username: `${user.firstName} ${user.lastName}`,
+          text: messageText,
+        },
       }),
     );
     setMessageText('');
@@ -100,122 +111,165 @@ const Chat = () => {
     );
   };
 
+  const scrollToBottom = () => {
+    if (containerRef.current) {
+      containerRef.current.scrollTop = containerRef.current.scrollHeight;
+    }
+  };
+
   if (!user) {
     return <Navigate to="/register" />;
   }
 
+  const today = new Date().toISOString().slice(0, -14);
+
   return (
-    <Grid container justifyContent="space-between">
-      <Grid
-        item
-        xs={12}
-        md={3}
-        container
-        flexDirection="column"
-        alignItems="center"
-        width="100%"
-        sx={{
-          background: '#6a30d2',
-          borderRadius: '8px',
-          padding: '20px 15px',
-        }}
+    <>
+      <Typography
+        variant="h4"
+        my={3}
+        textAlign="center"
+        color="primary.main"
+        fontWeight={700}
       >
-        <Typography variant="h5" mb={2} color="white">
-          Active users:{' '}
-        </Typography>
-        <List sx={{ width: '100%' }}>
-          {activeUsers.map((user, index) => (
-            <ListItem
-              key={user._id}
-              sx={{ width: '100%', borderBottom: '1px solid #fff' }}
-            >
-              <ListItemText
-                sx={{ color: '#fff' }}
-                primary={index + 1 + '. ' + user.firstName}
-              />
-            </ListItem>
-          ))}
-        </List>
-      </Grid>
+        Форум {COMPANY_TITLE}
+      </Typography>
       <Grid
-        item
-        xs={12}
-        md={8}
-        sx={{
-          border: '2px solid #6a30d2',
-          borderRadius: '8px',
-          padding: '10px 25px',
-        }}
+        sx={styles.containerColumn}
+        justifyContent="space-between"
+        height="100%"
+        gap={5}
       >
         <Grid
           item
           container
-          flexDirection="column"
-          flexWrap="nowrap"
-          sx={{ height: '600px', overflow: 'scroll', width: '100%' }}
+          justifyContent="space-between"
+          gap={3}
+          height={{ xs: 'auto', md: '400px' }}
         >
-          {messages.map((message) => (
-            <Box
-              key={message._id}
-              mb={2}
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
-              <Box
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  width: '100%',
-                }}
-              >
-                <Typography variant="body1">
-                  <b style={{ marginRight: '10px' }}>{message.username}: </b>{' '}
-                  {message.text}
-                </Typography>
-                <Typography variant="body1" color="text.secondary">
-                  {dayjs(message.createdAt).format('MMMM DD, YYYY, HH:mm')}
-                </Typography>
-              </Box>
-              {user?.role === 'admin' && (
-                <Button
-                  variant="contained"
-                  color="error"
-                  size="small"
-                  onClick={() => handleDeleteClick(message._id)}
-                  sx={{ ml: '20px' }}
+          <Grid
+            item
+            container
+            direction="column"
+            sx={styles.activeUsersBlock}
+            alignItems="flex-start"
+            xs={12}
+            md={3}
+          >
+            <Typography variant="h6" sx={styles.text}>
+              Активные пользователи:
+            </Typography>
+            <List sx={{ width: '100%' }}>
+              {activeUsers.map((user, index) => (
+                <ListItem key={user._id} sx={{ width: '100%' }}>
+                  <ListItemText
+                    sx={{ color: '#fff' }}
+                    primary={`${index + 1}. ${user.firstName} ${user.lastName}`}
+                  />
+                </ListItem>
+              ))}
+            </List>
+          </Grid>
+          <Grid
+            item
+            container
+            sx={styles.messagesBlock}
+            height={{ xs: '400px', md: '100%' }}
+            xs={12}
+            md={8}
+            ref={containerRef}
+          >
+            <Grid item sx={[styles.containerColumn, styles.messagesBlockInner]}>
+              {messages.map((message) => (
+                <Grid
+                  item
+                  sx={styles.containerRegular}
+                  alignItems="stretch"
+                  key={message._id}
                 >
-                  <DeleteForeverRoundedIcon />
-                </Button>
-              )}
-            </Box>
-          ))}
+                  <Grid
+                    item
+                    container
+                    justifyContent="space-between"
+                    sx={{
+                      width: '100%',
+                      overflow: 'scroll',
+                    }}
+                    gap={2}
+                    xs={12}
+                  >
+                    <Grid item xs={8}>
+                      <Typography
+                        variant="body1"
+                        fontSize={{ xs: '10px', sm: '14px' }}
+                        sx={{ wordWrap: 'break-word' }}
+                      >
+                        <Typography
+                          component="span"
+                          color="primary.dark"
+                          style={{ marginRight: '5px' }}
+                        >
+                          {message.username}:{' '}
+                        </Typography>
+                        {message.text}
+                      </Typography>
+                    </Grid>
+                    <Grid
+                      container
+                      justifyContent="flex-end"
+                      alignItems="center"
+                      xs={2}
+                      gap={1}
+                    >
+                      <Grid item>
+                        <Typography
+                          variant="body1"
+                          fontSize={{ xs: '10px', sm: '14px' }}
+                          color="text.secondary"
+                        >
+                          {today === message.createdAt.slice(0, -14)
+                            ? dayjs(message.createdAt).format('HH:mm')
+                            : dayjs(message.createdAt).format('DD.MM, HH:mm')}
+                        </Typography>
+                      </Grid>
+
+                      {user?.role === 'admin' && (
+                        <Grid item display={{ xs: 'none', md: 'block' }}>
+                          <IconButton
+                            color="error"
+                            size="small"
+                            onClick={() => handleDeleteClick(message._id)}
+                          >
+                            <DeleteForeverRoundedIcon fontSize="small" />
+                          </IconButton>
+                        </Grid>
+                      )}
+                    </Grid>
+                  </Grid>
+                </Grid>
+              ))}
+            </Grid>
+          </Grid>
         </Grid>
-        <form onSubmit={sendMessage}>
-          <Box display="flex" justifyContent="space-between" mt={4}>
-            <TextField
-              variant="outlined"
-              type="text"
-              value={messageText}
-              onChange={changeMessage}
-              sx={{ width: '75%' }}
-              required
-            />
-            <Button
-              variant="contained"
-              color="success"
-              type="submit"
-              sx={{ width: '20%' }}
-            >
-              Send
-            </Button>
-          </Box>
-        </form>
+        <Grid item>
+          <form onSubmit={sendMessage}>
+            <Box sx={styles.containerRegular} gap={1}>
+              <TextField
+                type="text"
+                value={messageText}
+                onChange={changeMessage}
+                sx={{ width: '90%', borderRadius: '20px' }}
+                required
+                placeholder="Ваше сообщение"
+              />
+              <Button variant="contained" type="submit" sx={styles.button}>
+                <SendIcon />
+              </Button>
+            </Box>
+          </form>
+        </Grid>
       </Grid>
-    </Grid>
+    </>
   );
 };
 

@@ -72,11 +72,14 @@ export interface ActiveConnections {
 
 export interface IncomingMessage {
   type: string;
-  payload: string;
+  payload: IMessageWithoutDate;
 }
 
-export interface IMessage {
+export interface IMessageWithoutDate {
   username: string;
   text: string;
+}
+
+export interface IMessage extends IMessageWithoutDate {
   createdAt: Date;
 }

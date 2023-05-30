@@ -40,11 +40,9 @@ const router = express.Router();
 router.ws('/chat', async (ws) => {
   const id = crypto.randomUUID();
   activeConnections[id] = ws;
-  console.log('client connected');
 
   ws.on('message', async (message) => {
     const decodedMessage = JSON.parse(message.toString()) as IncomingMessage;
-    console.log('web socket', decodedMessage);
     switch (decodedMessage.type) {
       case 'LOGIN':
         const token = decodedMessage.payload;
@@ -76,8 +74,8 @@ router.ws('/chat', async (ws) => {
         if (activeUser === null) break;
 
         const message: IMessage = {
-          username: `${activeUser.firstName} ${activeUser.lastName}`,
-          text: decodedMessage.payload,
+          username: `${decodedMessage.payload.username}`,
+          text: decodedMessage.payload.text,
           createdAt: new Date(),
         };
 
