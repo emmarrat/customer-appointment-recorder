@@ -18,7 +18,8 @@ import Categories from './features/categories/containers/Categories/Categories';
 import AppointmentPanel from './features/appointments/containers/AppointmentPanel/AppointmentPanel';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Chat from './features/Chat/Chat';
+import Chat from './features/chats/containers/Chat';
+import ChatPreview from './features/chats/containers/ChatPreview';
 
 const App = () => {
   const user = useAppSelector(selectUser);
@@ -106,6 +107,8 @@ const App = () => {
                 </Typography>
               }
             />
+            <Route path="/pre-chat" element={<ChatPreview />} />
+
             <Route path="/chat" element={<Chat />} />
           </Routes>
         </Container>

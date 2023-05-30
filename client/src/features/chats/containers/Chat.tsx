@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ChatMessage, User } from '../../types';
-import { useAppSelector } from '../../app/hooks';
-import { selectUser } from '../users/usersSlice';
+import { ChatMessage, User } from '../../../types';
+import { useAppSelector } from '../../../app/hooks';
+import { selectUser } from '../../users/usersSlice';
 import { Navigate } from 'react-router-dom';
 import ReconnectingWebSocket from 'reconnecting-websocket';
 import {
@@ -18,7 +18,7 @@ import {
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 import SendIcon from '@mui/icons-material/Send';
 import dayjs from 'dayjs';
-import { COMPANY_TITLE } from '../../constants';
+import { COMPANY_TITLE } from '../../../constants';
 import { styles } from './ChatStyles';
 
 const Chat = () => {
@@ -125,13 +125,7 @@ const Chat = () => {
 
   return (
     <>
-      <Typography
-        variant="h4"
-        my={3}
-        textAlign="center"
-        color="primary.main"
-        fontWeight={700}
-      >
+      <Typography variant="h4" textAlign="center" sx={styles.title}>
         Форум {COMPANY_TITLE}
       </Typography>
       <Grid

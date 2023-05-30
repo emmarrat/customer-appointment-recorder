@@ -50,6 +50,11 @@ const AppToolbar = () => {
                 Наши мастера
               </Button>
             </Grid>
+            <Grid item>
+              <Button component={NavLink} to="/pre-chat" color="inherit">
+                Форум
+              </Button>
+            </Grid>
             <Box
               sx={{
                 display: { xs: 'none', sm: 'inline-flex' },

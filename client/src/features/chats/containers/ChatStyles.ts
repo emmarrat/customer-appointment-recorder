@@ -1,3 +1,5 @@
+import team from '../../../assets/images/team.jpg';
+
 export const styles = {
   containerColumn: {
     display: 'flex',
@@ -40,5 +42,32 @@ export const styles = {
   button: {
     bgColor: 'primary.main',
     color: '#fff',
+  },
+  title: {
+    my: 3,
+    color: 'primary.main',
+    fontWeight: 700,
+  },
+  background: {
+    borderRadius: '30px',
+    padding: '50px',
+    background: `linear-gradient(22deg, rgba(133,83,116,1) 0%, rgba(215,123,179,1) 33%, rgba(255,255,255,0) 100%), url(${team})`,
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'right center',
+    backgroundSize: 'contain',
+    boxShadow: '12px 12px 24px #b2b8c9, -12px -12px 24px #f0f8ff',
+  },
+  previewTitle: {
+    maxWidth: '600px',
+    fontWeight: 900,
+    mb: 5,
+  },
+  buttonLink: {
+    fontSize: { xs: '10px', md: '14px' },
+    color: '#fff',
+    padding: '30px',
+    borderRadius: '50px',
+    bgcolor: 'primary.light',
+    boxShadow: '12px 12px 24px #8b5879, -12px -12px 24px #bd78a3',
   },
 };
