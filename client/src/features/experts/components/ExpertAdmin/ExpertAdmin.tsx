@@ -20,17 +20,21 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import {
+  selectExpertRemoving,
   selectExperts,
   selectExpertsCount,
   selectExpertsPage,
 } from '../../../../dispatchers/experts/expertsSlice';
-import { fetchExperts } from '../../../../dispatchers/experts/expertsThunks';
+import {
+  deleteExpert,
+  fetchExperts,
+} from '../../../../dispatchers/experts/expertsThunks';
 
 const ExpertAdmin = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const experts = useAppSelector(selectExperts);
-  // const deleting = useAppSelector(selectTeacherDeleting);
+  const deleting = useAppSelector(selectExpertRemoving);
   const currentPage = useAppSelector(selectExpertsPage);
   const totalCount = useAppSelector(selectExpertsCount);
   const [limit, setLimit] = React.useState(5);
@@ -42,7 +46,8 @@ const ExpertAdmin = () => {
 
   const handleDelete = async (id: string) => {
     if (window.confirm('Подтвердите удаление мастера')) {
-      console.log('you can think that it is deleted');
+      await dispatch(deleteExpert(id));
+      await dispatch(fetchExperts({ page, limit }));
     }
   };
 
@@ -101,8 +106,8 @@ const ExpertAdmin = () => {
                     </TableCell>
                     <TableCell align="right">
                       <IconButton
-                        // onClick={() => handleDelete(expert._id)}
-                        disabled={false}
+                        onClick={() => handleDelete(expert._id)}
+                        disabled={deleting === expert._id}
                       >
                         <DeleteIcon />
                       </IconButton>

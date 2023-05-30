@@ -125,3 +125,10 @@ export const updateExpert = createAsyncThunk<
     throw e;
   }
 });
+
+export const deleteExpert = createAsyncThunk<void, string>(
+  'experts/deleteExpert',
+  async (expertId) => {
+    await axiosApi.delete(`/experts/${expertId}`);
+  },
+);

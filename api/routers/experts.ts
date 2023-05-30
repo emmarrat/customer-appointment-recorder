@@ -5,6 +5,8 @@ import { imageUpload } from '../multer';
 import Expert from '../models/Expert';
 import User from '../models/User';
 import mongoose from 'mongoose';
+import Appointment from '../models/Appointment';
+import ServiceHour from '../models/ServiceHour';
 
 const expertsRouter = express.Router();
 
@@ -17,12 +19,12 @@ expertsRouter.post(
     try {
       const existingExpert = await Expert.findOne({ user: req.body.user });
       if (existingExpert) {
-        return res.status(500).send({ error: 'Такой мастер уже существует' });
+        return res.status(400).send({ error: 'Такой мастер уже существует' });
       }
       const user = await User.findById(req.body.user);
 
       if (!user) {
-        return res.status(500).send({ error: 'Пользователь не найден!' });
+        return res.status(400).send({ error: 'Пользователь не найден!' });
       }
 
       const parsedServices = JSON.parse(req.body.services);
@@ -134,13 +136,15 @@ expertsRouter.delete('/:id', auth, permit('admin'), async (req, res, next) => {
 
     if (!expert) {
       return res
-        .status(500)
+        .status(400)
         .send({ error: 'Учетная запись мастера не найдена!' });
     }
 
     const removedExpert = await expert.deleteOne();
-    //Когда будет сущность запись. Добавить удаление связаных сущностей.
+    await Appointment.deleteMany({ expert: expert._id });
 
+    // Delete service hours associated with the expert
+    await ServiceHour.deleteMany({ expert: expert._id });
     res.send({
       message: 'Учетная запись мастера удалена',
       removedExpert,

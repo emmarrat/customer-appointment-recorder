@@ -8,6 +8,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 import {
   createExpert,
+  deleteExpert,
   fetchExpertById,
   fetchExpertByUser,
   fetchExperts,
@@ -25,6 +26,7 @@ interface ExpertState {
   fetchOneExpertLoading: boolean;
   expertUpdating: boolean;
   expertUpdatingError: ValidationError | null;
+  expertRemoving: string | false;
   currentPage: number;
   totalCount: number;
 }
@@ -38,6 +40,7 @@ const initialState: ExpertState = {
   fetchOneExpertLoading: false,
   expertUpdating: false,
   expertUpdatingError: null,
+  expertRemoving: false,
   currentPage: 1,
   totalCount: 1,
 };
@@ -135,6 +138,20 @@ export const expertsSlice = createSlice({
         toast.error(error.message);
       }
     });
+
+    builder.addCase(deleteExpert.pending, (state, { meta: arg }) => {
+      state.expertRemoving = arg.arg;
+    });
+    builder.addCase(deleteExpert.fulfilled, (state) => {
+      state.expertRemoving = false;
+      toast.info('Эксперт удален!');
+    });
+    builder.addCase(deleteExpert.rejected, (state, { payload: error }) => {
+      state.expertUpdating = false;
+      if (error) {
+        toast.error('При удалении возникла ошибка"');
+      }
+    });
   },
 });
 
@@ -157,3 +174,5 @@ export const selectExpertsCount = (state: RootState) =>
   state.experts.totalCount;
 export const selectExpertsPage = (state: RootState) =>
   state.experts.currentPage;
+export const selectExpertRemoving = (state: RootState) =>
+  state.experts.expertRemoving;
