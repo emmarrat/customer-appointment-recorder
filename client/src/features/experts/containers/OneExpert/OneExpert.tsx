@@ -124,7 +124,9 @@ const OneExpert = () => {
     <>
       <Grid sx={styles.container}>
         {loading ? (
-          <CircularProgress />
+          <Grid container justifyContent="center" mt={5}>
+            <CircularProgress />
+          </Grid>
         ) : (
           expert && (
             <Grid

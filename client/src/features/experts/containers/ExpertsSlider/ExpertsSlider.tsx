@@ -54,7 +54,7 @@ const ExpertsSlider = () => {
               sx={{
                 display: 'flex',
                 justifyContent: 'center',
-                alignItems: 'center',
+                alignItems: 'stretch',
               }}
             >
               <ExpertCardBig expert={expert} />

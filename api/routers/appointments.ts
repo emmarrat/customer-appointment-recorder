@@ -57,11 +57,6 @@ appointmentsRouter.post('/', auth, async (req, res, next) => {
 
     await appointment.save();
 
-    await ServiceHour.updateOne(
-      { _id: date, 'hours.startTime': startTime },
-      { $set: { 'hours.$.status': true } },
-    );
-
     return res.send({
       message: 'Запись успешно создана!',
       appointment,
@@ -106,6 +101,7 @@ appointmentsRouter.get('/', auth, async (req, res, next) => {
           path: 'date',
           select: 'date',
         })
+        .sort({ createdAt: 1 })
         .skip(skip)
         .limit(itemsPerPage);
 
@@ -135,6 +131,8 @@ appointmentsRouter.get('/', auth, async (req, res, next) => {
           path: 'date',
           select: 'date',
         })
+        .sort({ createdAt: 1 })
+
         .skip(skip)
         .limit(itemsPerPage);
 
@@ -164,6 +162,7 @@ appointmentsRouter.get('/', auth, async (req, res, next) => {
           path: 'date',
           select: 'date',
         })
+        .sort({ createdAt: 1 })
         .skip(skip)
         .limit(itemsPerPage);
 
@@ -215,6 +214,11 @@ appointmentsRouter.patch(
       }
       appointmentToSave.isApproved = isApproved;
       await appointmentToSave.save();
+
+      await ServiceHour.updateOne(
+        { _id: appointment.date._id, 'hours.startTime': appointment.startTime },
+        { $set: { 'hours.$.status': isApproved } },
+      );
 
       await sendEmail(
         appointment.client.email,

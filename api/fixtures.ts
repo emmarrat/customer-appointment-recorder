@@ -24,7 +24,7 @@ const run = async () => {
     console.log('Collections were not present, skipping drop...');
   }
 
-  const [admin, user1, user2, expert1, expert2] = await User.create(
+  const [admin, expert3, user2, expert1, expert2] = await User.create(
     {
       email: 'admin@gmail.com',
       firstName: 'Emir',
@@ -35,7 +35,7 @@ const run = async () => {
       role: 'admin',
     },
     {
-      email: 'user@gmail.com',
+      email: 'expert3@gmail.com',
       firstName: 'Ulan',
       lastName: 'Sarykuev',
       password: '123',
@@ -78,13 +78,13 @@ const run = async () => {
     { title: 'Педикюр', image: 'fixtures/pedicure.jpg' },
   );
 
-  const [newExpert1, newExpert2] = await Expert.create(
+  const [newExpert1, newExpert2, newExpert3] = await Expert.create(
     {
       user: expert1._id,
       category: hair._id,
       title: 'Парикмахер',
       info: 'Я профессиональный парикмахер с опытом более 10 лет. Моя страсть - создавать стильные и модные прически, подчеркивая индивидуальность каждого клиента. Владею различными техниками стрижки, окрашивания и укладки волос. Заботливый и внимательный подход к каждому клиенту, высокий уровень профессионализма и использование высококачественных продуктов - мои основные принципы работы. Приходите ко мне, и я с радостью помогу вам выглядеть великолепно!',
-      photo: 'fixtures/avatar1.jpg',
+      photo: 'fixtures/alla.jpg',
       services: [
         { name: 'Обычная стрижка', price: 400 },
         { name: 'Окрашивание волос', price: 800 },
@@ -98,7 +98,7 @@ const run = async () => {
       info:
         expert2.firstName +
         ' профессионал с творческим подходом, владеющий различными техниками маникюра, предлагающий индивидуальные решения, создающий уникальные дизайны на ногтях.',
-      photo: 'fixtures/avatar2.jpg',
+      photo: 'fixtures/jamilya.jpg',
       services: [
         { name: 'Снятие лака', price: 500 },
         { name: 'Обычное покрытие ногтей', price: 800 },
@@ -106,11 +106,11 @@ const run = async () => {
       ],
     },
     {
-      user: user1._id,
+      user: expert3._id,
       category: hair._id,
       title: 'Мужской парикмахер',
       info: 'Я профессиональный барбер с более чем 10-летним опытом. Моим призванием является создание идеального образа для каждого клиента, выражающего его индивидуальность и стиль. Я владею различными техниками стрижки, бритья и ухода за бородой. В моей работе я особенно ценю заботу и внимание к каждому клиенту, а также стремлюсь к высокому профессионализму и использованию только качественных продуктов. Приходите ко мне, и я с удовольствием помогу вам выглядеть стильно и превосходно!',
-      photo: 'fixtures/avatar1.jpg',
+      photo: 'fixtures/ulan.jpg',
       services: [
         { name: 'Обычная стрижка', price: 400 },
         { name: 'Бритье бороды и усов', price: 500 },
@@ -119,7 +119,7 @@ const run = async () => {
     },
   );
 
-  const [date1, date2, date3, date4] = await ServiceHour.create(
+  const [date1, date2, date3, date4, date5] = await ServiceHour.create(
     {
       expert: newExpert1._id,
       date: new Date('2023-06-01'),
@@ -168,17 +168,29 @@ const run = async () => {
         { startTime: '17:30', endTime: '18:30', status: false },
       ],
     },
+    {
+      expert: newExpert3._id,
+      date: new Date('2023-06-03'),
+      hours: [
+        { startTime: '10:00', endTime: '11:00', status: false },
+        { startTime: '11:15', endTime: '12:15', status: false },
+        { startTime: '13:45', endTime: '14:45', status: true },
+        { startTime: '15:00', endTime: '16:00', status: false },
+        { startTime: '16:15', endTime: '17:15', status: false },
+        { startTime: '17:30', endTime: '18:30', status: false },
+      ],
+    },
   );
 
   const [appointment1, appointment2, appointment3] = await Appointment.create(
     {
-      client: user1._id,
+      client: user2._id,
       expert: newExpert1._id,
       date: date1._id,
       service: { name: 'Обычная стрижка', price: 400 },
       startTime: '11:15',
       endTime: '12:15',
-      isApproved: false,
+      isApproved: true,
     },
     {
       client: user2._id,
@@ -187,7 +199,7 @@ const run = async () => {
       service: { name: 'Снятие лака', price: 500 },
       startTime: '15:00',
       endTime: '16:00',
-      isApproved: false,
+      isApproved: true,
     },
     {
       client: user2._id,
@@ -196,30 +208,39 @@ const run = async () => {
       service: { name: 'Окрашивание волос', price: 800 },
       startTime: '15:00',
       endTime: '16:00',
-      isApproved: false,
+      isApproved: true,
+    },
+    {
+      client: user2._id,
+      expert: newExpert3._id,
+      date: date5._id,
+      service: { name: 'Бритье бороды и усов', price: 500 },
+      startTime: '13:45',
+      endTime: '14:45',
+      isApproved: true,
     },
   );
 
   await Message.create(
     {
-      username: 'Jesse Pinkman',
-      text: 'What good is being an outlaw when you have responsibilities?',
-      createdAt: new Date(),
+      username: 'Эмир Марат',
+      text: 'Стрижка была отличная! Мне все понравилос, однако, считаю, что сайт следовало бы доработать!',
+      createdAt: new Date(Date.now() - 86400000),
     },
     {
-      username: 'Jesse Pinkman',
-      text: 'You don’t need a criminal lawyer. You need a criminal lawyer',
-      createdAt: new Date(),
+      username: 'Джон Доу',
+      text: 'Мастер Алла была очень вежливой, я обязательно вернусь и всем советую',
+      createdAt: new Date(Date.now() - 86400000),
     },
     {
-      username: 'Walter White',
-      text: 'Say my name.',
-      createdAt: new Date(),
+      username: 'Нурзада Жакупова',
+      text: 'Ребят, а посоветуйте средство для ухода за волосами после окрашивания? Мастер Алла советовала, но я забыла.',
+      createdAt: new Date(Date.now() - 86400000),
     },
     {
-      username: 'Walter White',
-      text: 'I did it for me. I liked it. I was good at it. And I was really — I was alive.',
-      createdAt: new Date(),
+      username: 'Алла Ефромова',
+      text: 'Я с радостью напомню :) Маска для волос от фирмы эстель!',
+      createdAt: new Date(Date.now() - 86400000),
     },
   );
 

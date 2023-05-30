@@ -1,7 +1,10 @@
 import React, { useEffect } from 'react';
-import { Grid, Typography } from '@mui/material';
+import { Grid, LinearProgress, Typography } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { selectExperts } from '../../../../dispatchers/experts/expertsSlice';
+import {
+  selectExperts,
+  selectExpertsFetching,
+} from '../../../../dispatchers/experts/expertsSlice';
 import {
   fetchExperts,
   fetchExpertsByCategory,
@@ -15,6 +18,7 @@ const Experts = () => {
   const dispatch = useAppDispatch();
   const experts = useAppSelector(selectExperts);
   const categoryName = useAppSelector(selectCategoryName);
+  const loading = useAppSelector(selectExpertsFetching);
 
   useEffect(() => {
     if (id) {
@@ -24,7 +28,9 @@ const Experts = () => {
     }
   }, [dispatch, id]);
 
-  return (
+  return loading ? (
+    <LinearProgress />
+  ) : (
     <>
       <Typography
         textAlign="center"
@@ -38,7 +44,7 @@ const Experts = () => {
           : 'Список всех мастеров'}
       </Typography>
       <Grid container flexWrap="wrap" alignItems="stretch" spacing={2}>
-        {experts.length > 0 &&
+        {experts.length > 0 ? (
           experts.map((expert) => (
             <Grid
               item
@@ -51,7 +57,14 @@ const Experts = () => {
             >
               <ExpertCard expert={expert} />
             </Grid>
-          ))}
+          ))
+        ) : (
+          <Grid item xs={12}>
+            <Typography variant="h4" textAlign="center" color="primary.main">
+              Мастеров в данной категории пока нет :(
+            </Typography>
+          </Grid>
+        )}
       </Grid>
     </>
   );
