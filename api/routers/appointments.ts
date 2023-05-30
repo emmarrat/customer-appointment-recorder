@@ -6,6 +6,7 @@ import auth, { RequestWithUser } from '../middleware/auth';
 import nodemailer from 'nodemailer';
 import { AppointmentFull } from '../types';
 import constants from '../constants';
+import permit from '../middleware/permit';
 
 const appointmentsRouter = express.Router();
 
@@ -180,64 +181,69 @@ appointmentsRouter.get('/', auth, async (req, res, next) => {
   }
 });
 
-appointmentsRouter.patch('/:id', async (req, res, next) => {
-  const { id } = req.params;
-  const { isApproved } = req.body;
+appointmentsRouter.patch(
+  '/:id',
+  auth,
+  permit('admin'),
+  async (req, res, next) => {
+    const { id } = req.params;
+    const { isApproved } = req.body;
 
-  try {
-    const appointment: AppointmentFull | null = await Appointment.findById(id)
-      .populate({
-        path: 'client',
-        select: 'firstName lastName email',
-      })
-      .populate({
-        path: 'expert',
-        select: '_id title',
-        populate: {
-          path: 'user',
-          select: 'firstName lastName',
-        },
-      })
-      .populate({
-        path: 'date',
-        select: 'date',
+    try {
+      const appointment: AppointmentFull | null = await Appointment.findById(id)
+        .populate({
+          path: 'client',
+          select: 'firstName lastName email',
+        })
+        .populate({
+          path: 'expert',
+          select: '_id title',
+          populate: {
+            path: 'user',
+            select: 'firstName lastName',
+          },
+        })
+        .populate({
+          path: 'date',
+          select: 'date',
+        });
+
+      const appointmentToSave = await Appointment.findById(id);
+
+      if (!appointment || !appointmentToSave) {
+        return res.status(404).json({ error: 'Appointment not found' });
+      }
+      appointmentToSave.isApproved = isApproved;
+      await appointmentToSave.save();
+
+      await sendEmail(
+        appointment.client.email,
+        isApproved ? 'Подтверджение записи' : 'Отмена записи',
+        isApproved
+          ? constants.APPOINTMENT_APPROVAL_EMAIL(
+              appointment.client.firstName,
+              appointment.date.date,
+              appointment.startTime,
+              appointment.service.name,
+              appointment.expert.user.firstName,
+            )
+          : constants.APPOINTMENT_REJECTION_EMAIL(
+              appointment.client.firstName,
+              appointment.date.date,
+              appointment.startTime,
+              appointment.service.name,
+              appointment.expert.user.firstName,
+            ),
+      );
+
+      return res.send({
+        message: 'Статус записи успешно изменен!',
+        appointmentToSave,
       });
-
-    const appointmentToSave = await Appointment.findById(id);
-
-    if (!appointment || !appointmentToSave) {
-      return res.status(404).json({ error: 'Appointment not found' });
+    } catch (e) {
+      return next(e);
     }
-    appointmentToSave.isApproved = isApproved;
-    await appointmentToSave.save();
-
-    await sendEmail(
-      appointment.client.email,
-      isApproved ? 'Подтверджение записи' : 'Отмена записи',
-      isApproved
-        ? constants.APPOINTMENT_APPROVAL_EMAIL(
-            appointment.client.firstName,
-            appointment.date.date,
-            appointment.startTime,
-            appointment.service.name,
-            appointment.expert.user.firstName,
-          )
-        : constants.APPOINTMENT_REJECTION_EMAIL(
-            appointment.client.firstName,
-            appointment.date.date,
-            appointment.startTime,
-            appointment.service.name,
-            appointment.expert.user.firstName,
-          ),
-    );
-
-    return res.send({
-      message: 'Статус записи успешно изменен!',
-      appointmentToSave,
-    });
-  } catch (e) {
-    return next(e);
-  }
-});
+  },
+);
 
 export default appointmentsRouter;

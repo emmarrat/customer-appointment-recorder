@@ -33,7 +33,7 @@ const App = () => {
         <AppToolbar />
       </header>
       <main>
-        <Container maxWidth="xl" sx={{ mt: 5 }}>
+        <Container maxWidth="xl" sx={{ my: 5 }}>
           <Routes>
             <Route
               path="/"

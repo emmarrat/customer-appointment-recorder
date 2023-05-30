@@ -68,7 +68,7 @@ const AppointmentTable: React.FC<Props> = ({
                   <TableCell>Процедура</TableCell>
                   <TableCell>Стоимость</TableCell>
                   <TableCell>Статус</TableCell>
-                  <TableCell>Изменить</TableCell>
+                  {role === 'admin' && <TableCell>Изменить</TableCell>}
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -106,34 +106,36 @@ const AppointmentTable: React.FC<Props> = ({
                     >
                       {appointment.isApproved ? 'Подтвержден' : 'Ожидает'}
                     </TableCell>
-                    <TableCell>
-                      {appointment.isApproved ? (
-                        <IconButton
-                          aria-label="DoNotDisturbIcon"
-                          sx={{ cursor: 'pointer' }}
-                          onClick={() =>
-                            changeStatus({
-                              id: appointment._id,
-                              isApproved: false,
-                            })
-                          }
-                        >
-                          <DoNotDisturbIcon color="error" />
-                        </IconButton>
-                      ) : (
-                        <IconButton
-                          onClick={() =>
-                            changeStatus({
-                              id: appointment._id,
-                              isApproved: true,
-                            })
-                          }
-                          sx={{ cursor: 'pointer' }}
-                        >
-                          <CheckCircleOutlineIcon color="success" />
-                        </IconButton>
-                      )}
-                    </TableCell>
+                    {role === 'admin' && (
+                      <TableCell>
+                        {appointment.isApproved ? (
+                          <IconButton
+                            aria-label="DoNotDisturbIcon"
+                            sx={{ cursor: 'pointer' }}
+                            onClick={() =>
+                              changeStatus({
+                                id: appointment._id,
+                                isApproved: false,
+                              })
+                            }
+                          >
+                            <DoNotDisturbIcon color="error" />
+                          </IconButton>
+                        ) : (
+                          <IconButton
+                            onClick={() =>
+                              changeStatus({
+                                id: appointment._id,
+                                isApproved: true,
+                              })
+                            }
+                            sx={{ cursor: 'pointer' }}
+                          >
+                            <CheckCircleOutlineIcon color="success" />
+                          </IconButton>
+                        )}
+                      </TableCell>
+                    )}{' '}
                   </TableRow>
                 ))}
               </TableBody>

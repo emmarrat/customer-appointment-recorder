@@ -10,6 +10,7 @@ import {
 import { ExpertMini } from '../../../../types';
 import { borderRadius } from '../../../../stylesMui';
 import { apiURL } from '../../../../constants';
+import { Link as RouterLink } from 'react-router-dom';
 
 interface Props {
   expert: ExpertMini;
@@ -39,14 +40,19 @@ const ExpertCardBig: React.FC<Props> = ({ expert }) => {
           </Typography>
         </CardContent>
         <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
-          <Button variant="text" sx={{ borderRadius }}>
+          <Button
+            variant="text"
+            component={RouterLink}
+            to={`/experts/${expert._id}`}
+            sx={{ borderRadius }}
+          >
             Открыть профиль
           </Button>
         </Box>
       </Box>
       <CardMedia
         component="img"
-        sx={{ width: 250, display: { xs: 'none', sm: 'block' } }}
+        sx={{ width: 200, display: { xs: 'none', sm: 'unset' } }}
         image={apiURL + '/' + expert.photo}
         alt={`${expert.title} ${expert.user.firstName}`}
       />

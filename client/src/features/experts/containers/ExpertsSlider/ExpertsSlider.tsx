@@ -40,7 +40,10 @@ const ExpertsSlider = () => {
       <Grid item container justifyContent="center" xs={12} width="100%">
         <Carousel
           animation="slide"
-          duration={1000}
+          swipe={true}
+          duration={2000}
+          indicators={true}
+          navButtonsAlwaysVisible={true}
           sx={{
             width: '100%',
           }}
