@@ -86,3 +86,9 @@ export interface IMessageWithoutDate {
 export interface IMessage extends IMessageWithoutDate {
   createdAt: Date;
 }
+
+export interface IHours {
+  startTime: string;
+  endTime: string;
+  status: boolean;
+}

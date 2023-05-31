@@ -35,6 +35,8 @@ import { createAppointment } from '../../../../dispatchers/appointemtns/appointm
 import AppointmentMessage from '../../../appointments/components/AppointmentMessage/AppointmentMessage';
 import { styles } from './OneExpertStyles';
 import { selectUser } from '../../../../dispatchers/users/usersSlice';
+import LoadingButton from '@mui/lab/LoadingButton';
+import { selectAppointmentCreating } from '../../../../dispatchers/appointemtns/appointmentsSlice';
 
 const OneExpert = () => {
   const { id } = useParams() as { id: string };
@@ -43,6 +45,7 @@ const OneExpert = () => {
   const workingDates = useAppSelector(selectDatetimes);
   const loading = useAppSelector(selectExpertOneFetching);
   const user = useAppSelector(selectUser);
+  const appointmentLoading = useAppSelector(selectAppointmentCreating);
   const navigate = useNavigate();
   const [selectedServices, setSelectedServices] = useState<ServicesFull | null>(
     null,
@@ -283,9 +286,14 @@ const OneExpert = () => {
           </Box>
         </Box>
         {selectedDate && selectedServices && selectedTime && (
-          <Button fullWidth variant="outlined" onClick={submitAppointment}>
+          <LoadingButton
+            loading={appointmentLoading}
+            fullWidth
+            variant="outlined"
+            onClick={submitAppointment}
+          >
             Подтвердить запись
-          </Button>
+          </LoadingButton>
         )}
       </MyModal>
       {selectedDate && selectedTime && (

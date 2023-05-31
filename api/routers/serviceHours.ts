@@ -4,6 +4,7 @@ import permit from '../middleware/permit';
 import Expert from '../models/Expert';
 import mongoose from 'mongoose';
 import ServiceHour from '../models/ServiceHour';
+import { IHours } from '../types';
 
 const serviceHoursRouter = express.Router();
 
@@ -79,6 +80,20 @@ serviceHoursRouter.get('/expert/:id', async (req, res, next) => {
   }
 });
 
+serviceHoursRouter.get('/:id', async (req, res, next) => {
+  try {
+    const serviceHours = await ServiceHour.findById(req.params.id).exec();
+
+    if (!serviceHours) {
+      return res.status(404).send({ error: 'Рабочий график не найден!' });
+    }
+
+    res.status(200).send(serviceHours);
+  } catch (e) {
+    return next(e);
+  }
+});
+
 serviceHoursRouter.get('/by-user/:id', async (req, res, next) => {
   try {
     const expert = await Expert.findOne({ user: req.params.id }).populate(
@@ -101,7 +116,7 @@ serviceHoursRouter.get('/by-user/:id', async (req, res, next) => {
 });
 
 serviceHoursRouter.patch(
-  '/:id/hours',
+  '/hours/:id',
   auth,
   permit('expert'),
 
@@ -114,17 +129,36 @@ serviceHoursRouter.patch(
 
       const existingExpert = await Expert.findById(serviceHour.expert);
       if (!existingExpert) {
-        return res.status(500).send({ error: 'Expert not found!' });
+        return res.status(404).send({ error: 'Expert not found!' });
       }
 
       const user = (req as RequestWithUser).user;
       if (user._id.toString() !== existingExpert.user.toString()) {
         return res
-          .status(500)
+          .status(403)
           .send({ error: 'This user do not have enough access!' });
       }
 
-      serviceHour.hours = req.body.hours;
+      const hoursArray: IHours[] = req.body.hours;
+
+      const sortByStartTime = () => {
+        hoursArray.sort((a, b) => {
+          const startTimeA = a.startTime;
+          const startTimeB = b.startTime;
+
+          if (startTimeA < startTimeB) {
+            return -1;
+          } else if (startTimeA > startTimeB) {
+            return 1;
+          } else {
+            return 0;
+          }
+        });
+
+        return hoursArray;
+      };
+
+      serviceHour.hours = sortByStartTime();
       const savedServiceHour = await serviceHour.save();
 
       res.status(200).send({

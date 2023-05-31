@@ -6,13 +6,13 @@ import Register from './features/users/containers/Register';
 import Login from './features/users/containers/Login';
 import { useAppSelector } from './app/hooks';
 import { selectUser } from './dispatchers/users/usersSlice';
-import ExpertAdmin from './features/experts/components/ExpertAdmin/ExpertAdmin';
+import ExpertAdmin from './features/experts/containers/ExpertAdmin/ExpertAdmin';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import NewExpert from './features/experts/containers/NewExpert/NewExpert';
 import EditExpert from './features/experts/containers/EditExpert/EditExpert';
 import Experts from './features/experts/containers/Experts/Experts';
 import OneExpert from './features/experts/containers/OneExpert/OneExpert';
-import ServiceHourAdmin from './features/serviceHours/components/ServiceHourAdmin/ServiceHourAdmin';
+import ServiceHourAdmin from './features/serviceHours/containers/ServiceHourAdmin/ServiceHourAdmin';
 import './styles.css';
 import Categories from './features/categories/containers/Categories/Categories';
 import AppointmentPanel from './features/appointments/containers/AppointmentPanel/AppointmentPanel';
@@ -23,6 +23,7 @@ import ChatPreview from './features/chats/containers/ChatPreview';
 import WelcomeBlock from './components/StaticComponents/WelcomeBlock';
 import ExpertsSlider from './features/experts/containers/ExpertsSlider/ExpertsSlider';
 import VerifyEmail from './features/users/containers/VerifyEmail';
+import UpdateServiceHours from './features/serviceHours/containers/UpdateServiceHours/UpdateServiceHours';
 
 const App = () => {
   const user = useAppSelector(selectUser);
@@ -113,6 +114,14 @@ const App = () => {
               element={
                 <ProtectedRoute isAllowed={user && user.role === 'expert'}>
                   <ServiceHourAdmin />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/expert/service-hours/update/:id"
+              element={
+                <ProtectedRoute isAllowed={user && user.role === 'expert'}>
+                  <UpdateServiceHours />
                 </ProtectedRoute>
               }
             />

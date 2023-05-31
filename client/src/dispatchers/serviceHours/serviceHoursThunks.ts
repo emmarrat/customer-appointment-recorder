@@ -1,5 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { GlobalError, ServiceHourMutation, ServiceHours } from '../../types';
+import {
+  GlobalError,
+  ServiceHourMutation,
+  ServiceHours,
+  UpdateHours,
+} from '../../types';
 import axiosApi from '../../axiosApi';
 import { isAxiosError } from 'axios';
 
@@ -7,15 +12,15 @@ export const fetchServiceHoursForExpert = createAsyncThunk<
   ServiceHours[],
   string
 >('serviceHours/fetchServiceHoursForExpert', async (expertId) => {
-  const response = await axiosApi.get(`/service-hours/expert/${expertId}`);
-  return response.data;
+  const { data } = await axiosApi.get(`/service-hours/expert/${expertId}`);
+  return data;
 });
 
 export const fetchServiceHoursByUser = createAsyncThunk<ServiceHours[], string>(
   'serviceHours/fetchServiceHoursByUser',
   async (id) => {
-    const response = await axiosApi.get(`/service-hours/by-user/${id}`);
-    return response.data;
+    const { data } = await axiosApi.get(`/service-hours/by-user/${id}`);
+    return data;
   },
 );
 
@@ -23,20 +28,44 @@ export const createServiceHour = createAsyncThunk<
   void,
   ServiceHourMutation,
   { rejectValue: GlobalError }
->('serviceHours/createServiceHour', async (data, { rejectWithValue }) => {
+>('serviceHours/createServiceHour', async (body, { rejectWithValue }) => {
   try {
-    const response = await axiosApi.post(`/service-hours/`, data);
-    return response.data;
+    const { data } = await axiosApi.post(`/service-hours/`, body);
+    return data;
   } catch (error) {
-    console.log(error);
-    if (
-      isAxiosError(error) &&
-      error.response &&
-      error.response.status === 400
-    ) {
-      console.log(error.response.data);
+    if (isAxiosError(error) && error.response) {
       return rejectWithValue(error.response.data as GlobalError);
     }
     throw error;
   }
 });
+
+export const fetchOneServiceHours = createAsyncThunk<ServiceHours, string>(
+  'serviceHours/fetchOneServiceHours',
+  async (id) => {
+    const { data } = await axiosApi.get(`/service-hours/${id}`);
+    return data;
+  },
+);
+
+export const updateServiceHours = createAsyncThunk<
+  void,
+  UpdateHours,
+  { rejectValue: GlobalError }
+>(
+  'serviceHours/updateServiceHours',
+  async ({ id, hours }, { rejectWithValue }) => {
+    try {
+      await axiosApi.patch(`/service-hours/hours/${id}`, { hours });
+    } catch (error) {
+      if (
+        isAxiosError(error) &&
+        error.response &&
+        error.response.status === 400
+      ) {
+        return rejectWithValue(error.response.data as GlobalError);
+      }
+      throw error;
+    }
+  },
+);

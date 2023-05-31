@@ -3,6 +3,7 @@ export const boxShadow = '12px 12px 24px #b2b8c9, -12px -12px 24px #f0f8ff';
 export const gradient =
   'linear-gradient(22deg, rgba(133,83,116,1) 0%, rgba(215,123,179,1) 33%, rgba(255,255,255,0) 100%)';
 export const borderRadius = '30px';
+
 export const block = {
   block: {
     background: `${gradient}, url(${salon})`,

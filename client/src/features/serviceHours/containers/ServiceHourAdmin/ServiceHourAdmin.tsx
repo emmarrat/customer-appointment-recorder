@@ -13,8 +13,10 @@ import { Button, CircularProgress, Grid, Typography } from '@mui/material';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
 import MyModal from '../../../../components/UI/MyModal/MyModal';
-import ServicesHoursForm from '../ServicesHoursForm/ServicesHoursForm';
+import ServicesHoursForm from '../../components/ServicesHoursForm/ServicesHoursForm';
 import { ServiceHourMutation } from '../../../../types';
+import { borderRadius, boxShadow } from '../../../../stylesMui';
+import { Link as RouterLink } from 'react-router-dom';
 
 const ServiceHourAdmin = () => {
   const user = useAppSelector(selectUser);
@@ -69,9 +71,9 @@ const ServiceHourAdmin = () => {
               justifyContent="space-between"
               mb={3}
               sx={{
-                borderRadius: '20px',
+                borderRadius,
                 width: '65%',
-                boxShadow: '2px 12px 25px #d4d4d4, -12px -12px 25px #ffffff',
+                boxShadow,
                 padding: '15px',
               }}
               key={date._id}
@@ -90,6 +92,12 @@ const ServiceHourAdmin = () => {
                 <Typography>
                   {dayjs(date?.date).locale('ru').format('DD MMMM YYYY')} г.
                 </Typography>
+                <Button
+                  component={RouterLink}
+                  to={`/expert/service-hours/update/${date._id}`}
+                >
+                  Изменить рабочий график
+                </Button>
               </Grid>
               <Grid
                 item

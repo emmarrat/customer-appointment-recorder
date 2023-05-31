@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 import { ServiceHourMutation } from '../../../../types';
 import { Alert, Avatar, Box, Container, Grid, TextField } from '@mui/material';
 import { useAppSelector } from '../../../../app/hooks';
-import { selectDatetimeCreatingError } from '../../../../dispatchers/serviceHours/serviceHoursSlice';
+import {
+  selectDatetimeCreating,
+  selectDatetimeCreatingError,
+} from '../../../../dispatchers/serviceHours/serviceHoursSlice';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import LoadingButton from '@mui/lab/LoadingButton';
 
@@ -12,6 +15,7 @@ interface Props {
 }
 
 const ServicesHoursForm: React.FC<Props> = ({ onSubmit, expert }) => {
+  const loading = useAppSelector(selectDatetimeCreating);
   const error = useAppSelector(selectDatetimeCreatingError);
   const [state, setState] = useState<ServiceHourMutation>({
     expert: expert,
@@ -69,7 +73,7 @@ const ServicesHoursForm: React.FC<Props> = ({ onSubmit, expert }) => {
             </Grid>
           </Grid>
           <LoadingButton
-            loading={false}
+            loading={loading}
             variant="contained"
             type="submit"
             sx={{ mt: 3, mb: 2 }}
