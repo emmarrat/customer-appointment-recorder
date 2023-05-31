@@ -1,8 +1,6 @@
 import React from 'react';
-import { Button, Grid, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import { block } from '../../stylesMui';
-import { Link as RouterLink } from 'react-router-dom';
-import theme from '../../theme';
 import { COMPANY_TITLE } from '../../constants';
 
 const WelcomeBlock = () => {
@@ -26,21 +24,6 @@ const WelcomeBlock = () => {
           <br />
           Мы предоставляем широкий и качественный спектр услуг
         </Typography>
-        <Grid item container justifyContent="center" my={3}>
-          <Button
-            component={RouterLink}
-            to={`/about`}
-            sx={{
-              display: 'block',
-              color: theme.palette.info.main,
-              borderColor: theme.palette.info.main,
-              fontSize: block.btnFontSize,
-            }}
-            variant="outlined"
-          >
-            Узнать больше
-          </Button>
-        </Grid>
       </Grid>
     </Grid>
   );
