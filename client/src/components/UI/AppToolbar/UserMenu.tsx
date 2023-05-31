@@ -47,7 +47,7 @@ const UserMenu: React.FC<Props> = ({ user }) => {
         onClose={handleClose}
         sx={{ width: '100%' }}
       >
-        <MenuItem onClick={handleLogout}>Logout</MenuItem>
+        <MenuItem onClick={handleLogout}>Выйти</MenuItem>
         {user.role === 'admin' && (
           <MenuItem component={RouterLink} to="/admin/experts">
             Редактировать мастеров

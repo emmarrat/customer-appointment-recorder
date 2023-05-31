@@ -11,12 +11,15 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  Tooltip,
   Typography,
 } from '@mui/material';
 import { Appointment, UpdateAppointmentParams } from '../../../../types';
 import dayjs from 'dayjs';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import DoNotDisturbIcon from '@mui/icons-material/DoNotDisturb';
+import RemoveIcon from '@mui/icons-material/Remove';
+import ScheduleSendIcon from '@mui/icons-material/ScheduleSend';
 
 interface Props {
   appointments: Appointment[];
@@ -27,6 +30,7 @@ interface Props {
   setLimit: (number: number) => void;
   setPage: (number: number) => void;
   changeStatus: (item: UpdateAppointmentParams) => void;
+  remind: (id: string) => void;
 }
 
 const AppointmentTable: React.FC<Props> = ({
@@ -38,6 +42,7 @@ const AppointmentTable: React.FC<Props> = ({
   setPage,
   currentPage,
   changeStatus,
+  remind,
 }) => {
   return (
     <>
@@ -69,6 +74,7 @@ const AppointmentTable: React.FC<Props> = ({
                   <TableCell>Стоимость</TableCell>
                   <TableCell>Статус</TableCell>
                   {role === 'admin' && <TableCell>Изменить</TableCell>}
+                  {role === 'admin' && <TableCell>Напомнить</TableCell>}
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -107,35 +113,57 @@ const AppointmentTable: React.FC<Props> = ({
                       {appointment.isApproved ? 'Подтвержден' : 'Ожидает'}
                     </TableCell>
                     {role === 'admin' && (
-                      <TableCell>
+                      <TableCell align="center">
                         {appointment.isApproved ? (
-                          <IconButton
-                            aria-label="DoNotDisturbIcon"
-                            sx={{ cursor: 'pointer' }}
-                            onClick={() =>
-                              changeStatus({
-                                id: appointment._id,
-                                isApproved: false,
-                              })
-                            }
-                          >
-                            <DoNotDisturbIcon color="error" />
-                          </IconButton>
+                          <Tooltip title="Отменить">
+                            <IconButton
+                              aria-label="DoNotDisturbIcon"
+                              sx={{ cursor: 'pointer' }}
+                              onClick={() =>
+                                changeStatus({
+                                  id: appointment._id,
+                                  isApproved: false,
+                                })
+                              }
+                            >
+                              <DoNotDisturbIcon color="error" />
+                            </IconButton>
+                          </Tooltip>
                         ) : (
-                          <IconButton
-                            onClick={() =>
-                              changeStatus({
-                                id: appointment._id,
-                                isApproved: true,
-                              })
-                            }
-                            sx={{ cursor: 'pointer' }}
-                          >
-                            <CheckCircleOutlineIcon color="success" />
-                          </IconButton>
+                          <Tooltip title="Подтвердить">
+                            <IconButton
+                              onClick={() =>
+                                changeStatus({
+                                  id: appointment._id,
+                                  isApproved: true,
+                                })
+                              }
+                              sx={{ cursor: 'pointer' }}
+                            >
+                              <CheckCircleOutlineIcon color="success" />
+                            </IconButton>
+                          </Tooltip>
                         )}
                       </TableCell>
-                    )}{' '}
+                    )}
+                    {role === 'admin' && appointment.isApproved ? (
+                      <TableCell align="center">
+                        <Tooltip title="Отправить напоминание">
+                          <IconButton
+                            sx={{ cursor: 'pointer' }}
+                            onClick={() => remind(appointment._id)}
+                          >
+                            <ScheduleSendIcon color="primary" />
+                          </IconButton>
+                        </Tooltip>
+                      </TableCell>
+                    ) : (
+                      <TableCell align="center">
+                        <Tooltip title="Напоминание можно отправить после подтверждение записи">
+                          <RemoveIcon />
+                        </Tooltip>
+                      </TableCell>
+                    )}
                   </TableRow>
                 ))}
               </TableBody>

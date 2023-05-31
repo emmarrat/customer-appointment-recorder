@@ -3,6 +3,7 @@ import {
   ApiResponse,
   Appointment,
   AppointmentMutation,
+  GlobalError,
   UpdateAppointmentParams,
   ValidationError,
 } from '../../types';
@@ -70,4 +71,19 @@ export const updateAppointment = createAsyncThunk<
   UpdateAppointmentParams
 >('appointments/updateStatus', async ({ id, isApproved }) => {
   await axiosApi.patch(`/appointments/${id}`, { isApproved });
+});
+
+export const remindAboutAppointment = createAsyncThunk<
+  void,
+  string,
+  { rejectValue: GlobalError }
+>('appointments/remind', async (id, { rejectWithValue }) => {
+  try {
+    await axiosApi.post(`/appointments/remind/${id}`);
+  } catch (e) {
+    if (isAxiosError(e) && e.response && e.response.status === 400) {
+      return rejectWithValue(e.response.data as GlobalError);
+    }
+    throw e;
+  }
 });

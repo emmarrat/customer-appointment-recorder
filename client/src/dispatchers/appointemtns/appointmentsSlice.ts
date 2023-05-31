@@ -1,8 +1,14 @@
-import { Appointment, IPagination, ValidationError } from '../../types';
+import {
+  Appointment,
+  GlobalError,
+  IPagination,
+  ValidationError,
+} from '../../types';
 import { createSlice } from '@reduxjs/toolkit';
 import {
   createAppointment,
   fetchAppointments,
+  remindAboutAppointment,
   updateAppointment,
 } from './appointmentsThunk';
 import { RootState } from '../../app/store';
@@ -17,6 +23,8 @@ interface AppointmentsState {
   appointmentUpdating: string | false;
   currentPage: number;
   totalCount: number;
+  appointmentsReminderLoading: string | false;
+  appointmentReminderError: GlobalError | null;
 }
 
 const initialState: AppointmentsState = {
@@ -28,6 +36,8 @@ const initialState: AppointmentsState = {
   appointmentUpdating: false,
   currentPage: 1,
   totalCount: 1,
+  appointmentsReminderLoading: false,
+  appointmentReminderError: null,
 };
 
 export const appointmentsSlice = createSlice({
@@ -77,6 +87,26 @@ export const appointmentsSlice = createSlice({
       state.appointmentUpdating = false;
       toast.error('Произошла ошибка при обновлении статуса записи!');
     });
+    builder.addCase(
+      remindAboutAppointment.pending,
+      (state, { meta: { arg } }) => {
+        state.appointmentsReminderLoading = arg;
+      },
+    );
+    builder.addCase(remindAboutAppointment.fulfilled, (state) => {
+      state.appointmentsReminderLoading = false;
+      toast.info('Напоминание отправлено!');
+    });
+    builder.addCase(
+      remindAboutAppointment.rejected,
+      (state, { payload: error }) => {
+        state.appointmentUpdating = false;
+        state.appointmentReminderError = error || null;
+        if (error) {
+          toast.error(error.error);
+        }
+      },
+    );
   },
 });
 

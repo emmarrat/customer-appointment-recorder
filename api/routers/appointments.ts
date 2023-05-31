@@ -227,4 +227,57 @@ appointmentsRouter.patch(
   },
 );
 
+appointmentsRouter.post(
+  '/remind/:id',
+  auth,
+  permit('admin'),
+  async (req, res, next) => {
+    const { id } = req.params;
+
+    try {
+      const appointment: AppointmentFull | null = await Appointment.findById(id)
+        .populate({
+          path: 'client',
+          select: 'firstName lastName email',
+        })
+        .populate({
+          path: 'expert',
+          select: '_id title',
+          populate: {
+            path: 'user',
+            select: 'firstName lastName',
+          },
+        })
+        .populate({
+          path: 'date',
+          select: 'date',
+        });
+
+      if (!appointment) {
+        return res.status(400).json({ error: 'Appointment not found!' });
+      }
+      if (!appointment.isApproved) {
+        return res.status(400).json({ error: 'Appointment is not approved!' });
+      }
+
+      await constants.SEND_EMAIL(
+        appointment.client.email,
+        'Напоминание о записи!',
+        constants.APPOINTMENT_REMINDER_EMAIL(
+          appointment.client.firstName,
+          appointment.date.date,
+          appointment.startTime,
+          appointment.service.name,
+          appointment.expert.user.firstName,
+        ),
+      );
+      return res.send({
+        message: 'Напоминание отправлено!',
+      });
+    } catch (e) {
+      return next(e);
+    }
+  },
+);
+
 export default appointmentsRouter;

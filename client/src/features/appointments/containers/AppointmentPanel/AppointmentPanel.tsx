@@ -8,6 +8,7 @@ import {
 import { selectUser } from '../../../../dispatchers/users/usersSlice';
 import {
   fetchAppointments,
+  remindAboutAppointment,
   updateAppointment,
 } from '../../../../dispatchers/appointemtns/appointmentsThunk';
 import { fetchExpertByUser } from '../../../../dispatchers/experts/expertsThunks';
@@ -59,6 +60,9 @@ const AppointmentPanel: React.FC<Props> = ({ who }) => {
       dispatch(fetchAppointments({ page, limit }));
     }
   };
+  const remindToUser = async (id: string) => {
+    await dispatch(remindAboutAppointment(id));
+  };
   return (
     <AppointmentTable
       appointments={appointments}
@@ -69,6 +73,7 @@ const AppointmentPanel: React.FC<Props> = ({ who }) => {
       setPage={setPage}
       currentPage={currentPage}
       changeStatus={changeStatus}
+      remind={remindToUser}
     />
   );
 };
