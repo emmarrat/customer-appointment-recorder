@@ -131,7 +131,7 @@ const ServiceHourAdmin = () => {
             </Grid>
           ))}
       </Grid>
-      <MyModal open={open} handleClose={closeModal} isFullWidth>
+      <MyModal open={open} handleClose={closeModal}>
         <ServicesHoursForm onSubmit={onSubmitForm} expert={expert} />
       </MyModal>
     </>

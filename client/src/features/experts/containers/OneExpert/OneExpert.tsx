@@ -7,10 +7,6 @@ import {
   CircularProgress,
   Divider,
   Grid,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
   Typography,
 } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -134,7 +130,11 @@ const OneExpert = () => {
               sx={{ width: '100%' }}
             >
               <Button onClick={goBack}>Назад</Button>
-              <Grid sx={styles.columnContainer} mb={4}>
+              <Grid
+                sx={styles.columnContainer}
+                padding={{ xs: 0, sm: '0 20px', md: '0 50px' }}
+                mb={4}
+              >
                 <Grid sx={styles.container} mt={4}>
                   <Grid item>
                     <Typography variant="h6" mb={2}>
@@ -160,11 +160,55 @@ const OneExpert = () => {
                     </Typography>
                   )}
                   <Typography variant="h6">Выберите услугу:</Typography>
-                  <List>
+                  <Grid item container gap={2} mt={3}>
                     {expert.services.map((service) => (
-                      <ListItem
+                      <Grid
                         key={service._id}
-                        secondaryAction={
+                        item
+                        container
+                        justifyContent="space-between"
+                        alignItems="center"
+                        gap={1}
+                      >
+                        <Grid
+                          item
+                          container
+                          alignItems="center"
+                          gap={1}
+                          xs={12}
+                          md={8}
+                        >
+                          <Grid
+                            item
+                            sm={2}
+                            md={1}
+                            display={{ xs: 'none', sm: 'block' }}
+                          >
+                            <Avatar sx={{ bgcolor: 'primary.light' }}>
+                              <LoyaltyIcon />
+                            </Avatar>
+                          </Grid>
+                          <Grid
+                            item
+                            container
+                            justifyContent="space-between"
+                            xs={12}
+                            sm={8}
+                            md={10}
+                          >
+                            <Typography variant="body1">
+                              {service.name}
+                            </Typography>
+                            <Typography>{`${service.price} сом`}</Typography>
+                          </Grid>
+                        </Grid>
+                        <Grid
+                          item
+                          container
+                          xs={12}
+                          md={3}
+                          justifyContent={{ xs: 'center', md: 'flex-end' }}
+                        >
                           <Button
                             className="btn"
                             sx={styles.serviceBtn}
@@ -174,20 +218,10 @@ const OneExpert = () => {
                             Выбрать
                             <LocalMallRoundedIcon sx={styles.serviceIcon} />
                           </Button>
-                        }
-                      >
-                        <ListItemAvatar>
-                          <Avatar sx={{ bgcolor: 'primary.light' }}>
-                            <LoyaltyIcon />
-                          </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText
-                          primary={service.name}
-                          secondary={service.price + ' cом'}
-                        />
-                      </ListItem>
+                        </Grid>
+                      </Grid>
                     ))}
-                  </List>
+                  </Grid>
                 </Grid>
                 <Grid item width="100%">
                   <Divider sx={styles.divider} />
@@ -205,7 +239,7 @@ const OneExpert = () => {
           )
         )}
       </Grid>
-      <MyModal open={open} handleClose={closeAll} isFullWidth>
+      <MyModal open={open} handleClose={closeAll}>
         <Typography textAlign="center" variant="h6" my={1}>
           Выбранная процедура:{' '}
           <Typography variant="h6" component="span" color="primary">
@@ -220,6 +254,7 @@ const OneExpert = () => {
             <DateCalendar
               value={value}
               onChange={(newDate) => onDateChange(newDate)}
+              sx={styles.calendar}
             />
           </Box>
           <Box>
