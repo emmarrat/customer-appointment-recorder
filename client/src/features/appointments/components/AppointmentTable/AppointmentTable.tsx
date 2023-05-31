@@ -20,6 +20,10 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import DoNotDisturbIcon from '@mui/icons-material/DoNotDisturb';
 import RemoveIcon from '@mui/icons-material/Remove';
 import ScheduleSendIcon from '@mui/icons-material/ScheduleSend';
+import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
+import * as locales from '@mui/material/locale';
+
+type SupportedLocales = keyof typeof locales;
 
 interface Props {
   appointments: Appointment[];
@@ -44,6 +48,14 @@ const AppointmentTable: React.FC<Props> = ({
   changeStatus,
   remind,
 }) => {
+  const [locale, setLocale] = React.useState<SupportedLocales>('ruRU');
+
+  const theme = useTheme();
+
+  const themeWithLocale = React.useMemo(
+    () => createTheme(theme, locales[locale]),
+    [locale, theme],
+  );
   return (
     <>
       <Grid container spacing={2} direction="column">
@@ -169,16 +181,18 @@ const AppointmentTable: React.FC<Props> = ({
               </TableBody>
               <TableFooter>
                 <TableRow>
-                  <TablePagination
-                    rowsPerPageOptions={[5, 15, 50]}
-                    count={totalCount}
-                    rowsPerPage={limit}
-                    page={currentPage - 1}
-                    onPageChange={(_, newPage) => setPage(newPage + 1)}
-                    onRowsPerPageChange={(e) =>
-                      setLimit(parseInt(e.target.value))
-                    }
-                  />
+                  <ThemeProvider theme={themeWithLocale}>
+                    <TablePagination
+                      rowsPerPageOptions={[5, 15, 50]}
+                      count={totalCount}
+                      rowsPerPage={limit}
+                      page={currentPage - 1}
+                      onPageChange={(_, newPage) => setPage(newPage + 1)}
+                      onRowsPerPageChange={(e) =>
+                        setLimit(parseInt(e.target.value))
+                      }
+                    />
+                  </ThemeProvider>
                 </TableRow>
               </TableFooter>
             </Table>

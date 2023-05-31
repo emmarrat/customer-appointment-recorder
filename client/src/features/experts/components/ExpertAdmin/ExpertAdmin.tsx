@@ -30,6 +30,11 @@ import {
   fetchExperts,
 } from '../../../../dispatchers/experts/expertsThunks';
 
+import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
+import * as locales from '@mui/material/locale';
+
+type SupportedLocales = keyof typeof locales;
+
 const ExpertAdmin = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -39,6 +44,15 @@ const ExpertAdmin = () => {
   const totalCount = useAppSelector(selectExpertsCount);
   const [limit, setLimit] = React.useState(5);
   const [page, setPage] = React.useState(1);
+
+  const [locale, setLocale] = React.useState<SupportedLocales>('ruRU');
+
+  const theme = useTheme();
+
+  const themeWithLocale = React.useMemo(
+    () => createTheme(theme, locales[locale]),
+    [locale, theme],
+  );
 
   useEffect(() => {
     dispatch(fetchExperts({ page, limit }));
@@ -117,16 +131,18 @@ const ExpertAdmin = () => {
               </TableBody>
               <TableFooter>
                 <TableRow>
-                  <TablePagination
-                    rowsPerPageOptions={[5, 15, 50]}
-                    count={totalCount}
-                    rowsPerPage={limit}
-                    page={currentPage - 1}
-                    onPageChange={(_, newPage) => setPage(newPage + 1)}
-                    onRowsPerPageChange={(e) =>
-                      setLimit(parseInt(e.target.value))
-                    }
-                  />
+                  <ThemeProvider theme={themeWithLocale}>
+                    <TablePagination
+                      rowsPerPageOptions={[5, 15, 50]}
+                      count={totalCount}
+                      rowsPerPage={limit}
+                      page={currentPage - 1}
+                      onPageChange={(_, newPage) => setPage(newPage + 1)}
+                      onRowsPerPageChange={(e) =>
+                        setLimit(parseInt(e.target.value))
+                      }
+                    />
+                  </ThemeProvider>
                 </TableRow>
               </TableFooter>
             </Table>
