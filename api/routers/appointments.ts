@@ -3,34 +3,11 @@ import ServiceHour from '../models/ServiceHour';
 import mongoose from 'mongoose';
 import Appointment from '../models/Appointment';
 import auth, { RequestWithUser } from '../middleware/auth';
-import nodemailer from 'nodemailer';
 import { AppointmentFull } from '../types';
 import constants from '../constants';
 import permit from '../middleware/permit';
 
 const appointmentsRouter = express.Router();
-
-const sendEmail = async (email: string, subject: string, html: string) => {
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: true,
-    auth: {
-      user: process.env.VERIFY_EMAIL_USER,
-      pass: process.env.VERIFY_EMAIL_PASS,
-    },
-  });
-
-  const mailOptions = {
-    from: `"Strategia School" <do-not-reply@strategia.school>`,
-    to: email,
-    subject: subject,
-    html: html,
-  };
-
-  await transporter.sendMail(mailOptions);
-};
 
 appointmentsRouter.post('/', auth, async (req, res, next) => {
   try {
@@ -220,7 +197,7 @@ appointmentsRouter.patch(
         { $set: { 'hours.$.status': isApproved } },
       );
 
-      await sendEmail(
+      await constants.SEND_EMAIL(
         appointment.client.email,
         isApproved ? 'Подтверджение записи' : 'Отмена записи',
         isApproved

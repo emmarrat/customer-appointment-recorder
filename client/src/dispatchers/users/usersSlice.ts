@@ -7,6 +7,7 @@ import {
   googleLogin,
   login,
   register,
+  verifyEmail,
 } from './usersThunks';
 import { toast } from 'react-toastify';
 
@@ -20,6 +21,7 @@ interface UsersState {
   loginError: GlobalError | null;
   fetchLoading: boolean;
   fetchOneUserLoading: boolean;
+  verifyEmailLoading: boolean;
 }
 
 const initialState: UsersState = {
@@ -32,6 +34,7 @@ const initialState: UsersState = {
   loginError: null,
   fetchLoading: false,
   fetchOneUserLoading: false,
+  verifyEmailLoading: false,
 };
 
 export const usersSlice = createSlice({
@@ -49,8 +52,9 @@ export const usersSlice = createSlice({
     });
     builder.addCase(register.fulfilled, (state, { payload: user }) => {
       state.registerLoading = false;
-      state.user = user;
-      toast.success(`${user.firstName}, регистрация прошла успешно!`);
+      toast.success(
+        `${user.firstName}, регистрация прошла успешно! Теперь подтвердите email!`,
+      );
     });
     builder.addCase(register.rejected, (state, { payload: error }) => {
       state.registerLoading = false;
@@ -112,6 +116,18 @@ export const usersSlice = createSlice({
     builder.addCase(fetchOneBasicUser.rejected, (state) => {
       state.fetchOneUserLoading = false;
     });
+
+    builder.addCase(verifyEmail.pending, (state) => {
+      state.verifyEmailLoading = true;
+    });
+    builder.addCase(verifyEmail.fulfilled, (state, { payload: user }) => {
+      state.verifyEmailLoading = false;
+      state.user = user;
+      toast.success(`${user.firstName}, ваш email успешно подтвержден!`);
+    });
+    builder.addCase(verifyEmail.rejected, (state) => {
+      state.verifyEmailLoading = false;
+    });
   },
 });
 
@@ -130,3 +146,5 @@ export const selectLoginLoading = (state: RootState) =>
 export const selectLoginError = (state: RootState) => state.users.loginError;
 export const selectFetchingOneUser = (state: RootState) =>
   state.users.fetchOneUserLoading;
+export const selectVerifyEmailLoading = (state: RootState) =>
+  state.users.verifyEmailLoading;

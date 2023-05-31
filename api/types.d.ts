@@ -11,6 +11,9 @@ export interface IUser {
   role: string;
   googleId?: string;
   avatar: string | null;
+  resetPasswordToken: string | null;
+  verifyEmailToken: string | null;
+  verified: boolean;
 }
 
 export interface IUserFull extends IUser {

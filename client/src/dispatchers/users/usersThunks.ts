@@ -87,15 +87,26 @@ export const googleLogin = createAsyncThunk<
 export const fetchBasicUsers = createAsyncThunk<User[]>(
   'users/fetchAllBasic',
   async () => {
-    const response = await axiosApi.get<User[]>('/users/basics');
-    return response.data;
+    const { data } = await axiosApi.get<User[]>('/users/basics');
+    return data;
   },
 );
 
 export const fetchOneBasicUser = createAsyncThunk<User, string>(
   'users/fetchOneBasicUser',
   async (id) => {
-    const response = await axiosApi.get<User>('/users/basic/' + id);
-    return response.data;
+    const { data } = await axiosApi.get<User>('/users/basic/' + id);
+    return data;
+  },
+);
+
+export const verifyEmail = createAsyncThunk<User, string>(
+  'users/verifyEmail',
+  async (token) => {
+    const { data } = await axiosApi.post<RegisterResponse>(
+      `/users/verify-email/${token}`,
+    );
+
+    return data.user;
   },
 );

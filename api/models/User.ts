@@ -100,6 +100,18 @@ const UserSchema = new Schema<IUser, UserModel, IUserMethods>(
     },
     avatar: String,
     googleId: String,
+    verifyEmailToken: {
+      type: String,
+      default: null,
+    },
+    verified: {
+      type: Boolean,
+      default: false,
+    },
+    resetPasswordToken: {
+      type: String,
+      default: null,
+    },
   },
   { timestamps: true },
 );

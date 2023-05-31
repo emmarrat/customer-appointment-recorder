@@ -22,6 +22,7 @@ import Chat from './features/chats/containers/Chat';
 import ChatPreview from './features/chats/containers/ChatPreview';
 import WelcomeBlock from './components/StaticComponents/WelcomeBlock';
 import ExpertsSlider from './features/experts/containers/ExpertsSlider/ExpertsSlider';
+import VerifyEmail from './features/users/containers/VerifyEmail';
 
 const App = () => {
   const user = useAppSelector(selectUser);
@@ -56,6 +57,8 @@ const App = () => {
             <Route path="/experts" element={<Experts />} />
             <Route path="/experts/by-category/:id" element={<Experts />} />
             <Route path="/experts/:id" element={<OneExpert />} />
+            <Route path="/verify-email/:token" element={<VerifyEmail />} />
+
             <Route
               path={
                 user && user.role === 'expert'

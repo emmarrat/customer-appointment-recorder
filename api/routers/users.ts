@@ -8,12 +8,16 @@ import { downloadFile } from '../helper';
 import { randomUUID } from 'crypto';
 import auth from '../middleware/auth';
 import permit from '../middleware/permit';
+import crypto from 'crypto';
+import constants from '../constants';
 
 const usersRouter = express.Router();
 const client = new OAuth2Client(config.google.clientId);
 
 usersRouter.post('/', imageUpload.single('avatar'), async (req, res, next) => {
   try {
+    const token = crypto.randomBytes(4).toString('hex');
+
     const user = new User({
       email: req.body.email,
       firstName: req.body.firstName,
@@ -21,10 +25,16 @@ usersRouter.post('/', imageUpload.single('avatar'), async (req, res, next) => {
       password: req.body.password,
       phoneNumber: req.body.phoneNumber ? req.body.phoneNumber : null,
       avatar: req.file ? req.file.filename : null,
+      verifyEmailToken: token,
     });
 
     user.generateToken();
     await user.save();
+    await constants.SEND_EMAIL(
+      req.body.email,
+      'Подтверджение почты',
+      constants.EMAIL_VERIFICATION(token, req.body.firstName),
+    );
     return res.send({ message: 'Registered successfully!', user });
   } catch (error) {
     if (error instanceof mongoose.Error.ValidationError) {
@@ -46,6 +56,20 @@ usersRouter.post('/sessions', async (req, res, next) => {
 
   if (!isMatch) {
     return res.status(400).send({ error: 'Неверный email и/или пароль' });
+  }
+
+  if (!user.verified) {
+    const token = crypto.randomBytes(4).toString('hex');
+    user.verifyEmailToken = token;
+    await user.save();
+    await constants.SEND_EMAIL(
+      req.body.email,
+      'Подтверджение почты',
+      constants.EMAIL_VERIFICATION(token, user.firstName),
+    );
+    return res.status(400).send({
+      error: 'Email не подтвержден, на вашу почту было выслано письмо!',
+    });
   }
 
   try {
@@ -116,6 +140,7 @@ usersRouter.post('/google', async (req, res, next) => {
         lastName,
         avatar,
         googleId,
+        phoneNumber: null,
       });
     }
 
@@ -132,6 +157,30 @@ usersRouter.get('/basics', auth, permit('admin'), async (req, res, next) => {
     const user = await User.find({ role: 'user' });
 
     return res.send(user);
+  } catch (e) {
+    return next(e);
+  }
+});
+
+usersRouter.post('/verify-email/:token', async (req, res, next) => {
+  try {
+    const user = await User.findOne({
+      verifyEmailToken: req.params.token,
+    });
+
+    if (!user) {
+      return res
+        .status(404)
+        .send({ error: 'Неверный токен, вам был выслан новый токен' });
+    }
+
+    user.verified = true;
+    user.verifyEmailToken = null;
+    user.generateToken();
+    await user.save();
+    return res
+      .status(200)
+      .send({ message: 'Почта успешно подтверждена!', user });
   } catch (e) {
     return next(e);
   }

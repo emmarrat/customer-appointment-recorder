@@ -180,6 +180,7 @@ const Chat = () => {
                   sx={styles.containerRegular}
                   alignItems="stretch"
                   key={message._id}
+                  mb={2}
                 >
                   <Grid
                     item
@@ -188,6 +189,7 @@ const Chat = () => {
                     sx={{
                       width: '100%',
                       overflow: 'scroll',
+                      borderRadius: 0,
                     }}
                     gap={2}
                     xs={12}

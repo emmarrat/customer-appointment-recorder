@@ -14,6 +14,7 @@ export interface User {
   role: UserRole;
   avatar: string | null;
   googleId?: string;
+  verified: boolean;
 }
 
 export interface RegisterMutation {

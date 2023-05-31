@@ -33,6 +33,7 @@ const run = async () => {
       token: crypto.randomUUID(),
       phoneNumber: '+996500368878',
       role: 'admin',
+      verified: true,
     },
     {
       email: 'expert3@gmail.com',
@@ -42,6 +43,7 @@ const run = async () => {
       token: crypto.randomUUID(),
       phoneNumber: '+996500500500',
       role: 'expert',
+      verified: true,
     },
     {
       email: 'user1@gmail.com',
@@ -51,6 +53,7 @@ const run = async () => {
       token: crypto.randomUUID(),
       phoneNumber: '+996501501501',
       role: 'user',
+      verified: true,
     },
     {
       email: 'expert@gmail.com',
@@ -60,6 +63,7 @@ const run = async () => {
       token: crypto.randomUUID(),
       phoneNumber: '+996502502502',
       role: 'expert',
+      verified: true,
     },
     {
       email: 'expert1@gmail.com',
@@ -69,6 +73,7 @@ const run = async () => {
       token: crypto.randomUUID(),
       phoneNumber: '+996503503503',
       role: 'expert',
+      verified: true,
     },
   );
 

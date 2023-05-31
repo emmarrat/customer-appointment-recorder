@@ -1,4 +1,5 @@
 import team from '../../../assets/images/team.jpg';
+import { boxShadow, gradient } from '../../../stylesMui';
 
 export const styles = {
   containerColumn: {
@@ -15,7 +16,7 @@ export const styles = {
     padding: '20px 15px',
     maxHeight: '100%',
     overflow: 'scroll',
-    boxShadow: '12px 12px 24px #b2b8c9, -12px -12px 24px #f0f8ff',
+    boxShadow,
   },
   messagesBlock: {
     width: '100%',
@@ -23,7 +24,7 @@ export const styles = {
     padding: '10px 25px',
     maxHeight: '100%',
     overflow: 'scroll',
-    boxShadow: '12px 12px 24px #b2b8c9, -12px -12px 24px #f0f8ff',
+    boxShadow,
   },
   messagesBlockInner: {
     flexWrap: 'noWrap',
@@ -50,11 +51,11 @@ export const styles = {
   },
   background: {
     padding: '50px',
-    background: `linear-gradient(22deg, rgba(133,83,116,1) 0%, rgba(215,123,179,1) 33%, rgba(255,255,255,0) 100%), url(${team})`,
+    background: `${gradient}, url(${team})`,
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'right center',
     backgroundSize: 'contain',
-    boxShadow: '12px 12px 24px #b2b8c9, -12px -12px 24px #f0f8ff',
+    boxShadow,
   },
   previewTitle: {
     maxWidth: '600px',
@@ -62,7 +63,7 @@ export const styles = {
     mb: 5,
   },
   buttonLink: {
-    fontSize: { xs: '10px', md: '14px' },
+    fontSize: { xs: '8px', md: '12px' },
     color: '#fff',
     padding: '30px',
     borderRadius: '50px',

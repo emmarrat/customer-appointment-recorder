@@ -116,7 +116,6 @@ router.ws('/chat', async (ws) => {
   });
 
   ws.on('close', () => {
-    console.log('Client disconnected! id= ', id);
     delete activeConnections[id];
     const index = activeUsers.findIndex((user) => user._id === activeUser?._id);
     activeUsers.splice(index, 1);

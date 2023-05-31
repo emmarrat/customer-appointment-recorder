@@ -1,8 +1,8 @@
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import {
+  Alert,
   Avatar,
   Box,
-  Button,
   Container,
   Grid,
   Link,
@@ -12,16 +12,22 @@ import {
 import { GoogleLogin } from '@react-oauth/google';
 import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { selectRegisterError } from '../../../dispatchers/users/usersSlice';
+import {
+  selectRegisterError,
+  selectRegisterLoading,
+} from '../../../dispatchers/users/usersSlice';
 import { RegisterMutation } from '../../../types';
 import { googleLogin, register } from '../../../dispatchers/users/usersThunks';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import FileInput from '../../../components/UI/FileInput/FileInput';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 const Register = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const error = useAppSelector(selectRegisterError);
+  const loading = useAppSelector(selectRegisterLoading);
+  const [success, setSuccess] = React.useState(false);
   const [state, setState] = React.useState<RegisterMutation>({
     email: '',
     password: '',
@@ -39,7 +45,7 @@ const Register = () => {
   const submitFormHandler = async (event: React.FormEvent) => {
     event.preventDefault();
     await dispatch(register(state)).unwrap();
-    await navigate('/');
+    setSuccess(true);
   };
 
   const getFieldError = (fieldName: string) => {
@@ -173,14 +179,22 @@ const Register = () => {
                 errorCheck={getFieldError}
               />
             </Grid>
-            <Button
+            {success && (
+              <Grid item xs={12}>
+                <Alert severity="success" sx={{ mt: 1, maxWidth: '100%' }}>
+                  На вашу почту было отправлено письмо для потверждения!
+                </Alert>
+              </Grid>
+            )}
+            <LoadingButton
               type="submit"
               fullWidth
+              loading={loading}
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{ mt: 3, mb: 2, ml: 2 }}
             >
               Завершить регистрацию
-            </Button>
+            </LoadingButton>
             <Grid container justifyContent="flex-end">
               <Grid item>
                 <Link component={RouterLink} to="/login" variant="body2">
