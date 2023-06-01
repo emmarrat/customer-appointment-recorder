@@ -30,6 +30,7 @@ serviceHoursRouter.post(
 
       const existingService = await ServiceHour.findOne({
         date: req.body.date,
+        expert: existingExpert._id,
       });
 
       if (existingService) {
@@ -195,7 +196,6 @@ serviceHoursRouter.delete(
         return res.status(403).send({ error: 'Не достаточно прав!' });
       }
 
-      // Check if at least one hour has status as true
       const hasActiveHours = serviceHour.hours.some(
         (hour) => hour.status === true,
       );

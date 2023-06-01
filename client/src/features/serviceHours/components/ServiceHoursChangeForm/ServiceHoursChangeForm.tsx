@@ -90,8 +90,9 @@ const ServiceHoursChangeForm: React.FC<Props> = ({
           {hoursState.map((appointment) => (
             <Grid item key={appointment._id}>
               <TextField
-                label="Начало"
                 type="time"
+                label="Начало"
+                required
                 value={appointment.startTime}
                 onChange={(e) =>
                   handleChange(appointment._id, 'startTime', e.target.value)
@@ -103,6 +104,7 @@ const ServiceHoursChangeForm: React.FC<Props> = ({
               <TextField
                 type="time"
                 label="Конец"
+                required
                 value={appointment.endTime}
                 onChange={(e) =>
                   handleChange(appointment._id, 'endTime', e.target.value)

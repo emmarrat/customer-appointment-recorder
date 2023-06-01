@@ -2,7 +2,6 @@ import { createSlice } from '@reduxjs/toolkit';
 import { GlobalError, User, ValidationError } from '../../types';
 import { RootState } from '../../app/store';
 import {
-  fetchOneBasicUser,
   fetchBasicUsers,
   googleLogin,
   login,
@@ -16,13 +15,11 @@ import { toast } from 'react-toastify';
 interface UsersState {
   user: User | null;
   users: User[];
-  oneBasicUser: User | null;
   registerLoading: boolean;
   registerError: ValidationError | null;
   loginLoading: boolean;
   loginError: GlobalError | null;
   fetchLoading: boolean;
-  fetchOneUserLoading: boolean;
   verifyEmailLoading: boolean;
   passwordForgetLoading: boolean;
   passwordForgetError: GlobalError | null;
@@ -31,13 +28,11 @@ interface UsersState {
 const initialState: UsersState = {
   user: null,
   users: [],
-  oneBasicUser: null,
   registerLoading: false,
   registerError: null,
   loginLoading: false,
   loginError: null,
   fetchLoading: false,
-  fetchOneUserLoading: false,
   verifyEmailLoading: false,
   passwordForgetLoading: false,
   passwordForgetError: null,
@@ -111,18 +106,6 @@ export const usersSlice = createSlice({
       state.fetchLoading = false;
     });
 
-    builder.addCase(fetchOneBasicUser.pending, (state) => {
-      state.fetchOneUserLoading = true;
-      state.users = [];
-    });
-    builder.addCase(fetchOneBasicUser.fulfilled, (state, { payload: user }) => {
-      state.fetchOneUserLoading = false;
-      state.oneBasicUser = user;
-    });
-    builder.addCase(fetchOneBasicUser.rejected, (state) => {
-      state.fetchOneUserLoading = false;
-    });
-
     builder.addCase(verifyEmail.pending, (state) => {
       state.verifyEmailLoading = true;
     });
@@ -171,8 +154,6 @@ export const usersReducer = usersSlice.reducer;
 export const { unsetUser } = usersSlice.actions;
 export const selectUser = (state: RootState) => state.users.user;
 export const selectUsers = (state: RootState) => state.users.users;
-export const selectOneBasicUser = (state: RootState) =>
-  state.users.oneBasicUser;
 export const selectRegisterLoading = (state: RootState) =>
   state.users.registerLoading;
 export const selectRegisterError = (state: RootState) =>
@@ -180,8 +161,6 @@ export const selectRegisterError = (state: RootState) =>
 export const selectLoginLoading = (state: RootState) =>
   state.users.loginLoading;
 export const selectLoginError = (state: RootState) => state.users.loginError;
-export const selectFetchingOneUser = (state: RootState) =>
-  state.users.fetchOneUserLoading;
 export const selectVerifyEmailLoading = (state: RootState) =>
   state.users.verifyEmailLoading;
 export const selectPasswordForgetError = (state: RootState) =>

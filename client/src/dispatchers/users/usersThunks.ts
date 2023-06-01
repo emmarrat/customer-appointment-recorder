@@ -93,14 +93,6 @@ export const fetchBasicUsers = createAsyncThunk<User[]>(
   },
 );
 
-export const fetchOneBasicUser = createAsyncThunk<User, string>(
-  'users/fetchOneBasicUser',
-  async (id) => {
-    const { data } = await axiosApi.get<User>('/users/basic/' + id);
-    return data;
-  },
-);
-
 export const verifyEmail = createAsyncThunk<User, string>(
   'users/verifyEmail',
   async (token) => {
