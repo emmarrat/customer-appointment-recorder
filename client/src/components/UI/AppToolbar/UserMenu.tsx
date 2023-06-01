@@ -73,6 +73,10 @@ const UserMenu: React.FC<Props> = ({ user }) => {
             Контроль записей
           </MenuItem>
         )}
+
+        <MenuItem component={RouterLink} to="/chat">
+          Форум
+        </MenuItem>
       </Menu>
     </>
   );

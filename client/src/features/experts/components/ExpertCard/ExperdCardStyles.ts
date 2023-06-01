@@ -1,7 +1,10 @@
+import { borderRadius, boxShadow } from '../../../../stylesMui';
+
 export const styles = {
   card: {
     width: '320px',
-    borderRadius: '30px',
+    borderRadius,
+    boxShadow,
   },
   media: {
     height: '150px',

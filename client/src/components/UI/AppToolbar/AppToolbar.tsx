@@ -61,7 +61,7 @@ const AppToolbar = () => {
             </Grid>
             <Box
               sx={{
-                display: { xs: 'none', sm: 'inline-flex' },
+                display: { xs: 'none', md: 'inline-flex' },
                 width: '2px',
                 height: '20px',
                 background: '#fff',
