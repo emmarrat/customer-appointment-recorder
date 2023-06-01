@@ -26,6 +26,8 @@ import VerifyEmail from './features/users/containers/VerifyEmail';
 import UpdateServiceHours from './features/serviceHours/containers/UpdateServiceHours/UpdateServiceHours';
 import ForgetPassword from './features/users/containers/ForgetPassword';
 import ResetPassword from './features/users/containers/ResetPassword';
+import Footer from './components/UI/Footer/Footer';
+import './styles.css';
 
 const App = () => {
   const user = useAppSelector(selectUser);
@@ -36,7 +38,7 @@ const App = () => {
       <header>
         <AppToolbar />
       </header>
-      <main>
+      <main className="content">
         <Container maxWidth="xl" sx={{ my: 5 }}>
           <Routes>
             <Route
@@ -148,6 +150,9 @@ const App = () => {
           autoClose={2000}
         />
       </main>
+      <footer className="footer">
+        <Footer />
+      </footer>
     </>
   );
 };

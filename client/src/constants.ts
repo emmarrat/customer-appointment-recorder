@@ -7,3 +7,6 @@ export const COMPANY_TITLE = 'Beauty Salon';
 
 export const COMPANY_ADDRESS_LINK = 'https://go.2gis.com/iyai8';
 export const COMPANY_ADDRESS_NAME = 'г. Бишкек, ж/м Ак-Бата, 32/1';
+export const COMPANY_PHONE_LINK = '+996500555500';
+export const COMPANY_PHONE = '+996 500 555 500';
+export const COMPANY_EMAIL = 'beauty.salon@gmail.com';
