@@ -55,7 +55,7 @@ serviceHoursRouter.post(
       const savedServicesHour = await newServicesHour.save();
 
       res.status(200).send({
-        message: 'working schedule successfully created',
+        message: 'Рабочий график создан!',
         serviceHours: savedServicesHour,
       });
     } catch (e) {
@@ -124,19 +124,17 @@ serviceHoursRouter.patch(
     try {
       const serviceHour = await ServiceHour.findById(req.params.id);
       if (!serviceHour) {
-        return res.status(404).send({ error: 'Service hour not found!' });
+        return res.status(404).send({ error: 'Рабочий график не найден!' });
       }
 
       const existingExpert = await Expert.findById(serviceHour.expert);
       if (!existingExpert) {
-        return res.status(404).send({ error: 'Expert not found!' });
+        return res.status(404).send({ error: 'Мастер не найден!' });
       }
 
       const user = (req as RequestWithUser).user;
       if (user._id.toString() !== existingExpert.user.toString()) {
-        return res
-          .status(403)
-          .send({ error: 'This user do not have enough access!' });
+        return res.status(403).send({ error: 'Не достаточно прав!' });
       }
 
       const hoursArray: IHours[] = req.body.hours;
@@ -162,7 +160,7 @@ serviceHoursRouter.patch(
       const savedServiceHour = await serviceHour.save();
 
       res.status(200).send({
-        message: 'working hours successfully updated',
+        message: 'Рабочий график обновлен!',
         serviceHours: savedServiceHour,
       });
     } catch (e) {
@@ -183,18 +181,18 @@ serviceHoursRouter.delete(
     try {
       const serviceHour = await ServiceHour.findById(req.params.id);
       if (!serviceHour) {
-        return res.status(404).send({ error: 'Service hour not found!' });
+        return res.status(404).send({ error: 'Рабочий график не найден!' });
       }
 
       const existingExpert = await Expert.findById(serviceHour.expert);
       if (!existingExpert) {
-        return res.status(400).send({ error: 'Expert not found!' });
+        return res.status(400).send({ error: 'Мастер не найден!' });
       }
 
       const user = (req as RequestWithUser).user;
 
       if (user._id.toString() !== existingExpert.user.toString()) {
-        return res.status(403).send({ error: 'Access denied!' });
+        return res.status(403).send({ error: 'Не достаточно прав!' });
       }
 
       // Check if at least one hour has status as true
@@ -203,14 +201,13 @@ serviceHoursRouter.delete(
       );
       if (hasActiveHours) {
         return res.status(400).send({
-          error:
-            'Deletion is prohibited because at least one active hour exists!',
+          error: 'Удаление запрещено, имеется подтвержденная запись!',
         });
       }
 
       const removedServiceHour = await serviceHour.deleteOne();
       res.status(200).send({
-        message: 'Working hours successfully removed',
+        message: 'Рабочее время удалено',
         serviceHours: removedServiceHour,
       });
     } catch (e) {

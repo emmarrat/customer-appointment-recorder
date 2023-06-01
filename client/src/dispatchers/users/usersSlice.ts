@@ -8,6 +8,8 @@ import {
   login,
   register,
   verifyEmail,
+  forgotPassword,
+  resetPassword,
 } from './usersThunks';
 import { toast } from 'react-toastify';
 
@@ -22,6 +24,8 @@ interface UsersState {
   fetchLoading: boolean;
   fetchOneUserLoading: boolean;
   verifyEmailLoading: boolean;
+  passwordForgetLoading: boolean;
+  passwordForgetError: GlobalError | null;
 }
 
 const initialState: UsersState = {
@@ -35,6 +39,8 @@ const initialState: UsersState = {
   fetchLoading: false,
   fetchOneUserLoading: false,
   verifyEmailLoading: false,
+  passwordForgetLoading: false,
+  passwordForgetError: null,
 };
 
 export const usersSlice = createSlice({
@@ -128,6 +134,36 @@ export const usersSlice = createSlice({
     builder.addCase(verifyEmail.rejected, (state) => {
       state.verifyEmailLoading = false;
     });
+
+    builder.addCase(forgotPassword.pending, (state) => {
+      state.passwordForgetError = null;
+      state.passwordForgetLoading = true;
+    });
+    builder.addCase(forgotPassword.fulfilled, (state) => {
+      state.passwordForgetError = null;
+      state.passwordForgetLoading = false;
+      toast.info(` Запрос на сброс пароля отправлен!`);
+    });
+    builder.addCase(forgotPassword.rejected, (state, { payload: error }) => {
+      state.passwordForgetError = error || null;
+      state.passwordForgetLoading = false;
+      toast.error(error?.error);
+    });
+
+    builder.addCase(resetPassword.pending, (state) => {
+      state.passwordForgetError = null;
+      state.passwordForgetLoading = true;
+    });
+    builder.addCase(resetPassword.fulfilled, (state) => {
+      state.passwordForgetError = null;
+      state.passwordForgetLoading = false;
+      toast.success(`Новый пароль установлен!`);
+    });
+    builder.addCase(resetPassword.rejected, (state, { payload: error }) => {
+      state.passwordForgetError = error || null;
+      state.passwordForgetLoading = false;
+      toast.error(error?.error);
+    });
   },
 });
 
@@ -148,3 +184,7 @@ export const selectFetchingOneUser = (state: RootState) =>
   state.users.fetchOneUserLoading;
 export const selectVerifyEmailLoading = (state: RootState) =>
   state.users.verifyEmailLoading;
+export const selectPasswordForgetError = (state: RootState) =>
+  state.users.passwordForgetError;
+export const selectPasswordForgetLoading = (state: RootState) =>
+  state.users.passwordForgetLoading;

@@ -24,6 +24,8 @@ import WelcomeBlock from './components/StaticComponents/WelcomeBlock';
 import ExpertsSlider from './features/experts/containers/ExpertsSlider/ExpertsSlider';
 import VerifyEmail from './features/users/containers/VerifyEmail';
 import UpdateServiceHours from './features/serviceHours/containers/UpdateServiceHours/UpdateServiceHours';
+import ForgetPassword from './features/users/containers/ForgetPassword';
+import ResetPassword from './features/users/containers/ResetPassword';
 
 const App = () => {
   const user = useAppSelector(selectUser);
@@ -56,6 +58,8 @@ const App = () => {
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/verify-email/:token" element={<VerifyEmail />} />
+            <Route path="/forget-password" element={<ForgetPassword />} />
+            <Route path="/reset-password/:token" element={<ResetPassword />} />
             <Route path="/experts" element={<Experts />} />
             <Route path="/experts/by-category/:id" element={<Experts />} />
             <Route path="/experts/:id" element={<OneExpert />} />

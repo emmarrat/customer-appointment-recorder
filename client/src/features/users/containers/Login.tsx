@@ -6,6 +6,8 @@ import {
   Box,
   Container,
   Grid,
+  IconButton,
+  InputAdornment,
   Link,
   TextField,
   Typography,
@@ -21,6 +23,7 @@ import {
 } from '../../../dispatchers/users/usersSlice';
 import { LoginMutation } from '../../../types';
 import { googleLogin, login } from '../../../dispatchers/users/usersThunks';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 const Login = () => {
   const dispatch = useAppDispatch();
@@ -31,6 +34,8 @@ const Login = () => {
     email: '',
     password: '',
   });
+  const [showPassword, setShowNewPassword] = React.useState(false);
+  const togglePass = () => setShowNewPassword(!showPassword);
 
   const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -96,11 +101,24 @@ const Login = () => {
                 required
                 label="Пароль"
                 name="password"
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 autoComplete="current-password"
                 value={state.password}
                 onChange={inputChangeHandler}
                 sx={{ width: '100%' }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={togglePass}
+                        edge="end"
+                      >
+                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
             </Grid>
           </Grid>
@@ -112,10 +130,25 @@ const Login = () => {
           >
             <span>Войти</span>
           </LoadingButton>
-          <Grid container justifyContent="flex-end">
+          <Grid container justifyContent="space-between">
             <Grid item>
-              <Link component={RouterLink} to="/register" variant="body2">
+              <Link
+                component={RouterLink}
+                to="/register"
+                variant="body2"
+                sx={{ textDecoration: 'none' }}
+              >
                 или зарегистрироваться
+              </Link>
+            </Grid>
+            <Grid item>
+              <Link
+                component={RouterLink}
+                to="/forget-password"
+                variant="body2"
+                sx={{ textDecoration: 'none' }}
+              >
+                забыли пароль?
               </Link>
             </Grid>
           </Grid>

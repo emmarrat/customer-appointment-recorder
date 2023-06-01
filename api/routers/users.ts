@@ -35,7 +35,7 @@ usersRouter.post('/', imageUpload.single('avatar'), async (req, res, next) => {
       'Подтверджение почты',
       constants.EMAIL_VERIFICATION(token, req.body.firstName),
     );
-    return res.send({ message: 'Registered successfully!', user });
+    return res.send({ message: 'Регистрация прошла успешно!', user });
   } catch (error) {
     if (error instanceof mongoose.Error.ValidationError) {
       return res.status(400).send(error);
@@ -114,7 +114,7 @@ usersRouter.post('/google', async (req, res, next) => {
     const payload = ticket.getPayload();
 
     if (!payload) {
-      return res.status(400).send({ error: 'Wrong Google token!' });
+      return res.status(400).send({ error: 'Неверный гугл токен!' });
     }
 
     const email = payload['email'];
@@ -124,7 +124,9 @@ usersRouter.post('/google', async (req, res, next) => {
     const avatarUrl = payload['picture'];
 
     if (!email) {
-      return res.status(400).send({ error: 'Not enough user data' });
+      return res
+        .status(400)
+        .send({ error: 'Не достаточно данных для регистрации через гугл!' });
     }
 
     let user = await User.findOne({ googleId });
@@ -146,7 +148,7 @@ usersRouter.post('/google', async (req, res, next) => {
 
     user.generateToken();
     await user.save();
-    return res.send({ message: 'Login with Google successful', user });
+    return res.send({ message: 'Логин через Google прошел успешно!', user });
   } catch (e) {
     return next(e);
   }
@@ -182,6 +184,76 @@ usersRouter.post('/verify-email/:token', async (req, res, next) => {
       .status(200)
       .send({ message: 'Почта успешно подтверждена!', user });
   } catch (e) {
+    return next(e);
+  }
+});
+
+usersRouter.post('/forgot-password', async (req, res, next) => {
+  try {
+    const user = await User.findOne({ email: req.body.email });
+    const token = crypto.randomBytes(4).toString('hex');
+
+    if (!user) {
+      return res.status(400).send({ error: 'Email адрес не найден' });
+    }
+
+    user.resetPasswordToken = token;
+    await user.save();
+
+    await constants.SEND_EMAIL(
+      req.body.email,
+      'Сброс пароля',
+      constants.RESET_PASSWORD_EMAIL(token, user.firstName),
+    );
+
+    return res.send({
+      message: 'Запрос на сброс пароля отправлен',
+      result: user,
+    });
+  } catch (e) {
+    if (e instanceof mongoose.Error.ValidationError) {
+      return res.status(400).send(e);
+    }
+    return next(e);
+  }
+});
+
+usersRouter.post('/reset-password/:token', async (req, res, next) => {
+  try {
+    const user = await User.findOne({
+      resetPasswordToken: req.params.token,
+    });
+
+    if (!user) {
+      return res.status(404).send({ error: 'Неверный токен' });
+    }
+
+    if (req.body.newPassword !== req.body.confirmPassword) {
+      return res
+        .status(400)
+        .send({ error: 'Пароль подтверждения не совпадает с новым паролем' });
+    }
+
+    const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+
+    if (!regex.test(req.body.newPassword)) {
+      return res.status(400).send({
+        error:
+          'Пароль должен содержать минимум 8 символов, из них минимум 1 букву и 1 цифру.',
+      });
+    }
+
+    user.password = req.body.newPassword;
+    user.resetPasswordToken = null;
+    user.verified = true;
+    await user.generateToken();
+    await user.save();
+
+    return res.status(200).send({ message: 'Пароль обновлен!' });
+  } catch (e) {
+    if (e instanceof mongoose.Error.ValidationError) {
+      return res.status(400).send(e);
+    }
     return next(e);
   }
 });

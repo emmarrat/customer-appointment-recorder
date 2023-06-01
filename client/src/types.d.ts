@@ -209,3 +209,9 @@ export interface UpdateHours {
   id: string;
   hours: HourWithoutId[];
 }
+
+export interface ResetPassword {
+  newPassword: string;
+  confirmPassword: string;
+  token: string;
+}

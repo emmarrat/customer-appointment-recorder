@@ -187,7 +187,7 @@ appointmentsRouter.patch(
       const appointmentToSave = await Appointment.findById(id);
 
       if (!appointment || !appointmentToSave) {
-        return res.status(404).json({ error: 'Appointment not found' });
+        return res.status(404).send({ error: 'Запись не найдена!' });
       }
       appointmentToSave.isApproved = isApproved;
       await appointmentToSave.save();
@@ -254,10 +254,10 @@ appointmentsRouter.post(
         });
 
       if (!appointment) {
-        return res.status(400).json({ error: 'Appointment not found!' });
+        return res.status(400).send({ error: 'Запись не найдена!' });
       }
       if (!appointment.isApproved) {
-        return res.status(400).json({ error: 'Appointment is not approved!' });
+        return res.status(400).send({ error: 'Запись не подтверждена!' });
       }
 
       await constants.SEND_EMAIL(
