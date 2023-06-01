@@ -27,9 +27,9 @@ const run = async () => {
   const [admin, expert3, user2, expert1, expert2] = await User.create(
     {
       email: 'admin@gmail.com',
-      firstName: 'Emir',
-      lastName: 'Marat',
-      password: '123',
+      firstName: 'Эмир',
+      lastName: 'Марат',
+      password: '12345678A',
       token: crypto.randomUUID(),
       phoneNumber: '+996500368878',
       role: 'admin',
@@ -37,9 +37,9 @@ const run = async () => {
     },
     {
       email: 'expert3@gmail.com',
-      firstName: 'Ulan',
-      lastName: 'Sarykuev',
-      password: '123',
+      firstName: 'Улан',
+      lastName: 'Сарыкуев',
+      password: '12345678A',
       token: crypto.randomUUID(),
       phoneNumber: '+996500500500',
       role: 'expert',
@@ -47,9 +47,9 @@ const run = async () => {
     },
     {
       email: 'user1@gmail.com',
-      firstName: 'Ulus',
+      firstName: 'Улус Эмильбеков',
       lastName: 'Emilbekov',
-      password: '123',
+      password: '12345678A',
       token: crypto.randomUUID(),
       phoneNumber: '+996501501501',
       role: 'user',
@@ -57,9 +57,9 @@ const run = async () => {
     },
     {
       email: 'expert@gmail.com',
-      firstName: 'Alla',
-      lastName: 'Efremova',
-      password: '123',
+      firstName: 'Алла',
+      lastName: 'Ефремова',
+      password: '12345678A',
       token: crypto.randomUUID(),
       phoneNumber: '+996502502502',
       role: 'expert',
@@ -67,9 +67,9 @@ const run = async () => {
     },
     {
       email: 'expert1@gmail.com',
-      firstName: 'Jamilya',
-      lastName: 'Tashtanova',
-      password: '123',
+      firstName: 'Жамиля',
+      lastName: 'Таштанова',
+      password: '12345678A',
       token: crypto.randomUUID(),
       phoneNumber: '+996503503503',
       role: 'expert',
@@ -127,7 +127,7 @@ const run = async () => {
   const [date1, date2, date3, date4, date5] = await ServiceHour.create(
     {
       expert: newExpert1._id,
-      date: new Date('2023-06-01'),
+      date: new Date('2023-06-05'),
       hours: [
         { startTime: '10:00', endTime: '11:00', status: false },
         { startTime: '11:15', endTime: '12:15', status: true },
@@ -139,7 +139,7 @@ const run = async () => {
     },
     {
       expert: newExpert1._id,
-      date: new Date('2023-06-02'),
+      date: new Date('2023-06-06'),
       hours: [
         { startTime: '10:00', endTime: '11:00', status: false },
         { startTime: '11:15', endTime: '12:15', status: false },
@@ -151,7 +151,7 @@ const run = async () => {
     },
     {
       expert: newExpert2._id,
-      date: new Date('2023-06-01'),
+      date: new Date('2023-06-05'),
       hours: [
         { startTime: '10:00', endTime: '11:00', status: false },
         { startTime: '11:15', endTime: '12:15', status: false },
@@ -163,7 +163,7 @@ const run = async () => {
     },
     {
       expert: newExpert2._id,
-      date: new Date('2023-06-02'),
+      date: new Date('2023-06-06'),
       hours: [
         { startTime: '10:00', endTime: '11:00', status: false },
         { startTime: '11:15', endTime: '12:15', status: false },
@@ -175,7 +175,7 @@ const run = async () => {
     },
     {
       expert: newExpert3._id,
-      date: new Date('2023-06-03'),
+      date: new Date('2023-06-05'),
       hours: [
         { startTime: '10:00', endTime: '11:00', status: false },
         { startTime: '11:15', endTime: '12:15', status: false },
@@ -187,7 +187,7 @@ const run = async () => {
     },
   );
 
-  const [appointment1, appointment2, appointment3] = await Appointment.create(
+  await Appointment.create(
     {
       client: user2._id,
       expert: newExpert1._id,
@@ -229,7 +229,7 @@ const run = async () => {
   await Message.create(
     {
       username: 'Эмир Марат',
-      text: 'Стрижка была отличная! Мне все понравилос, однако, считаю, что сайт следовало бы доработать!',
+      text: 'Стрижка была отличная! Мне все понравилось, однако, считаю, что сайт следовало бы доработать!',
       createdAt: new Date(Date.now() - 86400000),
     },
     {
@@ -244,7 +244,7 @@ const run = async () => {
     },
     {
       username: 'Алла Ефромова',
-      text: 'Я с радостью напомню :) Маска для волос от фирмы эстель!',
+      text: 'Маска для волос от фирмы эстель!',
       createdAt: new Date(Date.now() - 86400000),
     },
   );
