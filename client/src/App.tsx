@@ -55,11 +55,12 @@ const App = () => {
             />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/verify-email/:token" element={<VerifyEmail />} />
             <Route path="/experts" element={<Experts />} />
             <Route path="/experts/by-category/:id" element={<Experts />} />
             <Route path="/experts/:id" element={<OneExpert />} />
-            <Route path="/verify-email/:token" element={<VerifyEmail />} />
-
+            <Route path="/pre-chat" element={<ChatPreview />} />
+            <Route path="/chat" element={<Chat />} />
             <Route
               path={
                 user && user.role === 'expert'
@@ -84,7 +85,6 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
-
             <Route
               path="/admin/experts"
               element={
@@ -125,7 +125,6 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
-
             <Route
               path="/*"
               element={
@@ -134,9 +133,6 @@ const App = () => {
                 </Typography>
               }
             />
-            <Route path="/pre-chat" element={<ChatPreview />} />
-
-            <Route path="/chat" element={<Chat />} />
           </Routes>
         </Container>
         <ToastContainer

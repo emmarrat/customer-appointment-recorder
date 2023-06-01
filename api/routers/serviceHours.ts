@@ -178,7 +178,7 @@ serviceHoursRouter.patch(
 serviceHoursRouter.delete(
   '/:id',
   auth,
-  permit('expert', 'admin'),
+  permit('expert'),
   async (req, res, next) => {
     try {
       const serviceHour = await ServiceHour.findById(req.params.id);
@@ -188,16 +188,24 @@ serviceHoursRouter.delete(
 
       const existingExpert = await Expert.findById(serviceHour.expert);
       if (!existingExpert) {
-        return res.status(500).send({ error: 'Expert not found!' });
+        return res.status(400).send({ error: 'Expert not found!' });
       }
 
       const user = (req as RequestWithUser).user;
 
-      if (
-        user._id.toString() !== serviceHour.expert.toString() &&
-        user.role !== 'admin'
-      ) {
+      if (user._id.toString() !== existingExpert.user.toString()) {
         return res.status(403).send({ error: 'Access denied!' });
+      }
+
+      // Check if at least one hour has status as true
+      const hasActiveHours = serviceHour.hours.some(
+        (hour) => hour.status === true,
+      );
+      if (hasActiveHours) {
+        return res.status(400).send({
+          error:
+            'Deletion is prohibited because at least one active hour exists!',
+        });
       }
 
       const removedServiceHour = await serviceHour.deleteOne();

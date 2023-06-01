@@ -58,14 +58,25 @@ export const updateServiceHours = createAsyncThunk<
     try {
       await axiosApi.patch(`/service-hours/hours/${id}`, { hours });
     } catch (error) {
-      if (
-        isAxiosError(error) &&
-        error.response &&
-        error.response.status === 400
-      ) {
+      if (isAxiosError(error) && error.response) {
         return rejectWithValue(error.response.data as GlobalError);
       }
       throw error;
     }
   },
 );
+
+export const removeServiceHours = createAsyncThunk<
+  void,
+  string,
+  { rejectValue: GlobalError }
+>('serviceHours/removeServiceHours', async (id, { rejectWithValue }) => {
+  try {
+    await axiosApi.delete(`/service-hours/${id}`);
+  } catch (error) {
+    if (isAxiosError(error) && error.response) {
+      return rejectWithValue(error.response.data as GlobalError);
+    }
+    throw error;
+  }
+});

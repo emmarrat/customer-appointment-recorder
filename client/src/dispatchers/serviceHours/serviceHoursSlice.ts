@@ -6,6 +6,7 @@ import {
   fetchOneServiceHours,
   fetchServiceHoursByUser,
   fetchServiceHoursForExpert,
+  removeServiceHours,
   updateServiceHours,
 } from './serviceHoursThunks';
 import { toast } from 'react-toastify';
@@ -113,6 +114,27 @@ export const serviceHoursSlice = createSlice({
       (state, { payload: error }) => {
         state.datetimeUpdatingError = error || null;
         state.datetimeUpdating = false;
+        if (error) {
+          toast.error(error.error);
+        }
+      },
+    );
+
+    builder.addCase(
+      removeServiceHours.pending,
+      (state, { meta: { arg: id } }) => {
+        state.datetimeRemoving = id;
+      },
+    );
+    builder.addCase(removeServiceHours.fulfilled, (state) => {
+      state.datetimeUpdatingError = null;
+      state.datetimeRemoving = false;
+      toast.success('Рабочий график успешно удален!');
+    });
+    builder.addCase(
+      removeServiceHours.rejected,
+      (state, { payload: error }) => {
+        state.datetimeRemoving = false;
         if (error) {
           toast.error(error.error);
         }
