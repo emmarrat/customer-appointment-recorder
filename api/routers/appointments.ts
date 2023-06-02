@@ -190,6 +190,7 @@ appointmentsRouter.patch(
         return res.status(404).send({ error: 'Запись не найдена!' });
       }
       appointmentToSave.isApproved = isApproved;
+
       await appointmentToSave.save();
 
       await ServiceHour.updateOne(
@@ -216,6 +217,54 @@ appointmentsRouter.patch(
               appointment.expert.user.firstName,
             ),
       );
+
+      const sameAppointmentFromOtherUser = await Appointment.find({
+        date: appointmentToSave.date,
+        startTime: appointmentToSave.startTime,
+        endTime: appointmentToSave.endTime,
+        isApproved: false,
+      });
+
+      if (sameAppointmentFromOtherUser.length > 0) {
+        for (const appointment of sameAppointmentFromOtherUser) {
+          const sameAppointmentToCancel: AppointmentFull | null =
+            await Appointment.findById(appointment._id)
+              .populate({
+                path: 'client',
+                select: 'firstName lastName email',
+              })
+              .populate({
+                path: 'expert',
+                select: '_id title',
+                populate: {
+                  path: 'user',
+                  select: 'firstName lastName',
+                },
+              })
+              .populate({
+                path: 'date',
+                select: 'date',
+              });
+
+          if (appointment._id.toString() !== appointmentToSave._id.toString()) {
+            await appointment.deleteOne();
+
+            if (!sameAppointmentToCancel) continue;
+
+            await constants.SEND_EMAIL(
+              sameAppointmentToCancel.client.email,
+              'Отмена записи',
+              constants.APPOINTMENT_REJECTION_EMAIL(
+                sameAppointmentToCancel.client.firstName,
+                sameAppointmentToCancel.date.date,
+                sameAppointmentToCancel.startTime,
+                sameAppointmentToCancel.service.name,
+                sameAppointmentToCancel.expert.user.firstName,
+              ),
+            );
+          }
+        }
+      }
 
       return res.send({
         message: 'Статус записи успешно изменен!',

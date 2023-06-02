@@ -31,7 +31,6 @@ const Chat = () => {
   const ws = useRef<null | ReconnectingWebSocket>(null);
   useEffect(() => {
     ws.current = new ReconnectingWebSocket('ws://localhost:8000/chat');
-    console.log('ws = ', ws.current);
     ws.current.onclose = () => console.log('ws closed!');
 
     ws.current.onmessage = (event) => {
@@ -211,6 +210,7 @@ const Chat = () => {
                       </Typography>
                     </Grid>
                     <Grid
+                      item
                       container
                       justifyContent="flex-end"
                       alignItems="center"

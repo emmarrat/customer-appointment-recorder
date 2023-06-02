@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   Grid,
-  IconButton,
   Paper,
   Table,
   TableBody,
@@ -22,6 +21,12 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import ScheduleSendIcon from '@mui/icons-material/ScheduleSend';
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import * as locales from '@mui/material/locale';
+import LoadingButton from '@mui/lab/LoadingButton';
+import { useAppSelector } from '../../../../app/hooks';
+import {
+  selectAppointmentReminderLoading,
+  selectAppointmentUpdating,
+} from '../../../../dispatchers/appointemtns/appointmentsSlice';
 
 type SupportedLocales = keyof typeof locales;
 
@@ -49,7 +54,8 @@ const AppointmentTable: React.FC<Props> = ({
   remind,
 }) => {
   const [locale, setLocale] = React.useState<SupportedLocales>('ruRU');
-
+  const loading = useAppSelector(selectAppointmentUpdating);
+  const remindLoading = useAppSelector(selectAppointmentReminderLoading);
   const theme = useTheme();
 
   const themeWithLocale = React.useMemo(
@@ -64,6 +70,7 @@ const AppointmentTable: React.FC<Props> = ({
             <Typography variant="h4">Записи</Typography>
           </Grid>
         </Grid>
+
         <Grid item>
           <TableContainer component={Paper}>
             <Table stickyHeader>
@@ -120,7 +127,9 @@ const AppointmentTable: React.FC<Props> = ({
                     <TableCell>{appointment.service.name}</TableCell>
                     <TableCell>{appointment.service.price} сом</TableCell>
                     <TableCell
-                      sx={{ color: appointment.isApproved ? 'green' : 'red' }}
+                      sx={{
+                        color: appointment.isApproved ? 'green' : 'red',
+                      }}
                     >
                       {appointment.isApproved ? 'Подтвержден' : 'Ожидает'}
                     </TableCell>
@@ -128,8 +137,8 @@ const AppointmentTable: React.FC<Props> = ({
                       <TableCell align="center">
                         {appointment.isApproved ? (
                           <Tooltip title="Отменить">
-                            <IconButton
-                              aria-label="DoNotDisturbIcon"
+                            <LoadingButton
+                              loading={loading === appointment._id}
                               sx={{ cursor: 'pointer' }}
                               onClick={() =>
                                 changeStatus({
@@ -138,12 +147,17 @@ const AppointmentTable: React.FC<Props> = ({
                                 })
                               }
                             >
-                              <DoNotDisturbIcon color="error" />
-                            </IconButton>
+                              {loading === appointment._id ? (
+                                ''
+                              ) : (
+                                <DoNotDisturbIcon color="error" />
+                              )}
+                            </LoadingButton>
                           </Tooltip>
                         ) : (
                           <Tooltip title="Подтвердить">
-                            <IconButton
+                            <LoadingButton
+                              loading={loading === appointment._id}
                               onClick={() =>
                                 changeStatus({
                                   id: appointment._id,
@@ -152,8 +166,12 @@ const AppointmentTable: React.FC<Props> = ({
                               }
                               sx={{ cursor: 'pointer' }}
                             >
-                              <CheckCircleOutlineIcon color="success" />
-                            </IconButton>
+                              {loading === appointment._id ? (
+                                ''
+                              ) : (
+                                <CheckCircleOutlineIcon color="success" />
+                              )}
+                            </LoadingButton>
                           </Tooltip>
                         )}
                       </TableCell>
@@ -161,12 +179,17 @@ const AppointmentTable: React.FC<Props> = ({
                     {role === 'admin' && appointment.isApproved ? (
                       <TableCell align="center">
                         <Tooltip title="Отправить напоминание">
-                          <IconButton
+                          <LoadingButton
+                            loading={remindLoading === appointment._id}
                             sx={{ cursor: 'pointer' }}
                             onClick={() => remind(appointment._id)}
                           >
-                            <ScheduleSendIcon color="primary" />
-                          </IconButton>
+                            {remindLoading === appointment._id ? (
+                              ''
+                            ) : (
+                              <ScheduleSendIcon color="primary" />
+                            )}
+                          </LoadingButton>
                         </Tooltip>
                       </TableCell>
                     ) : (

@@ -1,4 +1,4 @@
-import { Appointment, GlobalError, IPagination } from '../../types';
+import { Appointment, IPagination } from '../../types';
 import { createSlice } from '@reduxjs/toolkit';
 import {
   createAppointment,
@@ -17,7 +17,6 @@ interface AppointmentsState {
   currentPage: number;
   totalCount: number;
   appointmentsReminderLoading: string | false;
-  appointmentReminderError: GlobalError | null;
 }
 
 const initialState: AppointmentsState = {
@@ -28,7 +27,6 @@ const initialState: AppointmentsState = {
   currentPage: 1,
   totalCount: 1,
   appointmentsReminderLoading: false,
-  appointmentReminderError: null,
 };
 
 export const appointmentsSlice = createSlice({
@@ -90,7 +88,6 @@ export const appointmentsSlice = createSlice({
       remindAboutAppointment.rejected,
       (state, { payload: error }) => {
         state.appointmentUpdating = false;
-        state.appointmentReminderError = error || null;
         if (error) {
           toast.error(error.error);
         }
@@ -107,6 +104,10 @@ export const selectAppointmentCreating = (state: RootState) =>
   state.appointments.appointmentCreating;
 export const selectAppointmentFetching = (state: RootState) =>
   state.appointments.appointmentFetching;
+export const selectAppointmentUpdating = (state: RootState) =>
+  state.appointments.appointmentUpdating;
+export const selectAppointmentReminderLoading = (state: RootState) =>
+  state.appointments.appointmentsReminderLoading;
 export const selectAppointmentPage = (state: RootState) =>
   state.appointments.currentPage;
 export const selectAppointmentCount = (state: RootState) =>

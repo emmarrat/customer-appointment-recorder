@@ -140,11 +140,19 @@ expertsRouter.delete('/:id', auth, permit('admin'), async (req, res, next) => {
         .send({ error: 'Учетная запись мастера не найдена!' });
     }
 
+    const user = await User.findById(expert.user);
+
+    if (!user) {
+      return res
+        .status(400)
+        .send({ error: 'Учетная запись пользователя не найдена!' });
+    }
     const removedExpert = await expert.deleteOne();
     await Appointment.deleteMany({ expert: expert._id });
-
-    // Delete service hours associated with the expert
     await ServiceHour.deleteMany({ expert: expert._id });
+
+    user.role = 'user';
+    await user.save();
     res.send({
       message: 'Учетная запись мастера удалена',
       removedExpert,

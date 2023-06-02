@@ -16,6 +16,6 @@ export const styles = {
     justifyContent: 'center',
   },
   btn: {
-    borderRadius: '30px',
+    borderRadius,
   },
 };
