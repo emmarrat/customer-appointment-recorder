@@ -20,6 +20,18 @@ serviceHoursRouter.post(
         return res.status(400).send({ error: 'Мастер не найден!' });
       }
 
+      const currentDate = new Date();
+      currentDate.setHours(0, 0, 0, 0);
+
+      const selectedDate = new Date(req.body.date);
+      selectedDate.setHours(0, 0, 0, 0);
+
+      if (selectedDate < currentDate) {
+        return res
+          .status(400)
+          .send({ error: 'Нельзя создавать рабочий график на прошедший день' });
+      }
+
       const user = (req as RequestWithUser).user;
 
       if (user._id.toString() !== existingExpert.user.toString()) {
@@ -71,8 +83,12 @@ serviceHoursRouter.post(
 
 serviceHoursRouter.get('/expert/:id', async (req, res, next) => {
   try {
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+
     const serviceHours = await ServiceHour.find({
       expert: req.params.id,
+      date: { $gte: currentDate },
     }).exec();
 
     res.status(200).send(serviceHours);
@@ -97,16 +113,21 @@ serviceHoursRouter.get('/:id', async (req, res, next) => {
 
 serviceHoursRouter.get('/by-user/:id', async (req, res, next) => {
   try {
-    const expert = await Expert.findOne({ user: req.params.id }).populate(
-      'user',
-      'firstName lastName',
-    );
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+
+    const expert = await Expert.findOne({
+      user: req.params.id,
+    }).populate('user', 'firstName lastName');
 
     if (!expert) {
       return res.status(404).send({ error: 'Мастер не найден!' });
     }
 
-    const serviceHours = await ServiceHour.find({ expert: expert._id })
+    const serviceHours = await ServiceHour.find({
+      expert: expert._id,
+      date: { $gte: currentDate },
+    })
       .sort({ date: 1 })
       .exec();
 

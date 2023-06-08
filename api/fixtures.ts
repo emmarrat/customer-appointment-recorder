@@ -127,7 +127,7 @@ const run = async () => {
   const [date1, date2, date3, date4, date5] = await ServiceHour.create(
     {
       expert: newExpert1._id,
-      date: new Date('2023-06-05'),
+      date: new Date('2023-06-12'),
       hours: [
         { startTime: '10:00', endTime: '11:00', status: false },
         { startTime: '11:15', endTime: '12:15', status: true },
@@ -139,7 +139,7 @@ const run = async () => {
     },
     {
       expert: newExpert1._id,
-      date: new Date('2023-06-06'),
+      date: new Date('2023-06-13'),
       hours: [
         { startTime: '10:00', endTime: '11:00', status: false },
         { startTime: '11:15', endTime: '12:15', status: false },
@@ -151,7 +151,7 @@ const run = async () => {
     },
     {
       expert: newExpert2._id,
-      date: new Date('2023-06-05'),
+      date: new Date('2023-06-12'),
       hours: [
         { startTime: '10:00', endTime: '11:00', status: false },
         { startTime: '11:15', endTime: '12:15', status: false },
@@ -163,7 +163,7 @@ const run = async () => {
     },
     {
       expert: newExpert2._id,
-      date: new Date('2023-06-06'),
+      date: new Date('2023-06-13'),
       hours: [
         { startTime: '10:00', endTime: '11:00', status: false },
         { startTime: '11:15', endTime: '12:15', status: false },
@@ -175,7 +175,7 @@ const run = async () => {
     },
     {
       expert: newExpert3._id,
-      date: new Date('2023-06-05'),
+      date: new Date('2023-06-12'),
       hours: [
         { startTime: '10:00', endTime: '11:00', status: false },
         { startTime: '11:15', endTime: '12:15', status: false },
@@ -228,6 +228,11 @@ const run = async () => {
 
   await Message.create(
     {
+      username: 'Алла Ефромова',
+      text: 'Маска для волос от фирмы эстель!',
+      createdAt: new Date(Date.now() - 86400000),
+    },
+    {
       username: 'Эмир Марат',
       text: 'Стрижка была отличная! Мне все понравилось, однако, считаю, что сайт следовало бы доработать!',
       createdAt: new Date(Date.now() - 86400000),
@@ -240,11 +245,6 @@ const run = async () => {
     {
       username: 'Нурзада Жакупова',
       text: 'Ребят, а посоветуйте средство для ухода за волосами после окрашивания? Мастер Алла советовала, но я забыла.',
-      createdAt: new Date(Date.now() - 86400000),
-    },
-    {
-      username: 'Алла Ефромова',
-      text: 'Маска для волос от фирмы эстель!',
       createdAt: new Date(Date.now() - 86400000),
     },
   );

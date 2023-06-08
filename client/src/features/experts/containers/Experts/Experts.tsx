@@ -12,6 +12,7 @@ import {
 import ExpertCard from '../../components/ExpertCard/ExpertCard';
 import { useParams } from 'react-router-dom';
 import { selectCategoryName } from '../../../../dispatchers/categories/categoriesSlice';
+import { motion } from 'framer-motion';
 
 const Experts = () => {
   const { id } = useParams() as { id: string };
@@ -27,6 +28,21 @@ const Experts = () => {
       dispatch(fetchExperts());
     }
   }, [dispatch, id]);
+
+  const teacherVariants = {
+    visible: (i: number) => ({
+      opacity: 1,
+      scale: 1,
+      transition: {
+        delay: i * 0.5,
+        duration: 0.75,
+      },
+    }),
+    hidden: {
+      opacity: 0,
+      scale: 0.1,
+    },
+  };
 
   return loading ? (
     <LinearProgress />
@@ -51,7 +67,7 @@ const Experts = () => {
         spacing={2}
       >
         {experts.length > 0 ? (
-          experts.map((expert) => (
+          experts.map((expert, i) => (
             <Grid
               item
               container
@@ -61,7 +77,14 @@ const Experts = () => {
               lg={4}
               key={expert._id}
             >
-              <ExpertCard expert={expert} />
+              <motion.div
+                variants={teacherVariants}
+                initial="hidden"
+                animate="visible"
+                custom={i}
+              >
+                <ExpertCard expert={expert} />
+              </motion.div>
             </Grid>
           ))
         ) : (

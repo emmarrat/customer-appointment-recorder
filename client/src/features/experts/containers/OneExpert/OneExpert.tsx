@@ -37,6 +37,7 @@ import { styles } from './OneExpertStyles';
 import { selectUser } from '../../../../dispatchers/users/usersSlice';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { selectAppointmentCreating } from '../../../../dispatchers/appointemtns/appointmentsSlice';
+import { motion } from 'framer-motion';
 
 const OneExpert = () => {
   const { id } = useParams() as { id: string };
@@ -128,117 +129,128 @@ const OneExpert = () => {
           </Grid>
         ) : (
           expert && (
-            <Grid
-              padding={{ xs: '10px 20px', md: '15px 50px' }}
-              sx={{ width: '100%' }}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{
+                opacity: 1,
+                transition: {
+                  delay: 0.5,
+                  duration: 0.75,
+                },
+              }}
             >
-              <Button onClick={goBack}>Назад</Button>
               <Grid
-                sx={styles.columnContainer}
-                padding={{ xs: 0, sm: '0 20px', md: '0 50px' }}
-                mb={4}
+                padding={{ xs: '10px 20px', md: '15px 50px' }}
+                sx={{ width: '100%' }}
               >
-                <Grid sx={styles.container} mt={4}>
-                  <Grid item>
-                    <Typography variant="h6" mb={2}>
-                      {expert.user.firstName} {expert.user.lastName}
-                    </Typography>
-                    <Typography variant="h6">{expert.title}</Typography>
+                <Button onClick={goBack}>Назад</Button>
+                <Grid
+                  sx={styles.columnContainer}
+                  padding={{ xs: 0, sm: '0 20px', md: '0 50px' }}
+                  mb={4}
+                >
+                  <Grid sx={styles.container} mt={4}>
+                    <Grid item>
+                      <Typography variant="h6" mb={2}>
+                        {expert.user.firstName} {expert.user.lastName}
+                      </Typography>
+                      <Typography variant="h6">{expert.title}</Typography>
+                    </Grid>
+                    <Grid item>
+                      <Avatar
+                        sx={{ width: 120, height: 120 }}
+                        src={apiURL + '/' + expert.photo}
+                        alt={expert.user.firstName}
+                      />
+                    </Grid>
                   </Grid>
-                  <Grid item>
-                    <Avatar
-                      sx={{ width: 120, height: 120 }}
-                      src={apiURL + '/' + expert.photo}
-                      alt={expert.user.firstName}
-                    />
+                  <Grid item width="100%">
+                    <Divider sx={styles.divider} />
                   </Grid>
-                </Grid>
-                <Grid item width="100%">
-                  <Divider sx={styles.divider} />
-                </Grid>
-                <Grid item xs={12} width="100%">
-                  {!user && (
-                    <Typography variant="h6" textAlign="center">
-                      Только авторизованные пользователи могут выбрать услугу
-                    </Typography>
-                  )}
-                  <Typography variant="h6">Выберите услугу:</Typography>
-                  <Grid item container gap={2} mt={3}>
-                    {expert.services.map((service) => (
-                      <Grid
-                        key={service._id}
-                        item
-                        container
-                        justifyContent="space-between"
-                        alignItems="center"
-                        gap={1}
-                      >
+                  <Grid item xs={12} width="100%">
+                    {!user && (
+                      <Typography variant="h6" textAlign="center">
+                        Только авторизованные пользователи могут выбрать услугу
+                      </Typography>
+                    )}
+                    <Typography variant="h6">Выберите услугу:</Typography>
+                    <Grid item container gap={2} mt={3}>
+                      {expert.services.map((service) => (
                         <Grid
+                          key={service._id}
                           item
                           container
+                          justifyContent="space-between"
                           alignItems="center"
                           gap={1}
-                          xs={12}
-                          md={8}
                         >
                           <Grid
                             item
-                            sm={2}
-                            md={1}
-                            display={{ xs: 'none', sm: 'block' }}
+                            container
+                            alignItems="center"
+                            gap={1}
+                            xs={12}
+                            md={8}
                           >
-                            <Avatar sx={{ bgcolor: 'primary.light' }}>
-                              <LoyaltyIcon />
-                            </Avatar>
+                            <Grid
+                              item
+                              sm={2}
+                              md={1}
+                              display={{ xs: 'none', sm: 'block' }}
+                            >
+                              <Avatar sx={{ bgcolor: 'primary.light' }}>
+                                <LoyaltyIcon />
+                              </Avatar>
+                            </Grid>
+                            <Grid
+                              item
+                              container
+                              justifyContent="space-between"
+                              xs={12}
+                              sm={8}
+                              md={10}
+                            >
+                              <Typography variant="body1">
+                                {service.name}
+                              </Typography>
+                              <Typography>{`${service.price} сом`}</Typography>
+                            </Grid>
                           </Grid>
                           <Grid
                             item
                             container
-                            justifyContent="space-between"
                             xs={12}
-                            sm={8}
-                            md={10}
+                            md={3}
+                            justifyContent={{ xs: 'center', md: 'flex-end' }}
                           >
-                            <Typography variant="body1">
-                              {service.name}
-                            </Typography>
-                            <Typography>{`${service.price} сом`}</Typography>
+                            <Button
+                              className="btn"
+                              sx={styles.serviceBtn}
+                              onClick={() => addServiceState(service)}
+                              disabled={selectedServices !== null || !user}
+                            >
+                              Выбрать
+                              <LocalMallRoundedIcon sx={styles.serviceIcon} />
+                            </Button>
                           </Grid>
                         </Grid>
-                        <Grid
-                          item
-                          container
-                          xs={12}
-                          md={3}
-                          justifyContent={{ xs: 'center', md: 'flex-end' }}
-                        >
-                          <Button
-                            className="btn"
-                            sx={styles.serviceBtn}
-                            onClick={() => addServiceState(service)}
-                            disabled={selectedServices !== null || !user}
-                          >
-                            Выбрать
-                            <LocalMallRoundedIcon sx={styles.serviceIcon} />
-                          </Button>
-                        </Grid>
-                      </Grid>
-                    ))}
+                      ))}
+                    </Grid>
+                  </Grid>
+                  <Grid item width="100%">
+                    <Divider sx={styles.divider} />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Typography
+                      variant="body1"
+                      fontSize={{ xs: '14px', md: '18px' }}
+                    >
+                      {expert.info}
+                    </Typography>
                   </Grid>
                 </Grid>
-                <Grid item width="100%">
-                  <Divider sx={styles.divider} />
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography
-                    variant="body1"
-                    fontSize={{ xs: '14px', md: '18px' }}
-                  >
-                    {expert.info}
-                  </Typography>
-                </Grid>
               </Grid>
-            </Grid>
+            </motion.div>
           )
         )}
       </Grid>

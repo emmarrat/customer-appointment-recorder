@@ -70,9 +70,11 @@ export const appointmentsSlice = createSlice({
       state.appointmentUpdating = false;
       toast.info('Статус записи обновлен!');
     });
-    builder.addCase(updateAppointment.rejected, (state) => {
+    builder.addCase(updateAppointment.rejected, (state, { payload: error }) => {
       state.appointmentUpdating = false;
-      toast.error('Произошла ошибка при обновлении статуса записи!');
+      if (error) {
+        toast.error(error.error);
+      }
     });
     builder.addCase(
       remindAboutAppointment.pending,
@@ -87,7 +89,7 @@ export const appointmentsSlice = createSlice({
     builder.addCase(
       remindAboutAppointment.rejected,
       (state, { payload: error }) => {
-        state.appointmentUpdating = false;
+        state.appointmentsReminderLoading = false;
         if (error) {
           toast.error(error.error);
         }

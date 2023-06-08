@@ -23,6 +23,18 @@ appointmentsRouter.post('/', auth, async (req, res, next) => {
       return res.status(400).send({ error: 'Указанный день уже занят' });
     }
 
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+
+    const selectedDate = new Date(serviceHour.date);
+    selectedDate.setHours(0, 0, 0, 0);
+
+    if (selectedDate < currentDate) {
+      return res
+        .status(400)
+        .send({ error: 'Нельзя создавать запись на прошедший день' });
+    }
+
     const appointment = new Appointment({
       client: user._id,
       expert,
@@ -189,6 +201,19 @@ appointmentsRouter.patch(
       if (!appointment || !appointmentToSave) {
         return res.status(404).send({ error: 'Запись не найдена!' });
       }
+
+      const currentDate = new Date();
+      currentDate.setHours(0, 0, 0, 0);
+
+      const selectedDate = new Date(appointment.date.date);
+      selectedDate.setHours(0, 0, 0, 0);
+
+      if (selectedDate < currentDate) {
+        return res
+          .status(400)
+          .send({ error: 'Нельзя изменять прошедшую запись' });
+      }
+
       appointmentToSave.isApproved = isApproved;
 
       await appointmentToSave.save();
@@ -305,6 +330,19 @@ appointmentsRouter.post(
       if (!appointment) {
         return res.status(400).send({ error: 'Запись не найдена!' });
       }
+
+      const currentDate = new Date();
+      currentDate.setHours(0, 0, 0, 0);
+
+      const selectedDate = new Date(appointment.date.date);
+      selectedDate.setHours(0, 0, 0, 0);
+
+      if (selectedDate < currentDate) {
+        return res
+          .status(400)
+          .send({ error: 'Нельзя отправить напоминание на прошедшую запись' });
+      }
+
       if (!appointment.isApproved) {
         return res.status(400).send({ error: 'Запись не подтверждена!' });
       }

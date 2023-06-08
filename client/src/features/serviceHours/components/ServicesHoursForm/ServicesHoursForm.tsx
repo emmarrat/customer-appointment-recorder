@@ -32,10 +32,7 @@ const ServicesHoursForm: React.FC<Props> = ({ onSubmit, expert }) => {
   const submitFormHandler = async (event: React.FormEvent) => {
     event.preventDefault();
     await onSubmit(state);
-    setState({
-      expert: '',
-      date: '',
-    });
+    console.log(state);
   };
 
   return (

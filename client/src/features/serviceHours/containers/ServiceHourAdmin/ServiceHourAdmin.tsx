@@ -20,27 +20,25 @@ import { Hour, ServiceHourMutation } from '../../../../types';
 import { borderRadius, boxShadow } from '../../../../stylesMui';
 import { Link as RouterLink } from 'react-router-dom';
 import LoadingButton from '@mui/lab/LoadingButton';
+import { selectOneExpert } from '../../../../dispatchers/experts/expertsSlice';
+import { fetchExpertByUser } from '../../../../dispatchers/experts/expertsThunks';
 
 const ServiceHourAdmin = () => {
   const user = useAppSelector(selectUser);
   const dispatch = useAppDispatch();
   const workingDates = useAppSelector(selectDatetimes);
+  const expert = useAppSelector(selectOneExpert);
   const [open, setOpen] = useState(false);
-  const [expert, setExpert] = useState('');
   const loading = useAppSelector(selectDatetimeFetching);
   const removeLoading = useAppSelector(selectDatetimeRemoving);
   useEffect(() => {
     if (user) {
       dispatch(fetchServiceHoursByUser(user._id));
+      dispatch(fetchExpertByUser(user._id));
     }
   }, [dispatch, user]);
 
-  useEffect(() => {
-    const date = workingDates.find((date) => date._id);
-    if (date) {
-      setExpert(date.expert);
-    }
-  }, [workingDates]);
+  console.log('expert = ', expert);
 
   const openModal = () => {
     setOpen(true);
@@ -79,8 +77,9 @@ const ServiceHourAdmin = () => {
         justifyContent="center"
         alignItems="center"
       >
-        {loading && <CircularProgress />}
-        {workingDates.length > 0 &&
+        {loading ? (
+          <CircularProgress />
+        ) : workingDates.length > 0 ? (
           workingDates.map((date) => (
             <Grid
               item
@@ -171,10 +170,17 @@ const ServiceHourAdmin = () => {
                 ))}
               </Grid>
             </Grid>
-          ))}
+          ))
+        ) : (
+          <Typography variant="h5" textAlign="center" mt={5}>
+            У вас нет рабочего графика
+          </Typography>
+        )}
       </Grid>
       <MyModal open={open} handleClose={closeModal}>
-        <ServicesHoursForm onSubmit={onSubmitForm} expert={expert} />
+        {expert && (
+          <ServicesHoursForm onSubmit={onSubmitForm} expert={expert._id} />
+        )}
       </MyModal>
     </>
   );
