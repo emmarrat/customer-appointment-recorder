@@ -3,6 +3,8 @@ import { Button, Grid, styled, Typography } from '@mui/material';
 import { styles } from './ChatStyles';
 import { COMPANY_TITLE } from '../../../constants';
 import { Link as RouterLink } from 'react-router-dom';
+import { ANIMATION_VARIANTS } from '../../../stylesMui';
+import { motion } from 'framer-motion';
 
 const Text = styled(Typography)({
   color: '#fff',
@@ -22,37 +24,61 @@ const ChatPreview = () => {
     <Grid container justifyContent="space-between" sx={styles.background}>
       <Grid item container direction="column" xs={12} md={6} gap={3}>
         <Grid item>
-          <Typography
-            variant="h4"
-            sx={styles.previewTitle}
-            fontSize={{ xs: '20px', md: '35px' }}
-            color={{ xs: 'primary.dark', md: '#fff' }}
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={ANIMATION_VARIANTS}
           >
-            {COMPANY_TITLE} предлагает своим клиентам присоединиться к нашему
-            Форуму!
-          </Typography>
+            <Typography
+              variant="h4"
+              sx={styles.previewTitle}
+              fontSize={{ xs: '20px', md: '35px' }}
+              color={{ xs: 'primary.dark', md: '#fff' }}
+            >
+              {COMPANY_TITLE} предлагает своим клиентам присоединиться к нашему
+              Форуму!
+            </Typography>
+          </motion.div>
         </Grid>
         <Grid item>
-          <Text variant="h5" fontSize={{ xs: '14px', md: '25px' }}>
-            В нашем форуме вы можете поделиться своими впечатлениями и
-            рассказать о качестве предоставляемых услуг, а также дать идеи для
-            улучешния работы нашего сервиса.
-          </Text>
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={ANIMATION_VARIANTS}
+          >
+            <Text variant="h5" fontSize={{ xs: '14px', md: '25px' }}>
+              В нашем форуме вы можете поделиться своими впечатлениями и
+              рассказать о качестве предоставляемых услуг, а также дать идеи для
+              улучешния работы нашего сервиса.
+            </Text>
+          </motion.div>
         </Grid>
         <Grid item>
-          <Text variant="h5" fontSize={{ xs: '14px', md: '25px' }}>
-            Чтобы присоединиться к форуму вы должны быть{' '}
-            <Link to="/register" target="_blank">
-              зарегестрированы
-            </Link>{' '}
-            на нашем сайте, просим соблюдать уважение ко всем пользователям.
-          </Text>
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={ANIMATION_VARIANTS}
+          >
+            <Text variant="h5" fontSize={{ xs: '14px', md: '25px' }}>
+              Чтобы присоединиться к форуму вы должны быть{' '}
+              <Link to="/register" target="_blank">
+                зарегестрированы
+              </Link>{' '}
+              на нашем сайте, просим соблюдать уважение ко всем пользователям.
+            </Text>
+          </motion.div>
         </Grid>
         <Grid item>
-          <Text variant="h5" fontSize={{ xs: '14px', md: '25px' }}>
-            Администратор имеет право удалять сообщения в случае нарушения
-            этики.
-          </Text>
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={ANIMATION_VARIANTS}
+          >
+            <Text variant="h5" fontSize={{ xs: '14px', md: '25px' }}>
+              Администратор имеет право удалять сообщения в случае нарушения
+              этики.
+            </Text>
+          </motion.div>
         </Grid>
       </Grid>
       <Grid item container alignItems="center" mt={5} xs={12} md={3}>

@@ -19,6 +19,21 @@ export const block = {
     lineHeight: '1.5',
   },
   fontSize: { xs: '15px', sm: '25px', md: '35px', lg: '38px' },
-  maxWidth: { xs: '250px', sm: '500px', md: '600px', lg: '700px', xl: '850px' },
+  maxWidth: { xs: '250px', sm: '500px', md: '600px', lg: '750px', xl: '850px' },
   btnFontSize: { xs: '10px', md: '15px' },
+};
+
+export const ANIMATION_VARIANTS = {
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      delay: 0.5,
+      duration: 0.75,
+    },
+  },
+  hidden: {
+    opacity: 0,
+    scale: 0.1,
+  },
 };
