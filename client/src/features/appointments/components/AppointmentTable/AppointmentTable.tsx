@@ -120,9 +120,9 @@ const AppointmentTable: React.FC<Props> = ({
                     <TableCell>
                       {`${dayjs(appointment.date.date)
                         .locale('ru')
-                        .format('DD.MM.YY')} | ${appointment.startTime} - ${
-                        appointment.endTime
-                      }`}
+                        .format('DD.MM.YY')}`}
+                      <br />
+                      {appointment.startTime}
                     </TableCell>
                     <TableCell>{appointment.service.name}</TableCell>
                     <TableCell>{appointment.service.price} сом</TableCell>
@@ -176,27 +176,27 @@ const AppointmentTable: React.FC<Props> = ({
                         )}
                       </TableCell>
                     )}
-                    {role === 'admin' && appointment.isApproved ? (
+                    {role === 'admin' && (
                       <TableCell align="center">
-                        <Tooltip title="Отправить напоминание">
-                          <LoadingButton
-                            loading={remindLoading === appointment._id}
-                            sx={{ cursor: 'pointer' }}
-                            onClick={() => remind(appointment._id)}
-                          >
-                            {remindLoading === appointment._id ? (
-                              ''
-                            ) : (
-                              <ScheduleSendIcon color="primary" />
-                            )}
-                          </LoadingButton>
-                        </Tooltip>
-                      </TableCell>
-                    ) : (
-                      <TableCell align="center">
-                        <Tooltip title="Напоминание можно отправить после подтверждение записи">
-                          <RemoveIcon />
-                        </Tooltip>
+                        {appointment.isApproved ? (
+                          <Tooltip title="Отправить напоминание">
+                            <LoadingButton
+                              loading={remindLoading === appointment._id}
+                              sx={{ cursor: 'pointer' }}
+                              onClick={() => remind(appointment._id)}
+                            >
+                              {remindLoading === appointment._id ? (
+                                ''
+                              ) : (
+                                <ScheduleSendIcon color="primary" />
+                              )}
+                            </LoadingButton>
+                          </Tooltip>
+                        ) : (
+                          <Tooltip title="Напоминание можно отправить после подтверждение записи">
+                            <RemoveIcon />
+                          </Tooltip>
+                        )}
                       </TableCell>
                     )}
                   </TableRow>

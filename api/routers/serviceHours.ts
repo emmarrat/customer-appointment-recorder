@@ -83,15 +83,30 @@ serviceHoursRouter.post(
 
 serviceHoursRouter.get('/expert/:id', async (req, res, next) => {
   try {
-    const currentDate = new Date();
-    currentDate.setHours(0, 0, 0, 0);
+    const fromToday = new Date();
+    const currentTime = fromToday.getHours() + ':' + fromToday.getMinutes();
+    fromToday.setHours(0, 0, 0, 0);
+    const today = new Date();
 
     const serviceHours = await ServiceHour.find({
       expert: req.params.id,
-      date: { $gte: currentDate },
+      date: { $gte: fromToday },
     }).exec();
 
-    res.status(200).send(serviceHours);
+    const filteredServiceHours = serviceHours.map((serviceHour) => {
+      if (
+        serviceHour.date.toISOString().slice(0, 10) ===
+        today.toISOString().slice(0, 10)
+      ) {
+        const filteredHours = serviceHour.hours.filter((hour) => {
+          return hour.startTime >= currentTime;
+        });
+        return { ...serviceHour.toObject(), hours: filteredHours };
+      }
+      return serviceHour.toObject();
+    });
+
+    res.status(200).send(filteredServiceHours);
   } catch (e) {
     return next(e);
   }
@@ -115,7 +130,6 @@ serviceHoursRouter.get('/by-user/:id', async (req, res, next) => {
   try {
     const currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0);
-
     const expert = await Expert.findOne({
       user: req.params.id,
     }).populate('user', 'firstName lastName');
@@ -220,6 +234,7 @@ serviceHoursRouter.delete(
       const hasActiveHours = serviceHour.hours.some(
         (hour) => hour.status === true,
       );
+
       if (hasActiveHours) {
         return res.status(400).send({
           error: 'Удаление запрещено, имеется подтвержденная запись!',

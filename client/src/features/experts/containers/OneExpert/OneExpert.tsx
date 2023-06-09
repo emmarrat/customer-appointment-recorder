@@ -68,7 +68,6 @@ const OneExpert = () => {
       const matchingObject = workingDates.find((obj) => {
         const objDate = dayjs(obj.date).startOf('day');
         const providedDate = newValue.startOf('day');
-
         return objDate.isSame(providedDate);
       });
       if (matchingObject) {
@@ -130,6 +129,9 @@ const OneExpert = () => {
         ) : (
           expert && (
             <motion.div
+              style={{
+                width: '100%',
+              }}
               initial={{ opacity: 0 }}
               animate={{
                 opacity: 1,
@@ -167,9 +169,14 @@ const OneExpert = () => {
                   <Grid item width="100%">
                     <Divider sx={styles.divider} />
                   </Grid>
-                  <Grid item xs={12} width="100%">
+                  <Grid item xs={12} sx={{ width: '100%' }}>
                     {!user && (
-                      <Typography variant="h6" textAlign="center">
+                      <Typography
+                        variant="h6"
+                        textAlign="center"
+                        textTransform="uppercase"
+                        color="primary.main"
+                      >
                         Только авторизованные пользователи могут выбрать услугу
                       </Typography>
                     )}

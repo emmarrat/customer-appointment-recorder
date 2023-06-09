@@ -31,14 +31,13 @@ const ServiceHourAdmin = () => {
   const [open, setOpen] = useState(false);
   const loading = useAppSelector(selectDatetimeFetching);
   const removeLoading = useAppSelector(selectDatetimeRemoving);
+
   useEffect(() => {
     if (user) {
       dispatch(fetchServiceHoursByUser(user._id));
       dispatch(fetchExpertByUser(user._id));
     }
   }, [dispatch, user]);
-
-  console.log('expert = ', expert);
 
   const openModal = () => {
     setOpen(true);
