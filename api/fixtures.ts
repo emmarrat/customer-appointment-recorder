@@ -47,8 +47,8 @@ const run = async () => {
     },
     {
       email: 'user1@gmail.com',
-      firstName: 'Улус Эмильбеков',
-      lastName: 'Emilbekov',
+      firstName: 'Улус',
+      lastName: 'Эмильбеков',
       password: '12345678A',
       token: crypto.randomUUID(),
       phoneNumber: '+996501501501',

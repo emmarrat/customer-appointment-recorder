@@ -11,7 +11,12 @@ interface Props {
 
 const MyModal: React.FC<Props> = ({ open, handleClose, title, children }) => {
   return (
-    <Dialog open={open} onClose={handleClose} fullWidth={true}>
+    <Dialog
+      open={open}
+      onClose={handleClose}
+      fullWidth={true}
+      transitionDuration={{ exit: 0.2 }}
+    >
       <DialogTitle>
         {title}
         <IconButton

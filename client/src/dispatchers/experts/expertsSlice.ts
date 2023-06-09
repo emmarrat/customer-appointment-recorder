@@ -146,11 +146,10 @@ export const expertsSlice = createSlice({
       state.expertRemoving = false;
       toast.info('Эксперт удален!');
     });
-    builder.addCase(deleteExpert.rejected, (state, { payload: error }) => {
+    builder.addCase(deleteExpert.rejected, (state) => {
       state.expertUpdating = false;
-      if (error) {
-        toast.error('При удалении возникла ошибка"');
-      }
+
+      toast.error('При удалении возникла ошибка"');
     });
   },
 });

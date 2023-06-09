@@ -28,6 +28,9 @@ import ForgetPassword from './features/users/containers/ForgetPassword';
 import ResetPassword from './features/users/containers/ResetPassword';
 import Footer from './components/UI/Footer/Footer';
 import './styles.css';
+import CategoriesAdmin from './features/categories/containers/CategoriesAdmin/CategoriesAdmin';
+import CreateCategory from './features/categories/containers/CreateCategory/CreateCategory';
+import UpdateCategory from './features/categories/containers/UpdateCategory/UpdateCategory';
 
 const App = () => {
   const user = useAppSelector(selectUser);
@@ -112,6 +115,30 @@ const App = () => {
               element={
                 <ProtectedRoute isAllowed={user && user.role === 'admin'}>
                   <EditExpert />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/categories"
+              element={
+                <ProtectedRoute isAllowed={user && user.role === 'admin'}>
+                  <CategoriesAdmin />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/categories/new"
+              element={
+                <ProtectedRoute isAllowed={user && user.role === 'admin'}>
+                  <CreateCategory />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/categories/update/:id"
+              element={
+                <ProtectedRoute isAllowed={user && user.role === 'admin'}>
+                  <UpdateCategory />
                 </ProtectedRoute>
               }
             />

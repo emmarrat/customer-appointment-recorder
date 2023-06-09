@@ -7,6 +7,9 @@ import User from '../models/User';
 import mongoose from 'mongoose';
 import Appointment from '../models/Appointment';
 import ServiceHour from '../models/ServiceHour';
+import path from 'path';
+import config from '../config';
+import fs from 'fs';
 
 const expertsRouter = express.Router();
 
@@ -172,41 +175,37 @@ expertsRouter.put(
   imageUpload.single('photo'),
   async (req, res, next) => {
     try {
-      const expert = await Expert.findById(req.params.id);
+      const { id } = req.params;
+      const { user, category, title, info, services } = req.body;
+      const expert = await Expert.findById(id);
 
       if (!expert) {
-        return res.status(404).send({ error: 'Мастер не найден!' });
+        return res.status(404).send({ error: 'Эксперт не найден!' });
       }
 
-      if (req.body.user) {
-        expert.user = req.body.user;
-      }
-
-      if (req.body.category) {
-        expert.category = req.body.category;
-      }
-
-      if (req.body.title) {
-        expert.title = req.body.title;
-      }
-
-      if (req.body.info) {
-        expert.info = req.body.info;
-      }
+      expert.user = user || expert.user;
+      expert.category = category || expert.category;
+      expert.title = title || expert.title;
+      expert.info = info || expert.info;
+      expert.services = services ? JSON.parse(services) : expert.services;
 
       if (req.file) {
+        if (expert.photo) {
+          const imagePath = path.join(config.publicPath, expert.photo);
+          fs.unlink(imagePath, (err) => {
+            if (err) {
+              console.error('Error removing photo:', err);
+            }
+          });
+        }
         expert.photo = req.file.filename;
       }
 
-      if (req.body.services) {
-        expert.services = JSON.parse(req.body.services);
-      }
-
-      await expert.save();
+      const updatedExpert = await expert.save();
 
       return res.send({
         message: 'Учетная запись мастера изменена!',
-        expert,
+        updatedExpert,
       });
     } catch (e) {
       if (e instanceof mongoose.Error.ValidationError) {

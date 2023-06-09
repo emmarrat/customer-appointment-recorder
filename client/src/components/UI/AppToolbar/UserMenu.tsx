@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { User } from '../../../types';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import { Avatar, Button, Menu, MenuItem } from '@mui/material';
+import { Avatar, Button, Divider, Menu, MenuItem } from '@mui/material';
 import { useAppDispatch } from '../../../app/hooks';
 import { logout } from '../../../dispatchers/users/usersThunks';
 import noImageAvailable from '../../../assets/images/noImageAvailable.jpg';
@@ -48,11 +48,6 @@ const UserMenu: React.FC<Props> = ({ user }) => {
         sx={{ width: '100%', mt: 3 }}
       >
         <MenuItem onClick={handleLogout}>Выйти</MenuItem>
-        {user.role === 'admin' && (
-          <MenuItem component={RouterLink} to="/admin/experts">
-            Редактировать мастеров
-          </MenuItem>
-        )}
         {user.role === 'expert' && (
           <MenuItem component={RouterLink} to="/expert/service-hours">
             Рабочий график
@@ -68,15 +63,24 @@ const UserMenu: React.FC<Props> = ({ user }) => {
             {user.role === 'expert' ? 'Записи клиентов' : 'Мои записи'}
           </MenuItem>
         )}
-        {user.role === 'admin' && (
-          <MenuItem component={RouterLink} to="/admin/appointments">
-            Контроль записей
-          </MenuItem>
-        )}
-
         <MenuItem component={RouterLink} to="/chat">
           Форум
         </MenuItem>
+
+        {user.role === 'admin' && (
+          <>
+            <Divider />
+            <MenuItem component={RouterLink} to="/admin/categories">
+              Категории услуг
+            </MenuItem>
+            <MenuItem component={RouterLink} to="/admin/appointments">
+              Контроль записей
+            </MenuItem>
+            <MenuItem component={RouterLink} to="/admin/experts">
+              Редактировать мастеров
+            </MenuItem>
+          </>
+        )}
       </Menu>
     </>
   );

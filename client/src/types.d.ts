@@ -154,6 +154,11 @@ export interface Category {
   image: string;
 }
 
+export interface CategoryMutation {
+  title: string;
+  image: File | null;
+}
+
 export interface Appointment {
   service: ServicesPriceNumber;
   _id: string;

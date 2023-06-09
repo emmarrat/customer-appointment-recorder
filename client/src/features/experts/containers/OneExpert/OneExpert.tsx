@@ -110,13 +110,13 @@ const OneExpert = () => {
     setOpenCongrats(true);
   };
 
-  const closeAll = () => {
-    closeModal();
-    setOpenCongrats(false);
-    setSelectedTime(null);
-    setSelectedDate(null);
-    setSelectedServices(null);
-    setValue(null);
+  const closeAll = async () => {
+    await closeModal();
+    await setOpenCongrats(false);
+    await setSelectedTime(null);
+    await setSelectedDate(null);
+    await setSelectedServices(null);
+    await setValue(null);
   };
 
   return (
