@@ -5,6 +5,8 @@ import {
   Box,
   Container,
   Grid,
+  IconButton,
+  InputAdornment,
   Link,
   TextField,
   Typography,
@@ -21,6 +23,7 @@ import { googleLogin, register } from '../../../dispatchers/users/usersThunks';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import FileInput from '../../../components/UI/FileInput/FileInput';
 import LoadingButton from '@mui/lab/LoadingButton';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 const Register = () => {
   const dispatch = useAppDispatch();
@@ -36,6 +39,9 @@ const Register = () => {
     phoneNumber: '',
     avatar: null,
   });
+
+  const [showPassword, setShowNewPassword] = React.useState(false);
+  const togglePass = () => setShowNewPassword(!showPassword);
 
   const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -161,13 +167,26 @@ const Register = () => {
                 variant="outlined"
                 name="password"
                 label="Пароль"
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 autoComplete="new-password"
                 value={state.password}
                 onChange={inputChangeHandler}
                 error={Boolean(getFieldError('password'))}
                 helperText={getFieldError('password')}
                 sx={{ width: '100%' }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={togglePass}
+                        edge="end"
+                      >
+                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
             </Grid>
             <Grid item xs>

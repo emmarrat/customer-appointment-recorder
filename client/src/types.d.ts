@@ -201,3 +201,17 @@ export interface ChatMessage {
   text: string;
   createdAt: string;
 }
+export interface HourWithoutId extends HourMutation {
+  status: boolean;
+}
+
+export interface UpdateHours {
+  id: string;
+  hours: HourWithoutId[];
+}
+
+export interface ResetPassword {
+  newPassword: string;
+  confirmPassword: string;
+  token: string;
+}

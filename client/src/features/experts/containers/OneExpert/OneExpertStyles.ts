@@ -4,13 +4,13 @@ export const styles = {
     justifyContent: 'space-between',
     alignItems: 'center',
     width: '100%',
+    flexDirection: { xs: 'column', md: 'row' },
   },
   columnContainer: {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: '0 50px',
   },
   miniWrapp: {
     display: 'flex',
@@ -28,5 +28,8 @@ export const styles = {
   },
   divider: {
     my: 3,
+  },
+  calendar: {
+    width: { xs: '85%', sm: '100%' },
   },
 };

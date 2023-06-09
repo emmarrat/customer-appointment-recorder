@@ -45,7 +45,7 @@ const UserMenu: React.FC<Props> = ({ user }) => {
         keepMounted
         open={Boolean(anchorEl)}
         onClose={handleClose}
-        sx={{ width: '100%' }}
+        sx={{ width: '100%', mt: 3 }}
       >
         <MenuItem onClick={handleLogout}>Выйти</MenuItem>
         {user.role === 'admin' && (
@@ -73,6 +73,10 @@ const UserMenu: React.FC<Props> = ({ user }) => {
             Контроль записей
           </MenuItem>
         )}
+
+        <MenuItem component={RouterLink} to="/chat">
+          Форум
+        </MenuItem>
       </Menu>
     </>
   );

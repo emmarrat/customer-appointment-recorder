@@ -6,6 +6,7 @@ import {
   LoginMutation,
   RegisterMutation,
   RegisterResponse,
+  ResetPassword,
   User,
   ValidationError,
 } from '../../types';
@@ -92,21 +93,53 @@ export const fetchBasicUsers = createAsyncThunk<User[]>(
   },
 );
 
-export const fetchOneBasicUser = createAsyncThunk<User, string>(
-  'users/fetchOneBasicUser',
-  async (id) => {
-    const { data } = await axiosApi.get<User>('/users/basic/' + id);
-    return data;
-  },
-);
-
 export const verifyEmail = createAsyncThunk<User, string>(
   'users/verifyEmail',
   async (token) => {
     const { data } = await axiosApi.post<RegisterResponse>(
       `/users/verify-email/${token}`,
     );
-
     return data.user;
   },
 );
+
+interface ForgotPasswordPayload {
+  email: string;
+}
+
+export const forgotPassword = createAsyncThunk<
+  void,
+  ForgotPasswordPayload,
+  { rejectValue: GlobalError }
+>('users/forgotPassword', async (email, { rejectWithValue }) => {
+  try {
+    await axiosApi.post('/users/forgot-password', email);
+  } catch (error) {
+    if (isAxiosError(error) && error.response) {
+      return rejectWithValue(error.response.data as GlobalError);
+    }
+    throw error;
+  }
+});
+
+export const resetPassword = createAsyncThunk<
+  void,
+  ResetPassword,
+  { rejectValue: GlobalError }
+>('users/resetPassword', async (data, { rejectWithValue }) => {
+  try {
+    const response = await axiosApi.post(
+      `/users/reset-password/${data.token}`,
+      {
+        newPassword: data.newPassword,
+        confirmPassword: data.confirmPassword,
+      },
+    );
+    return response.data;
+  } catch (error) {
+    if (isAxiosError(error) && error.response) {
+      return rejectWithValue(error.response.data as GlobalError);
+    }
+    throw error;
+  }
+});

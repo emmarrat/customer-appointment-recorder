@@ -6,13 +6,13 @@ import Register from './features/users/containers/Register';
 import Login from './features/users/containers/Login';
 import { useAppSelector } from './app/hooks';
 import { selectUser } from './dispatchers/users/usersSlice';
-import ExpertAdmin from './features/experts/components/ExpertAdmin/ExpertAdmin';
+import ExpertAdmin from './features/experts/containers/ExpertAdmin/ExpertAdmin';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import NewExpert from './features/experts/containers/NewExpert/NewExpert';
 import EditExpert from './features/experts/containers/EditExpert/EditExpert';
 import Experts from './features/experts/containers/Experts/Experts';
 import OneExpert from './features/experts/containers/OneExpert/OneExpert';
-import ServiceHourAdmin from './features/serviceHours/components/ServiceHourAdmin/ServiceHourAdmin';
+import ServiceHourAdmin from './features/serviceHours/containers/ServiceHourAdmin/ServiceHourAdmin';
 import './styles.css';
 import Categories from './features/categories/containers/Categories/Categories';
 import AppointmentPanel from './features/appointments/containers/AppointmentPanel/AppointmentPanel';
@@ -23,6 +23,11 @@ import ChatPreview from './features/chats/containers/ChatPreview';
 import WelcomeBlock from './components/StaticComponents/WelcomeBlock';
 import ExpertsSlider from './features/experts/containers/ExpertsSlider/ExpertsSlider';
 import VerifyEmail from './features/users/containers/VerifyEmail';
+import UpdateServiceHours from './features/serviceHours/containers/UpdateServiceHours/UpdateServiceHours';
+import ForgetPassword from './features/users/containers/ForgetPassword';
+import ResetPassword from './features/users/containers/ResetPassword';
+import Footer from './components/UI/Footer/Footer';
+import './styles.css';
 
 const App = () => {
   const user = useAppSelector(selectUser);
@@ -33,7 +38,7 @@ const App = () => {
       <header>
         <AppToolbar />
       </header>
-      <main>
+      <main className="content">
         <Container maxWidth="xl" sx={{ my: 5 }}>
           <Routes>
             <Route
@@ -54,11 +59,14 @@ const App = () => {
             />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/verify-email/:token" element={<VerifyEmail />} />
+            <Route path="/forget-password" element={<ForgetPassword />} />
+            <Route path="/reset-password/:token" element={<ResetPassword />} />
             <Route path="/experts" element={<Experts />} />
             <Route path="/experts/by-category/:id" element={<Experts />} />
             <Route path="/experts/:id" element={<OneExpert />} />
-            <Route path="/verify-email/:token" element={<VerifyEmail />} />
-
+            <Route path="/pre-chat" element={<ChatPreview />} />
+            <Route path="/chat" element={<Chat />} />
             <Route
               path={
                 user && user.role === 'expert'
@@ -83,7 +91,6 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
-
             <Route
               path="/admin/experts"
               element={
@@ -116,7 +123,14 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
-
+            <Route
+              path="/expert/service-hours/update/:id"
+              element={
+                <ProtectedRoute isAllowed={user && user.role === 'expert'}>
+                  <UpdateServiceHours />
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="/*"
               element={
@@ -125,9 +139,6 @@ const App = () => {
                 </Typography>
               }
             />
-            <Route path="/pre-chat" element={<ChatPreview />} />
-
-            <Route path="/chat" element={<Chat />} />
           </Routes>
         </Container>
         <ToastContainer
@@ -139,6 +150,9 @@ const App = () => {
           autoClose={2000}
         />
       </main>
+      <footer className="footer">
+        <Footer />
+      </footer>
     </>
   );
 };

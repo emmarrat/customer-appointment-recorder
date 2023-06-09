@@ -7,10 +7,6 @@ import {
   CircularProgress,
   Divider,
   Grid,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
   Typography,
 } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -39,6 +35,9 @@ import { createAppointment } from '../../../../dispatchers/appointemtns/appointm
 import AppointmentMessage from '../../../appointments/components/AppointmentMessage/AppointmentMessage';
 import { styles } from './OneExpertStyles';
 import { selectUser } from '../../../../dispatchers/users/usersSlice';
+import LoadingButton from '@mui/lab/LoadingButton';
+import { selectAppointmentCreating } from '../../../../dispatchers/appointemtns/appointmentsSlice';
+import { motion } from 'framer-motion';
 
 const OneExpert = () => {
   const { id } = useParams() as { id: string };
@@ -47,6 +46,7 @@ const OneExpert = () => {
   const workingDates = useAppSelector(selectDatetimes);
   const loading = useAppSelector(selectExpertOneFetching);
   const user = useAppSelector(selectUser);
+  const appointmentLoading = useAppSelector(selectAppointmentCreating);
   const navigate = useNavigate();
   const [selectedServices, setSelectedServices] = useState<ServicesFull | null>(
     null,
@@ -129,83 +129,132 @@ const OneExpert = () => {
           </Grid>
         ) : (
           expert && (
-            <Grid
-              padding={{ xs: '10px 20px', md: '15px 50px' }}
-              sx={{ width: '100%' }}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{
+                opacity: 1,
+                transition: {
+                  delay: 0.5,
+                  duration: 0.75,
+                },
+              }}
             >
-              <Button onClick={goBack}>Назад</Button>
-              <Grid sx={styles.columnContainer} mb={4}>
-                <Grid sx={styles.container} mt={4}>
-                  <Grid item>
-                    <Typography variant="h6" mb={2}>
-                      {expert.user.firstName} {expert.user.lastName}
-                    </Typography>
-                    <Typography variant="h6">{expert.title}</Typography>
+              <Grid
+                padding={{ xs: '10px 20px', md: '15px 50px' }}
+                sx={{ width: '100%' }}
+              >
+                <Button onClick={goBack}>Назад</Button>
+                <Grid
+                  sx={styles.columnContainer}
+                  padding={{ xs: 0, sm: '0 20px', md: '0 50px' }}
+                  mb={4}
+                >
+                  <Grid sx={styles.container} mt={4}>
+                    <Grid item>
+                      <Typography variant="h6" mb={2}>
+                        {expert.user.firstName} {expert.user.lastName}
+                      </Typography>
+                      <Typography variant="h6">{expert.title}</Typography>
+                    </Grid>
+                    <Grid item>
+                      <Avatar
+                        sx={{ width: 120, height: 120 }}
+                        src={apiURL + '/' + expert.photo}
+                        alt={expert.user.firstName}
+                      />
+                    </Grid>
                   </Grid>
-                  <Grid item>
-                    <Avatar
-                      sx={{ width: 120, height: 120 }}
-                      src={apiURL + '/' + expert.photo}
-                      alt={expert.user.firstName}
-                    />
+                  <Grid item width="100%">
+                    <Divider sx={styles.divider} />
                   </Grid>
-                </Grid>
-                <Grid item width="100%">
-                  <Divider sx={styles.divider} />
-                </Grid>
-                <Grid item xs={12} width="100%">
-                  {!user && (
-                    <Typography variant="h6" textAlign="center">
-                      Только авторизованные пользователи могут выбрать услугу
-                    </Typography>
-                  )}
-                  <Typography variant="h6">Выберите услугу:</Typography>
-                  <List>
-                    {expert.services.map((service) => (
-                      <ListItem
-                        key={service._id}
-                        secondaryAction={
-                          <Button
-                            className="btn"
-                            sx={styles.serviceBtn}
-                            onClick={() => addServiceState(service)}
-                            disabled={selectedServices !== null || !user}
+                  <Grid item xs={12} width="100%">
+                    {!user && (
+                      <Typography variant="h6" textAlign="center">
+                        Только авторизованные пользователи могут выбрать услугу
+                      </Typography>
+                    )}
+                    <Typography variant="h6">Выберите услугу:</Typography>
+                    <Grid item container gap={2} mt={3}>
+                      {expert.services.map((service) => (
+                        <Grid
+                          key={service._id}
+                          item
+                          container
+                          justifyContent="space-between"
+                          alignItems="center"
+                          gap={1}
+                        >
+                          <Grid
+                            item
+                            container
+                            alignItems="center"
+                            gap={1}
+                            xs={12}
+                            md={8}
                           >
-                            Выбрать
-                            <LocalMallRoundedIcon sx={styles.serviceIcon} />
-                          </Button>
-                        }
-                      >
-                        <ListItemAvatar>
-                          <Avatar sx={{ bgcolor: 'primary.light' }}>
-                            <LoyaltyIcon />
-                          </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText
-                          primary={service.name}
-                          secondary={service.price + ' cом'}
-                        />
-                      </ListItem>
-                    ))}
-                  </List>
-                </Grid>
-                <Grid item width="100%">
-                  <Divider sx={styles.divider} />
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography
-                    variant="body1"
-                    fontSize={{ xs: '14px', md: '18px' }}
-                  >
-                    {expert.info}
-                  </Typography>
+                            <Grid
+                              item
+                              sm={2}
+                              md={1}
+                              display={{ xs: 'none', sm: 'block' }}
+                            >
+                              <Avatar sx={{ bgcolor: 'primary.light' }}>
+                                <LoyaltyIcon />
+                              </Avatar>
+                            </Grid>
+                            <Grid
+                              item
+                              container
+                              justifyContent="space-between"
+                              xs={12}
+                              sm={8}
+                              md={10}
+                            >
+                              <Typography variant="body1">
+                                {service.name}
+                              </Typography>
+                              <Typography>{`${service.price} сом`}</Typography>
+                            </Grid>
+                          </Grid>
+                          <Grid
+                            item
+                            container
+                            xs={12}
+                            md={3}
+                            justifyContent={{ xs: 'center', md: 'flex-end' }}
+                          >
+                            <Button
+                              className="btn"
+                              sx={styles.serviceBtn}
+                              onClick={() => addServiceState(service)}
+                              disabled={selectedServices !== null || !user}
+                            >
+                              Выбрать
+                              <LocalMallRoundedIcon sx={styles.serviceIcon} />
+                            </Button>
+                          </Grid>
+                        </Grid>
+                      ))}
+                    </Grid>
+                  </Grid>
+                  <Grid item width="100%">
+                    <Divider sx={styles.divider} />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Typography
+                      variant="body1"
+                      fontSize={{ xs: '14px', md: '18px' }}
+                    >
+                      {expert.info}
+                    </Typography>
+                  </Grid>
                 </Grid>
               </Grid>
-            </Grid>
+            </motion.div>
           )
         )}
       </Grid>
-      <MyModal open={open} handleClose={closeAll} isFullWidth>
+      <MyModal open={open} handleClose={closeAll}>
         <Typography textAlign="center" variant="h6" my={1}>
           Выбранная процедура:{' '}
           <Typography variant="h6" component="span" color="primary">
@@ -220,6 +269,7 @@ const OneExpert = () => {
             <DateCalendar
               value={value}
               onChange={(newDate) => onDateChange(newDate)}
+              sx={styles.calendar}
             />
           </Box>
           <Box>
@@ -248,9 +298,14 @@ const OneExpert = () => {
           </Box>
         </Box>
         {selectedDate && selectedServices && selectedTime && (
-          <Button fullWidth variant="outlined" onClick={submitAppointment}>
+          <LoadingButton
+            loading={appointmentLoading}
+            fullWidth
+            variant="outlined"
+            onClick={submitAppointment}
+          >
             Подтвердить запись
-          </Button>
+          </LoadingButton>
         )}
       </MyModal>
       {selectedDate && selectedTime && (

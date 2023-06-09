@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import {
   selectAppointmentCount,
+  selectAppointmentFetching,
   selectAppointmentPage,
   selectAppointments,
 } from '../../../../dispatchers/appointemtns/appointmentsSlice';
@@ -15,6 +16,7 @@ import { fetchExpertByUser } from '../../../../dispatchers/experts/expertsThunks
 import { selectOneExpert } from '../../../../dispatchers/experts/expertsSlice';
 import AppointmentTable from '../../components/AppointmentTable/AppointmentTable';
 import { UpdateAppointmentParams } from '../../../../types';
+import { LinearProgress } from '@mui/material';
 
 interface Props {
   who: string;
@@ -27,6 +29,7 @@ const AppointmentPanel: React.FC<Props> = ({ who }) => {
   const user = useAppSelector(selectUser);
   const currentPage = useAppSelector(selectAppointmentPage);
   const totalCount = useAppSelector(selectAppointmentCount);
+  const loading = useAppSelector(selectAppointmentFetching);
   const [limit, setLimit] = React.useState(5);
   const [page, setPage] = React.useState(1);
 
@@ -64,17 +67,23 @@ const AppointmentPanel: React.FC<Props> = ({ who }) => {
     await dispatch(remindAboutAppointment(id));
   };
   return (
-    <AppointmentTable
-      appointments={appointments}
-      role={who}
-      limit={limit}
-      setLimit={setLimit}
-      totalCount={totalCount}
-      setPage={setPage}
-      currentPage={currentPage}
-      changeStatus={changeStatus}
-      remind={remindToUser}
-    />
+    <>
+      {loading ? (
+        <LinearProgress />
+      ) : (
+        <AppointmentTable
+          appointments={appointments}
+          role={who}
+          limit={limit}
+          setLimit={setLimit}
+          totalCount={totalCount}
+          setPage={setPage}
+          currentPage={currentPage}
+          changeStatus={changeStatus}
+          remind={remindToUser}
+        />
+      )}
+    </>
   );
 };
 

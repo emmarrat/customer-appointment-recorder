@@ -23,6 +23,18 @@ appointmentsRouter.post('/', auth, async (req, res, next) => {
       return res.status(400).send({ error: 'Указанный день уже занят' });
     }
 
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+
+    const selectedDate = new Date(serviceHour.date);
+    selectedDate.setHours(0, 0, 0, 0);
+
+    if (selectedDate < currentDate) {
+      return res
+        .status(400)
+        .send({ error: 'Нельзя создавать запись на прошедший день' });
+    }
+
     const appointment = new Appointment({
       client: user._id,
       expert,
@@ -187,9 +199,23 @@ appointmentsRouter.patch(
       const appointmentToSave = await Appointment.findById(id);
 
       if (!appointment || !appointmentToSave) {
-        return res.status(404).json({ error: 'Appointment not found' });
+        return res.status(404).send({ error: 'Запись не найдена!' });
       }
+
+      const currentDate = new Date();
+      currentDate.setHours(0, 0, 0, 0);
+
+      const selectedDate = new Date(appointment.date.date);
+      selectedDate.setHours(0, 0, 0, 0);
+
+      if (selectedDate < currentDate) {
+        return res
+          .status(400)
+          .send({ error: 'Нельзя изменять прошедшую запись' });
+      }
+
       appointmentToSave.isApproved = isApproved;
+
       await appointmentToSave.save();
 
       await ServiceHour.updateOne(
@@ -216,6 +242,54 @@ appointmentsRouter.patch(
               appointment.expert.user.firstName,
             ),
       );
+
+      const sameAppointmentFromOtherUser = await Appointment.find({
+        date: appointmentToSave.date,
+        startTime: appointmentToSave.startTime,
+        endTime: appointmentToSave.endTime,
+        isApproved: false,
+      });
+
+      if (sameAppointmentFromOtherUser.length > 0) {
+        for (const appointment of sameAppointmentFromOtherUser) {
+          const sameAppointmentToCancel: AppointmentFull | null =
+            await Appointment.findById(appointment._id)
+              .populate({
+                path: 'client',
+                select: 'firstName lastName email',
+              })
+              .populate({
+                path: 'expert',
+                select: '_id title',
+                populate: {
+                  path: 'user',
+                  select: 'firstName lastName',
+                },
+              })
+              .populate({
+                path: 'date',
+                select: 'date',
+              });
+
+          if (appointment._id.toString() !== appointmentToSave._id.toString()) {
+            await appointment.deleteOne();
+
+            if (!sameAppointmentToCancel) continue;
+
+            await constants.SEND_EMAIL(
+              sameAppointmentToCancel.client.email,
+              'Отмена записи',
+              constants.APPOINTMENT_REJECTION_EMAIL(
+                sameAppointmentToCancel.client.firstName,
+                sameAppointmentToCancel.date.date,
+                sameAppointmentToCancel.startTime,
+                sameAppointmentToCancel.service.name,
+                sameAppointmentToCancel.expert.user.firstName,
+              ),
+            );
+          }
+        }
+      }
 
       return res.send({
         message: 'Статус записи успешно изменен!',
@@ -254,10 +328,23 @@ appointmentsRouter.post(
         });
 
       if (!appointment) {
-        return res.status(400).json({ error: 'Appointment not found!' });
+        return res.status(400).send({ error: 'Запись не найдена!' });
       }
+
+      const currentDate = new Date();
+      currentDate.setHours(0, 0, 0, 0);
+
+      const selectedDate = new Date(appointment.date.date);
+      selectedDate.setHours(0, 0, 0, 0);
+
+      if (selectedDate < currentDate) {
+        return res
+          .status(400)
+          .send({ error: 'Нельзя отправить напоминание на прошедшую запись' });
+      }
+
       if (!appointment.isApproved) {
-        return res.status(400).json({ error: 'Appointment is not approved!' });
+        return res.status(400).send({ error: 'Запись не подтверждена!' });
       }
 
       await constants.SEND_EMAIL(

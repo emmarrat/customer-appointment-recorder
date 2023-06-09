@@ -1,7 +1,8 @@
 import React from 'react';
 import { Grid, Typography } from '@mui/material';
-import { block } from '../../stylesMui';
+import { ANIMATION_VARIANTS, block } from '../../stylesMui';
 import { COMPANY_TITLE } from '../../constants';
+import { motion } from 'framer-motion';
 
 const WelcomeBlock = () => {
   return (
@@ -12,18 +13,24 @@ const WelcomeBlock = () => {
       padding={block.padding}
     >
       <Grid item container justifyContent="center" direction="column">
-        <Typography
-          textAlign="left"
-          variant="h2"
-          sx={block.title}
-          fontSize={block.fontSize}
-          maxWidth={block.maxWidth}
-          color="#fff"
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={ANIMATION_VARIANTS}
         >
-          {`Добро пожаловать на сервис оказания beauty услуг "${COMPANY_TITLE}"`}{' '}
-          <br />
-          Мы предоставляем широкий и качественный спектр услуг
-        </Typography>
+          <Typography
+            textAlign="left"
+            variant="h2"
+            sx={block.title}
+            fontSize={block.fontSize}
+            maxWidth={block.maxWidth}
+            color="#fff"
+          >
+            {`Добро пожаловать на сервис оказания beauty услуг "${COMPANY_TITLE}"`}
+            <br />
+            Мы предоставляем широкий и качественный спектр услуг
+          </Typography>
+        </motion.div>
       </Grid>
     </Grid>
   );

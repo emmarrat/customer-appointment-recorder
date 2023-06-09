@@ -3,8 +3,11 @@ import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 import {
   createServiceHour,
+  fetchOneServiceHours,
   fetchServiceHoursByUser,
   fetchServiceHoursForExpert,
+  removeServiceHours,
+  updateServiceHours,
 } from './serviceHoursThunks';
 import { toast } from 'react-toastify';
 
@@ -81,6 +84,62 @@ export const serviceHoursSlice = createSlice({
         toast.error(error.error);
       }
     });
+
+    builder.addCase(fetchOneServiceHours.pending, (state) => {
+      state.oneDateTime = null;
+      state.datetimeFetching = true;
+    });
+    builder.addCase(
+      fetchOneServiceHours.fulfilled,
+      (state, { payload: datetime }) => {
+        state.datetimeFetching = false;
+        state.oneDateTime = datetime;
+      },
+    );
+    builder.addCase(fetchOneServiceHours.rejected, (state) => {
+      state.datetimeFetching = false;
+    });
+
+    builder.addCase(updateServiceHours.pending, (state) => {
+      state.datetimeUpdatingError = null;
+      state.datetimeUpdating = true;
+    });
+    builder.addCase(updateServiceHours.fulfilled, (state) => {
+      state.datetimeUpdatingError = null;
+      state.datetimeUpdating = false;
+      toast.success('Рабочий график успешно обновлен!');
+    });
+    builder.addCase(
+      updateServiceHours.rejected,
+      (state, { payload: error }) => {
+        state.datetimeUpdatingError = error || null;
+        state.datetimeUpdating = false;
+        if (error) {
+          toast.error(error.error);
+        }
+      },
+    );
+
+    builder.addCase(
+      removeServiceHours.pending,
+      (state, { meta: { arg: id } }) => {
+        state.datetimeRemoving = id;
+      },
+    );
+    builder.addCase(removeServiceHours.fulfilled, (state) => {
+      state.datetimeUpdatingError = null;
+      state.datetimeRemoving = false;
+      toast.success('Рабочий график успешно удален!');
+    });
+    builder.addCase(
+      removeServiceHours.rejected,
+      (state, { payload: error }) => {
+        state.datetimeRemoving = false;
+        if (error) {
+          toast.error(error.error);
+        }
+      },
+    );
   },
 });
 

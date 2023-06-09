@@ -1,7 +1,10 @@
+import { borderRadius, boxShadow } from '../../../../stylesMui';
+
 export const styles = {
   card: {
     width: '320px',
-    borderRadius: '30px',
+    borderRadius,
+    boxShadow,
   },
   media: {
     height: '150px',
@@ -13,6 +16,6 @@ export const styles = {
     justifyContent: 'center',
   },
   btn: {
-    borderRadius: '30px',
+    borderRadius,
   },
 };

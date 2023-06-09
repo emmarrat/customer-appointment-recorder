@@ -7,25 +7,11 @@ interface Props {
   handleClose: () => void;
   title?: string;
   children: React.ReactNode;
-  isFullWidth?: boolean;
-  isFullScreen?: boolean;
 }
 
-const MyModal: React.FC<Props> = ({
-  open,
-  handleClose,
-  title,
-  children,
-  isFullWidth,
-  isFullScreen,
-}) => {
+const MyModal: React.FC<Props> = ({ open, handleClose, title, children }) => {
   return (
-    <Dialog
-      open={open}
-      onClose={handleClose}
-      fullWidth={isFullWidth}
-      fullScreen={isFullScreen}
-    >
+    <Dialog open={open} onClose={handleClose} fullWidth={true}>
       <DialogTitle>
         {title}
         <IconButton

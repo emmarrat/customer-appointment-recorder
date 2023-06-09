@@ -68,10 +68,21 @@ export const fetchAppointments = createAsyncThunk<
 
 export const updateAppointment = createAsyncThunk<
   void,
-  UpdateAppointmentParams
->('appointments/updateStatus', async ({ id, isApproved }) => {
-  await axiosApi.patch(`/appointments/${id}`, { isApproved });
-});
+  UpdateAppointmentParams,
+  { rejectValue: GlobalError }
+>(
+  'appointments/updateStatus',
+  async ({ id, isApproved }, { rejectWithValue }) => {
+    try {
+      await axiosApi.patch(`/appointments/${id}`, { isApproved });
+    } catch (e) {
+      if (isAxiosError(e) && e.response) {
+        return rejectWithValue(e.response.data as GlobalError);
+      }
+      throw e;
+    }
+  },
+);
 
 export const remindAboutAppointment = createAsyncThunk<
   void,

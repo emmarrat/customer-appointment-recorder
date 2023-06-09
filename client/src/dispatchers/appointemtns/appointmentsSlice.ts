@@ -1,9 +1,4 @@
-import {
-  Appointment,
-  GlobalError,
-  IPagination,
-  ValidationError,
-} from '../../types';
+import { Appointment, IPagination } from '../../types';
 import { createSlice } from '@reduxjs/toolkit';
 import {
   createAppointment,
@@ -16,28 +11,22 @@ import { toast } from 'react-toastify';
 
 interface AppointmentsState {
   appointments: Appointment[];
-  oneAppointment: Appointment | null;
   appointmentCreating: boolean;
-  appointmentCreatingError: ValidationError | null;
   appointmentFetching: boolean;
   appointmentUpdating: string | false;
   currentPage: number;
   totalCount: number;
   appointmentsReminderLoading: string | false;
-  appointmentReminderError: GlobalError | null;
 }
 
 const initialState: AppointmentsState = {
   appointments: [],
-  oneAppointment: null,
   appointmentCreating: false,
-  appointmentCreatingError: null,
   appointmentFetching: false,
   appointmentUpdating: false,
   currentPage: 1,
   totalCount: 1,
   appointmentsReminderLoading: false,
-  appointmentReminderError: null,
 };
 
 export const appointmentsSlice = createSlice({
@@ -47,7 +36,6 @@ export const appointmentsSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(createAppointment.pending, (state) => {
       state.appointmentCreating = true;
-      state.appointmentCreatingError = null;
     });
     builder.addCase(createAppointment.fulfilled, (state) => {
       state.appointmentCreating = false;
@@ -55,7 +43,6 @@ export const appointmentsSlice = createSlice({
     });
     builder.addCase(createAppointment.rejected, (state, { payload: error }) => {
       state.appointmentCreating = false;
-      state.appointmentCreatingError = error || null;
       if (error) {
         toast.error(error.message);
       }
@@ -83,9 +70,11 @@ export const appointmentsSlice = createSlice({
       state.appointmentUpdating = false;
       toast.info('Статус записи обновлен!');
     });
-    builder.addCase(updateAppointment.rejected, (state) => {
+    builder.addCase(updateAppointment.rejected, (state, { payload: error }) => {
       state.appointmentUpdating = false;
-      toast.error('Произошла ошибка при обновлении статуса записи!');
+      if (error) {
+        toast.error(error.error);
+      }
     });
     builder.addCase(
       remindAboutAppointment.pending,
@@ -100,8 +89,7 @@ export const appointmentsSlice = createSlice({
     builder.addCase(
       remindAboutAppointment.rejected,
       (state, { payload: error }) => {
-        state.appointmentUpdating = false;
-        state.appointmentReminderError = error || null;
+        state.appointmentsReminderLoading = false;
         if (error) {
           toast.error(error.error);
         }
@@ -114,14 +102,14 @@ export const appointmentsReducer = appointmentsSlice.reducer;
 
 export const selectAppointments = (state: RootState) =>
   state.appointments.appointments;
-export const selectOneAppointment = (state: RootState) =>
-  state.appointments.oneAppointment;
 export const selectAppointmentCreating = (state: RootState) =>
   state.appointments.appointmentCreating;
-export const selectAppointmentCreatingError = (state: RootState) =>
-  state.appointments.appointmentCreatingError;
 export const selectAppointmentFetching = (state: RootState) =>
   state.appointments.appointmentFetching;
+export const selectAppointmentUpdating = (state: RootState) =>
+  state.appointments.appointmentUpdating;
+export const selectAppointmentReminderLoading = (state: RootState) =>
+  state.appointments.appointmentsReminderLoading;
 export const selectAppointmentPage = (state: RootState) =>
   state.appointments.currentPage;
 export const selectAppointmentCount = (state: RootState) =>
