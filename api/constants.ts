@@ -168,7 +168,7 @@ export default {
             Здравствуйте, ${name}
           </h1></td></tr>
           <tr style="margin-top:0;margin-bottom:0;padding:0"><td style="margin-top:0;margin-bottom:0;padding:16px 0 0;border-width:0"><h2 style="margin-top:0;margin-bottom:0;font-size:15px;font-weight:400;line-height:20px;text-transform:initial;letter-spacing:initial;padding:0">
-          Команда ${COMPANY_TITLE} получила ваш запрос на сброс пароля. Нажмите на кнопку по для сброса пароля.
+          Команда ${COMPANY_TITLE} получила ваш запрос на сброс пароля. Нажмите на кнопку для сброса пароля.
           </h2></td></tr>
           <tr style="margin-top:0;margin-bottom:0;padding:0"><td style="margin-top:0;margin-bottom:0;padding:16px 0 0;border-width:0"><h2 style="margin-top:0;margin-bottom:0;font-size:15px;font-weight:400;line-height:20px;text-transform:initial;letter-spacing:initial;padding:0">
           Если вы не запрашивали сброс пароля, то проигнорируйте данное сообщение

@@ -129,6 +129,14 @@ usersRouter.post('/google', async (req, res, next) => {
         .send({ error: 'Не достаточно данных для регистрации через гугл!' });
     }
 
+    const emailUser = await User.findOne({ email });
+
+    if (emailUser) {
+      return res
+        .status(400)
+        .send({ error: 'Пользователь под этой почтой уже зарегистрирован!' });
+    }
+
     let user = await User.findOne({ googleId });
 
     if (!user) {
