@@ -34,25 +34,25 @@ if no, i hope you can google it, after finishing that steps you can start from h
   npm install
 ```
 
-2. Update data base 
+3. Update data base 
 
 ```bash
   npm run seed
 ```
 
-3. Run the server
+4. Run the server
 
 ```bash
   npm run dev
 ```
 
-4. Open client directory and install all dependencies
+5. Open client directory and install all dependencies
 
 ```bash
   npm install
 ```
 
-5. Run the client server
+6. Run the client server
 
 ```bash
   npm start
